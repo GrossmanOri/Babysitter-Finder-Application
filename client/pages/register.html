@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הרשמה - Babysitter Finder</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <main class="container mt-5">
+        <section class="card mx-auto shadow-lg rounded-lg">
+            <article class="card-body p-5">
+                <header class="text-center mb-4">
+                    <h3 class="card-title mb-3">הרשמה למערכת</h3>
+                    <p class="text-muted">הצטרפו לקהילת Babysitter Finder</p>
+                </header>
+                <form id="registerForm">
+                    <section class="mb-3">
+                        <label class="form-label"><i class="bi bi-person-badge me-2"></i>סוג משתמש</label>
+                        <select class="form-select" id="userType" name="userType" required>
+                            <option value="parent">👨‍👩‍👧‍👦 הורה</option>
+                            <option value="babysitter">👶 ביביסיטר</option>
+                        </select>
+                    </section>
+                    <section class="mb-3">
+                        <label class="form-label"><i class="bi bi-person me-2"></i>שם פרטי</label>
+                        <input type="text" class="form-control" name="firstName" required>
+                    </section>
+                    <section class="mb-3">
+                        <label class="form-label"><i class="bi bi-person me-2"></i>שם משפחה</label>
+                        <input type="text" class="form-control" name="lastName" required>
+                    </section>
+                    <section class="mb-3">
+                        <label class="form-label"><i class="bi bi-envelope me-2"></i>אימייל</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </section>
+                    <section class="mb-3">
+                        <label class="form-label"><i class="bi bi-lock me-2"></i>סיסמה</label>
+                        <input type="password" class="form-control" name="password" required minlength="6">
+                    </section>
+                    <section class="mb-3">
+                        <label class="form-label"><i class="bi bi-telephone me-2"></i>טלפון</label>
+                        <input type="text" class="form-control" name="phone" required>
+                    </section>
+                    <section class="mb-3">
+                        <label class="form-label"><i class="bi bi-geo-alt me-2"></i>עיר</label>
+                        <input type="text" class="form-control" name="city" required>
+                    </section>
+                    <!-- Babysitter fields -->
+                    <section id="babysitterFields">
+                        <hr class="my-4">
+                        <h5 class="text-primary mb-3"><i class="bi bi-star me-2"></i>פרטי ביביסיטר</h5>
+                        <section class="mb-3">
+                            <label class="form-label"><i class="bi bi-calendar me-2"></i>גיל</label>
+                            <input type="number" class="form-control" name="age" min="16" max="80">
+                        </section>
+                        <section class="mb-3">
+                            <label class="form-label"><i class="bi bi-award me-2"></i>ניסיון</label>
+                            <select class="form-select" name="experience">
+                                <option value="beginner">🌱 מתחילה</option>
+                                <option value="intermediate">⭐ בינונית</option>
+                                <option value="expert">🏆 מנוסה</option>
+                            </select>
+                        </section>
+                        <section class="mb-3">
+                            <label class="form-label"><i class="bi bi-currency-dollar me-2"></i>מחיר לשעה (₪)</label>
+                            <input type="number" class="form-control" name="hourlyRate" min="20" max="200">
+                        </section>
+                        <section class="mb-3">
+                            <label class="form-label"><i class="bi bi-chat-text me-2"></i>תיאור קצר</label>
+                            <textarea class="form-control" name="description" maxlength="500" rows="3" placeholder="ספרו על עצמכם, הניסיון שלכם ומה אתם מציעים..."></textarea>
+                        </section>
+                    </section>
+                    <!-- Parent fields -->
+                    <section id="parentFields">
+                        <hr class="my-4">
+                        <h5 class="text-primary mb-3"><i class="bi bi-people me-2"></i>פרטי משפחה</h5>
+                        <section class="mb-3">
+                            <label class="form-label"><i class="bi bi-people-fill me-2"></i>מספר ילדים</label>
+                            <input type="number" class="form-control" name="childrenCount" min="1" max="10">
+                        </section>
+                        <section class="mb-3">
+                            <label class="form-label"><i class="bi bi-calendar-range me-2"></i>גילאי ילדים (מופרד בפסיקים)</label>
+                            <input type="text" class="form-control" name="childrenAges" placeholder="למשל: 2,5,8">
+                        </section>
+                    </section>
+                    <section id="formMessage" class="mb-3 text-center"></section>
+                    <button type="submit" class="btn btn-primary w-100 py-3 fs-2 fw-600">
+                        <i class="bi bi-person-plus me-2"></i>הרשמה למערכת
+                    </button>
+                </form>
+                <footer class="text-center mt-4 pt-3 border-top">
+                    <p class="mb-0">יש לך כבר חשבון? <a href="login.html" class="text-primary fw-bold">התחברות</a></p>
+                </footer>
+            </article>
+        </section>
+    </main>
+    
+    <!-- Bootstrap JS -->
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/pages/register.js"></script>
+</body>
+</html> 

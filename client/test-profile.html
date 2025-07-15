@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Profile - Babysitter Finder</title>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <section class="test-container">
+        <h1>בדיקת דף הפרופיל</h1>
+        
+        <section>
+            <button class="test-btn" onclick="testLogin()">בדוק התחברות</button>
+            <button class="test-btn" onclick="testProfileData()">בדוק נתוני פרופיל</button>
+            <button class="test-btn" onclick="goToProfile()">עבור לדף הפרופיל</button>
+            <button class="test-btn" onclick="clearData()">נקה נתונים</button>
+        </section>
+        
+        <section id="results" class="test-user-info">
+            <h3>תוצאות הבדיקה:</h3>
+            <section id="output"></section>
+        </section>
+    </section>
+
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString('he-IL');
+            const color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'black';
+            output.innerHTML += `<section style="color: ${color}; margin: 5px 0;">[${timestamp}] ${message}</section>`;
+        }
+
+        async function testLogin() {
+            log('מתחיל בדיקת התחברות...');
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'origr95@gmail.com',
+                        password: 'oriori'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    log('✅ התחברות הצליחה!', 'success');
+                    log(`טוקן: ${data.token.substring(0, 50)}...`, 'success');
+                    log(`משתמש: ${data.user.firstName} ${data.user.lastName}`, 'success');
+                    log(`אימייל: ${data.user.email}`, 'success');
+                    log(`טלפון: ${data.user.phone}`, 'success');
+                    log(`סוג משתמש: ${data.user.userType}`, 'success');
+                    log(`עיר: ${data.user.city}`, 'success');
+                    
+                    if (data.user.parent) {
+                        log(`מספר ילדים: ${data.user.parent.childrenCount}`, 'success');
+                        log(`גילאי ילדים: ${data.user.parent.childrenAges.join(', ')}`, 'success');
+                    }
+                    
+                    // שמירת נתונים
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userData', JSON.stringify(data.user));
+                    log('✅ נתונים נשמרו ב-localStorage', 'success');
+                } else {
+                    log(`❌ שגיאה בהתחברות: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ שגיאה: ${error.message}`, 'error');
+            }
+        }
+
+        function testProfileData() {
+            log('בודק נתוני פרופיל...');
+            
+            const token = localStorage.getItem('token');
+            const userData = localStorage.getItem('userData');
+            
+            if (!token) {
+                log('❌ אין טוקן', 'error');
+                return;
+            }
+            
+            if (!userData) {
+                log('❌ אין נתוני משתמש', 'error');
+                return;
+            }
+            
+            try {
+                const user = JSON.parse(userData);
+                log('✅ נתוני משתמש נמצאו:', 'success');
+                log(`שם: ${user.firstName} ${user.lastName}`, 'success');
+                log(`אימייל: ${user.email}`, 'success');
+                log(`טלפון: ${user.phone}`, 'success');
+                log(`סוג משתמש: ${user.userType}`, 'success');
+                log(`עיר: ${user.city}`, 'success');
+                
+                if (user.parent) {
+                    log(`מספר ילדים: ${user.parent.childrenCount}`, 'success');
+                    log(`גילאי ילדים: ${user.parent.childrenAges.join(', ')}`, 'success');
+                }
+            } catch (error) {
+                log(`❌ שגיאה בפענוח נתונים: ${error.message}`, 'error');
+            }
+        }
+
+        function goToProfile() {
+            log('עובר לדף הפרופיל...');
+            window.location.href = 'pages/profile.html';
+        }
+
+        function clearData() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userData');
+            log('✅ נתונים נוקו', 'success');
+        }
+
+        // בדיקה ראשונית
+        window.onload = function() {
+            log('דף הבדיקה נטען');
+            const token = localStorage.getItem('token');
+            const userData = localStorage.getItem('userData');
+            
+            if (token && userData) {
+                log('✅ נמצאו נתוני משתמש', 'success');
+            } else {
+                log('ℹ️ אין נתוני משתמש - יש לבצע התחברות', 'info');
+            }
+        };
+    </script>
+</body>
+</html> 

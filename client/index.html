@@ -11,35 +11,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
-    
-    <!-- הוספתי סגנון אישי -->
-    <style>
-        .hero-section {
-            background: linear-gradient(45deg, #007bff, #0056b3) !important;
-            color: white !important;
-        }
-        
-        /* ניסיון לעשות משהו יפה */
-        .feature-card {
-            border: 2px solid #007bff;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        
-        /* אולי זה יעבוד טוב יותר */
-        .step-number {
-            width: 50px;
-            height: 50px;
-            line-height: 50px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-    </style>
 </head>
 <body>
     <!-- Header - זה החלק העליון של האתר -->
@@ -87,27 +58,164 @@
                 <h1 class="display-4 mb-4">מצאו בייביסיטר אמין ומקצועי</h1>
                 <p class="lead mb-4">חברו בין הורים לבייביסיטרים מנוסים בישראל</p>
                 
-                <section class="search-box bg-white p-4 rounded shadow">
-                    <form id="heroSearchForm" class="row g-3">
-                        <article class="col-md-4">
-                            <label for="city" class="form-label">עיר</label>
-                            <input type="text" class="form-control" id="city" placeholder="הזינו עיר..." required>
-                        </article>
-                        <article class="col-md-3">
-                            <label for="date" class="form-label">תאריך</label>
-                            <input type="date" class="form-control" id="date" required>
-                        </article>
-                        <article class="col-md-3">
-                            <label for="time" class="form-label">שעה</label>
-                            <input type="time" class="form-control" id="time" required>
-                        </article>
-                        <article class="col-md-2">
-                            <label class="form-label">&nbsp;</label>
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="bi bi-search"></i> חפש
-                            </button>
-                        </article>
-                    </form>
+                <section class="auth-container bg-white shadow-lg">
+                    <!-- כרטיסי התחברות/הרשמה -->
+                    <section class="auth-tabs">
+                        <button class="auth-tab active" onclick="switchTab('login')">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>התחברות
+                        </button>
+                        <button class="auth-tab" onclick="switchTab('register')">
+                            <i class="bi bi-person-plus me-2"></i>הרשמה
+                        </button>
+                    </section>
+                    
+                    <section class="auth-content">
+                        <!-- טופס התחברות -->
+                        <form id="loginForm" class="auth-form active">
+                            <header class="text-center mb-4">
+                                <h3 class="text-primary mb-2">ברוכים הבאים!</h3>
+                                <p class="text-muted">התחברו לחשבון שלכם</p>
+                            </header>
+                            
+                            <section class="row g-3">
+                                <section class="col-12">
+                                    <label class="form-label"><i class="bi bi-envelope me-2"></i>אימייל</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </section>
+                                
+                                <section class="col-12">
+                                    <label class="form-label"><i class="bi bi-lock me-2"></i>סיסמה</label>
+                                    <input type="password" class="form-control" name="password" required>
+                                </section>
+                                
+                                <section class="col-12">
+                                    <section class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                                        <label class="form-check-label" for="rememberMe">
+                                            זכור אותי
+                                        </label>
+                                    </section>
+                                </section>
+                                
+                                <section id="loginMessage" class="col-12 text-center"></section>
+                                
+                                <section class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>התחברות
+                                    </button>
+                                </section>
+                            </section>
+                        </form>
+                        
+                        <!-- טופס הרשמה -->
+                        <form id="registerForm" class="auth-form">
+                            <header class="text-center mb-4">
+                                <h3 class="text-primary mb-2">הצטרפו לקהילה שלנו</h3>
+                                <p class="text-muted">הרשמה מהירה ופשוטה</p>
+                            </header>
+                            
+                            <section class="row g-3">
+                                <!-- סוג משתמש -->
+                                <section class="col-md-6">
+                                    <label class="form-label"><i class="bi bi-person-badge me-2"></i>סוג משתמש</label>
+                                    <select class="form-select" id="userType" name="userType" required>
+                                        <option value="parent">👨‍👩‍👧‍👦 הורה</option>
+                                        <option value="babysitter">👶 ביביסיטר</option>
+                                    </select>
+                                </section>
+                                
+                                <!-- שם פרטי -->
+                                <section class="col-md-6">
+                                    <label class="form-label"><i class="bi bi-person me-2"></i>שם פרטי</label>
+                                    <input type="text" class="form-control" name="firstName" required>
+                                </section>
+                                
+                                <!-- שם משפחה -->
+                                <section class="col-md-6">
+                                    <label class="form-label"><i class="bi bi-person me-2"></i>שם משפחה</label>
+                                    <input type="text" class="form-control" name="lastName" required>
+                                </section>
+                                
+                                <!-- אימייל -->
+                                <section class="col-md-6">
+                                    <label class="form-label"><i class="bi bi-envelope me-2"></i>אימייל</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </section>
+                                
+                                <!-- סיסמה -->
+                                <section class="col-md-6">
+                                    <label class="form-label"><i class="bi bi-lock me-2"></i>סיסמה</label>
+                                    <input type="password" class="form-control" name="password" required minlength="6">
+                                </section>
+                                
+                                <!-- טלפון -->
+                                <section class="col-md-6">
+                                    <label class="form-label"><i class="bi bi-telephone me-2"></i>טלפון</label>
+                                    <input type="text" class="form-control" name="phone" required>
+                                </section>
+                                
+                                <!-- עיר -->
+                                <section class="col-md-6">
+                                    <label class="form-label"><i class="bi bi-geo-alt me-2"></i>עיר</label>
+                                    <input type="text" class="form-control" name="city" required>
+                                </section>
+                                
+                                <!-- שדות ביביסיטר -->
+                                <section id="babysitterFields">
+                                    <hr class="my-3">
+                                    <h6 class="text-primary mb-3"><i class="bi bi-star me-2"></i>פרטי ביביסיטר</h6>
+                                    <section class="row g-3">
+                                        <section class="col-md-4">
+                                            <label class="form-label"><i class="bi bi-calendar me-2"></i>גיל</label>
+                                            <input type="number" class="form-control" name="age" min="16" max="80">
+                                        </section>
+                                        <section class="col-md-4">
+                                            <label class="form-label"><i class="bi bi-award me-2"></i>ניסיון</label>
+                                            <select class="form-select" name="experience">
+                                                <option value="beginner">🌱 מתחילה</option>
+                                                <option value="intermediate">⭐ בינונית</option>
+                                                <option value="expert">🏆 מנוסה</option>
+                                            </select>
+                                        </section>
+                                        <section class="col-md-4">
+                                            <label class="form-label"><i class="bi bi-currency-dollar me-2"></i>מחיר לשעה (₪)</label>
+                                            <input type="number" class="form-control" name="hourlyRate" min="20" max="200">
+                                        </section>
+                                        <section class="col-12">
+                                            <label class="form-label"><i class="bi bi-chat-text me-2"></i>תיאור קצר</label>
+                                            <textarea class="form-control" name="description" maxlength="500" rows="2" placeholder="ספרו על עצמכם..."></textarea>
+                                        </section>
+                                    </section>
+                                </section>
+                                
+                                <!-- שדות הורה -->
+                                <section id="parentFields">
+                                    <hr class="my-3">
+                                    <h6 class="text-primary mb-3"><i class="bi bi-people me-2"></i>פרטי משפחה</h6>
+                                    <section class="row g-3">
+                                        <section class="col-md-6">
+                                            <label class="form-label"><i class="bi bi-people-fill me-2"></i>מספר ילדים</label>
+                                            <input type="number" class="form-control" name="childrenCount" min="1" max="10">
+                                        </section>
+                                        <section class="col-md-6">
+                                            <label class="form-label"><i class="bi bi-calendar-range me-2"></i>גילאי ילדים (מופרד בפסיקים)</label>
+                                            <input type="text" class="form-control" name="childrenAges" placeholder="למשל: 2,5,8">
+                                        </section>
+                                    </section>
+                                </section>
+                                
+                                <!-- הודעת תוצאה -->
+                                <section id="registerMessage" class="col-12 text-center"></section>
+                                
+                                <!-- כפתור הרשמה -->
+                                <section class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
+                                        <i class="bi bi-person-plus me-2"></i>הרשמה למערכת
+                                    </button>
+                                </section>
+                            </section>
+                        </form>
+                    </section>
                 </section>
             </article>
         </section>
@@ -218,55 +326,8 @@
     </footer>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="js/main.js"></script>
-    
-    <!-- הוספתי קוד JavaScript אישי -->
-    <script>
-        // בדיקה שהדף נטען כמו שצריך
-        console.log('הדף נטען בהצלחה!');
-        
-        // פונקציה לבדיקת הטופס
-        function checkForm() {
-            const city = document.getElementById('city').value;
-            const date = document.getElementById('date').value;
-            const time = document.getElementById('time').value;
-            
-            console.log('עיר:', city);
-            console.log('תאריך:', date);
-            console.log('שעה:', time);
-            
-            if (city && date && time) {
-                alert('הטופס מלא! מעביר לחיפוש...');
-                window.location.href = 'pages/search.html';
-            } else {
-                alert('אנא מלאו את כל השדות');
-            }
-        }
-        
-        // הוספת event listener לטופס
-        document.getElementById('heroSearchForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            checkForm();
-        });
-        
-        // הוספת אנימציה לתכונות
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('הדף מוכן!');
-            
-            // הוספת אפקט hover לתכונות
-            const features = document.querySelectorAll('.feature-card');
-            features.forEach(function(feature) {
-                feature.addEventListener('mouseenter', function() {
-                    this.style.backgroundColor = '#f8f9fa';
-                });
-                
-                feature.addEventListener('mouseleave', function() {
-                    this.style.backgroundColor = '';
-                });
-            });
-        });
-    </script>
 </body>
 </html> 
