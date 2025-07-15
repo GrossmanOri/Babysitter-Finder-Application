@@ -105,7 +105,7 @@ function handleCityAutocomplete(event) {
 
 // Fetch cities from external API
 function fetchCitiesFromAPI(query) {
-    return fetch(`${API_BASE_URL}/cities/search?q=${encodeURIComponent(query)}`)
+    return fetch(`${API_BASE_URL}/cities?q=${encodeURIComponent(query)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
