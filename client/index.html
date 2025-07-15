@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babysitter Finder - מציאת בייביסיטר</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    
+    <!-- הוספתי סגנון אישי -->
+    <style>
+        .hero-section {
+            background: linear-gradient(45deg, #007bff, #0056b3) !important;
+            color: white !important;
+        }
+        
+        /* ניסיון לעשות משהו יפה */
+        .feature-card {
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        /* אולי זה יעבוד טוב יותר */
+        .step-number {
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header - זה החלק העליון של האתר -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-heart-fill me-2"></i>
+                Babysitter Finder
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <section class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">בית</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/search.html">חיפוש בייביסיטר</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/about.html">אודות</a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/login.html">התחברות</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/register.html">הרשמה</a>
+                    </li>
+                </ul>
+            </section>
+        </nav>
+    </header>
+
+    <!-- Main Content - התוכן הראשי -->
+    <main>
+        <!-- Hero Section - החלק הראשי -->
+        <section class="hero-section py-5">
+            <article class="container text-center">
+                <h1 class="display-4 mb-4">מצאו בייביסיטר אמין ומקצועי</h1>
+                <p class="lead mb-4">חברו בין הורים לבייביסיטרים מנוסים בישראל</p>
+                
+                <section class="search-box bg-white p-4 rounded shadow">
+                    <form id="heroSearchForm" class="row g-3">
+                        <article class="col-md-4">
+                            <label for="city" class="form-label">עיר</label>
+                            <input type="text" class="form-control" id="city" placeholder="הזינו עיר..." required>
+                        </article>
+                        <article class="col-md-3">
+                            <label for="date" class="form-label">תאריך</label>
+                            <input type="date" class="form-control" id="date" required>
+                        </article>
+                        <article class="col-md-3">
+                            <label for="time" class="form-label">שעה</label>
+                            <input type="time" class="form-control" id="time" required>
+                        </article>
+                        <article class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search"></i> חפש
+                            </button>
+                        </article>
+                    </form>
+                </section>
+            </article>
+        </section>
+
+        <!-- Features Section - תכונות האתר -->
+        <section class="features-section py-5">
+            <article class="container">
+                <h2 class="text-center mb-5">למה לבחור ב-Babysitter Finder?</h2>
+                
+                <section class="row g-4">
+                    <article class="col-md-4">
+                        <section class="feature-card text-center p-4">
+                            <i class="bi bi-shield-check display-4 text-primary mb-3"></i>
+                            <h3>בדוק ואמין</h3>
+                            <p>כל הבייביסיטרים עוברים בדיקות רקע ואימות זהות</p>
+                        </section>
+                    </article>
+                    
+                    <article class="col-md-4">
+                        <section class="feature-card text-center p-4">
+                            <i class="bi bi-clock display-4 text-primary mb-3"></i>
+                            <h3>זמינות מיידית</h3>
+                            <p>מצאו בייביסיטר זמין תוך דקות, 24/7</p>
+                        </section>
+                    </article>
+                    
+                    <article class="col-md-4">
+                        <section class="feature-card text-center p-4">
+                            <i class="bi bi-star display-4 text-primary mb-3"></i>
+                            <h3>דירוגים וביקורות</h3>
+                            <p>קראו ביקורות אמיתיות מהורים אחרים</p>
+                        </section>
+                    </article>
+                </section>
+            </article>
+        </section>
+
+        <!-- How It Works Section - איך זה עובד -->
+        <section class="how-it-works-section bg-light py-5">
+            <article class="container">
+                <h2 class="text-center mb-5">איך זה עובד?</h2>
+                
+                <section class="row g-4">
+                    <article class="col-md-3">
+                        <section class="step-card text-center">
+                            <section class="step-number bg-primary text-white rounded-circle mx-auto mb-3">1</section>
+                            <h4>הרשמה</h4>
+                            <p>הירשמו כחברים או בייביסיטרים</p>
+                        </section>
+                    </article>
+                    
+                    <article class="col-md-3">
+                        <section class="step-card text-center">
+                            <section class="step-number bg-primary text-white rounded-circle mx-auto mb-3">2</section>
+                            <h4>חיפוש</h4>
+                            <p>חפשו בייביסיטר לפי מיקום ותאריך</p>
+                        </section>
+                    </article>
+                    
+                    <article class="col-md-3">
+                        <section class="step-card text-center">
+                            <section class="step-number bg-primary text-white rounded-circle mx-auto mb-3">3</section>
+                            <h4>הזמנה</h4>
+                            <p>הזמינו את הבייביסיטר המתאים</p>
+                        </section>
+                    </article>
+                    
+                    <article class="col-md-3">
+                        <section class="step-card text-center">
+                            <section class="step-number bg-primary text-white rounded-circle mx-auto mb-3">4</section>
+                            <h4>תקשורת</h4>
+                            <p>תקשרו עם הבייביסיטר דרך הצ'אט</p>
+                        </section>
+                    </article>
+                </section>
+            </article>
+        </section>
+    </main>
+
+    <!-- Footer - החלק התחתון -->
+    <footer class="bg-dark text-white py-4">
+        <article class="container">
+            <section class="row">
+                <article class="col-md-6">
+                    <h5>Babysitter Finder</h5>
+                    <p>הפלטפורמה המובילה למציאת בייביסיטרים בישראל</p>
+                </article>
+                
+                <article class="col-md-6 text-md-end">
+                    <h5>צור קשר</h5>
+                    <p>
+                        <i class="bi bi-envelope me-2"></i>
+                        info@babysitterfinder.co.il
+                    </p>
+                    <p>
+                        <i class="bi bi-telephone me-2"></i>
+                        03-1234567
+                    </p>
+                </article>
+            </section>
+            
+            <hr>
+            
+            <section class="text-center">
+                <p>&copy; 2024 Babysitter Finder. כל הזכויות שמורות.</p>
+            </section>
+        </article>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+    
+    <!-- הוספתי קוד JavaScript אישי -->
+    <script>
+        // בדיקה שהדף נטען כמו שצריך
+        console.log('הדף נטען בהצלחה!');
+        
+        // פונקציה לבדיקת הטופס
+        function checkForm() {
+            const city = document.getElementById('city').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            
+            console.log('עיר:', city);
+            console.log('תאריך:', date);
+            console.log('שעה:', time);
+            
+            if (city && date && time) {
+                alert('הטופס מלא! מעביר לחיפוש...');
+                window.location.href = 'pages/search.html';
+            } else {
+                alert('אנא מלאו את כל השדות');
+            }
+        }
+        
+        // הוספת event listener לטופס
+        document.getElementById('heroSearchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            checkForm();
+        });
+        
+        // הוספת אנימציה לתכונות
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('הדף מוכן!');
+            
+            // הוספת אפקט hover לתכונות
+            const features = document.querySelectorAll('.feature-card');
+            features.forEach(function(feature) {
+                feature.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                });
+                
+                feature.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

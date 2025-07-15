@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>צ'אט - Babysitter Finder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-primary text-white py-3">
+        <nav class="container">
+            <section class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Babysitter Finder</h1>
+                <section class="d-flex gap-3">
+                    <a href="../index.html" class="btn btn-outline-light">דף הבית</a>
+                    <a href="search.html" class="btn btn-outline-light">חיפוש</a>
+                    <button class="btn btn-light" onclick="logout()">התנתק</button>
+                </section>
+            </nav>
+        </section>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container-fluid my-4">
+        <section class="row">
+            <!-- Conversations List -->
+            <aside class="col-md-4 col-lg-3">
+                <section class="card">
+                    <header class="card-header">
+                        <h3 class="h5 mb-0">שיחות</h3>
+                    </header>
+                    <section class="card-body p-0">
+                        <!-- Conversations will be loaded here -->
+                        <section id="conversationsList">
+                            <!-- Loading -->
+                            <section class="text-center py-4">
+                                <section class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">טוען...</span>
+                                </section>
+                            </section>
+                        </section>
+                    </section>
+                </section>
+            </aside>
+
+            <!-- Chat Area -->
+            <section class="col-md-8 col-lg-9">
+                <section class="card h-100">
+                    <!-- Chat Header -->
+                    <header class="card-header d-flex justify-content-between align-items-center">
+                        <section>
+                            <h3 class="h5 mb-0" id="chatTitle">בחרו שיחה</h3>
+                            <small class="text-muted" id="chatSubtitle"></small>
+                        </section>
+                        <section class="d-flex gap-2">
+                            <button class="btn btn-outline-secondary btn-sm" onclick="refreshChat()">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
+                        </section>
+                    </header>
+
+                    <!-- Messages Area -->
+                    <section class="card-body p-0" style="height: 400px;">
+                        <section id="messagesContainer" class="h-100 d-flex flex-column">
+                            <!-- Welcome Message -->
+                            <section id="welcomeMessage" class="flex-grow-1 d-flex align-items-center justify-content-center">
+                                <section class="text-center text-muted">
+                                    <i class="bi bi-chat-dots display-1"></i>
+                                    <h4 class="mt-3">בחרו שיחה מהרשימה</h4>
+                                    <p>או התחילו שיחה חדשה עם ביביסיטר</p>
+                                </section>
+                            </section>
+
+                            <!-- Messages List -->
+                            <section id="messagesList" class="flex-grow-1 p-3 d-none" style="overflow-y: auto;">
+                                <!-- Messages will be loaded here -->
+                            </section>
+
+                            <!-- Message Input -->
+                            <section id="messageInput" class="p-3 border-top d-none">
+                                <form id="messageForm" class="d-flex gap-2">
+                                    <input type="text" class="form-control" id="messageText" placeholder="הקלדו הודעה..." maxlength="1000">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-send"></i>
+                                    </button>
+                                </form>
+                            </section>
+                        </section>
+                    </section>
+                </section>
+            </section>
+        </section>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/pages/chat.js"></script>
+</body>
+</html> 

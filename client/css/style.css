@@ -1,0 +1,407 @@
+/* Global Styles - סגנונות כלליים */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+}
+
+/* סגנון הגוף - Body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    direction: rtl;
+    text-align: right;
+    /* הוספתי רקע עדין */
+    background-color: #fafafa;
+}
+
+/* Hero Section - החלק הראשי */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 80px 0;
+    /* הוספתי אפקט נוסף */
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+    pointer-events: none;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+    margin-bottom: 20px;
+    /* הוספתי צל לטקסט */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.search-box {
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    /* הוספתי רקע שקוף */
+    background: rgba(255,255,255,0.95) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Feature Cards - כרטיסי תכונות */
+.feature-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    /* הוספתי גבול צבעוני */
+    border: 2px solid transparent;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    /* שינוי צבע הגבול בהובר */
+    border-color: var(--primary-color);
+}
+
+.feature-card i {
+    color: var(--primary-color);
+    /* הוספתי אנימציה לאייקונים */
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover i {
+    transform: scale(1.1);
+}
+
+/* Step Cards - כרטיסי שלבים */
+.step-card {
+    padding: 20px;
+    /* הוספתי רקע עדין */
+    background: rgba(255,255,255,0.8);
+    border-radius: 10px;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    /* הוספתי אפקט זוהר */
+    box-shadow: 0 0 20px rgba(0,123,255,0.3);
+}
+
+/* Navigation - ניווט */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    /* הוספתי אפקט זוהר */
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+    /* הוספתי אפקט תחתית */
+    position: relative;
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--warning-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 100%;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--warning-color) !important;
+}
+
+/* Buttons - כפתורים */
+.btn {
+    border-radius: 25px;
+    padding: 10px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    /* הוספתי אפקט זוהר */
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+}
+
+/* Forms - טפסים */
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    padding: 12px 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /* הוספתי רקע עדין */
+    background: rgba(255,255,255,0.9);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+    /* הוספתי אפקט זוהר */
+    background: white;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-color);
+    /* הוספתי אפקט צל */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Cards - כרטיסים */
+.card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* הוספתי רקע עדין */
+    background: rgba(255,255,255,0.95);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    background: var(--primary-color);
+    color: white;
+    border-radius: 15px 15px 0 0 !important;
+    font-weight: 600;
+    /* הוספתי אפקט זוהר */
+    box-shadow: 0 2px 10px rgba(0,123,255,0.3);
+}
+
+/* Alerts - התראות */
+.alert {
+    border-radius: 10px;
+    border: none;
+    padding: 15px 20px;
+    /* הוספתי אפקט זוהר */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Badges - תגיות */
+.badge {
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-weight: 500;
+    /* הוספתי אפקט זוהר */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Profile Images - תמונות פרופיל */
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    /* הוספתי אפקט זוהר */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.profile-image-small {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Rating Stars - כוכבי דירוג */
+.rating {
+    color: var(--warning-color);
+    font-size: 1.2rem;
+    /* הוספתי אפקט זוהר */
+    text-shadow: 0 0 5px rgba(255,193,7,0.5);
+}
+
+.rating .bi-star-fill {
+    color: var(--warning-color);
+}
+
+.rating .bi-star {
+    color: #e9ecef;
+}
+
+/* Chat Styles - סגנונות צ'אט */
+.chat-container {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 15px;
+    /* הוספתי רקע עדין */
+    background: rgba(248,249,250,0.8);
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    /* הוספתי אפקט זוהר */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.message.sent {
+    background: var(--primary-color);
+    color: white;
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.message.received {
+    background: var(--light-color);
+    color: var(--dark-color);
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Loading Spinner */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 40px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .search-box {
+        margin: 20px;
+    }
+    
+    .feature-card {
+        margin-bottom: 20px;
+    }
+    
+    .step-card {
+        margin-bottom: 30px;
+    }
+}
+
+/* Utility Classes */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.border-primary {
+    border-color: var(--primary-color) !important;
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
+} 
