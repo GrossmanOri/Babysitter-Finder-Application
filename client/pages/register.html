@@ -13,6 +13,16 @@
     <link href="../css/style.css" rel="stylesheet">
 </head>
 <body class="bg-light">
+    <!-- Header -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-heart-fill me-2"></i>
+                Babysitter Finder
+            </a>
+        </nav>
+    </header>
+    
     <main class="container mt-5">
         <section class="card mx-auto shadow-lg rounded-lg">
             <article class="card-body p-5">
@@ -50,16 +60,18 @@
                     </section>
                     <section class="mb-3">
                         <label class="form-label"><i class="bi bi-geo-alt me-2"></i>עיר</label>
-                        <input type="text" class="form-control" name="city" required>
+                        <section class="input-group">
+                            <input type="text" class="form-control" name="city" id="cityInput" required>
+                            <button type="button" class="btn btn-outline-primary" id="detectLocationBtn" title="זיהוי אוטומטי של העיר" style="border: 5px solid #00ff00 !important; background-color: #00ff00 !important; color: black !important; min-width: 80px; height: 45px; display: flex !important; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; z-index: 9999; position: relative; visibility: visible !important; opacity: 1 !important; margin-left: 10px;">
+                                <i class="bi bi-geo-alt"></i> LOCATE
+                            </button>
+                        </section>
+                        <small class="form-text text-muted">לחצו על הכפתור לצד כדי לזהות את העיר שלכם אוטומטית</small>
                     </section>
                     <!-- Babysitter fields -->
                     <section id="babysitterFields">
                         <hr class="my-4">
                         <h5 class="text-primary mb-3"><i class="bi bi-star me-2"></i>פרטי ביביסיטר</h5>
-                        <section class="mb-3">
-                            <label class="form-label"><i class="bi bi-calendar me-2"></i>גיל</label>
-                            <input type="number" class="form-control" name="age" min="16" max="80">
-                        </section>
                         <section class="mb-3">
                             <label class="form-label"><i class="bi bi-award me-2"></i>ניסיון</label>
                             <select class="form-select" name="experience">
@@ -76,18 +88,12 @@
                             <label class="form-label"><i class="bi bi-chat-text me-2"></i>תיאור קצר</label>
                             <textarea class="form-control" name="description" maxlength="500" rows="3" placeholder="ספרו על עצמכם, הניסיון שלכם ומה אתם מציעים..."></textarea>
                         </section>
-                    </section>
-                    <!-- Parent fields -->
-                    <section id="parentFields">
-                        <hr class="my-4">
-                        <h5 class="text-primary mb-3"><i class="bi bi-people me-2"></i>פרטי משפחה</h5>
                         <section class="mb-3">
-                            <label class="form-label"><i class="bi bi-people-fill me-2"></i>מספר ילדים</label>
-                            <input type="number" class="form-control" name="childrenCount" min="1" max="10">
-                        </section>
-                        <section class="mb-3">
-                            <label class="form-label"><i class="bi bi-calendar-range me-2"></i>גילאי ילדים (מופרד בפסיקים)</label>
-                            <input type="text" class="form-control" name="childrenAges" placeholder="למשל: 2,5,8">
+                            <label class="form-label"><i class="bi bi-check-circle me-2"></i>זמינות</label>
+                            <select class="form-select" name="isAvailable">
+                                <option value="true">✅ זמינה עכשיו</option>
+                                <option value="false">❌ לא זמינה כרגע</option>
+                            </select>
                         </section>
                     </section>
                     <section id="formMessage" class="mb-3 text-center"></section>
@@ -104,6 +110,8 @@
     
     <!-- Bootstrap JS -->
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <!-- Geolocation Service -->
+    <script src="../js/utils/geolocation.js"></script>
     <!-- Custom JS -->
     <script src="../js/pages/register.js"></script>
 </body>

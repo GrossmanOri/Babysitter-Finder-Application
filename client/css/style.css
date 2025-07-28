@@ -1,4 +1,3 @@
-/* Global Styles - סגנונות כלליים */
 :root {
     --primary-color: #007bff;
     --secondary-color: #6c757d;
@@ -9,8 +8,73 @@
     --light-color: #f8f9fa;
     --dark-color: #343a40;
 }
-
-/* סגנון הגוף - Body */
+.input-group {
+    display: flex !important;
+    align-items: stretch;
+    width: 100%;
+}
+.input-group .form-control {
+    flex: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    height: 38px;
+}
+#detectLocationBtn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    height: 38px;
+    border: 3px solid #ff0000 !important;
+    background-color: #ff0000 !important;
+    color: white !important;
+    font-weight: bold;
+    font-size: 16px;
+    z-index: 9999;
+    position: relative;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+#detectLocationBtn:hover {
+    background-color: #cc0000 !important;
+    color: white !important;
+}
+.input-group {
+    display: flex !important;
+    align-items: stretch;
+    width: 100%;
+    position: relative;
+}
+.input-group .form-control {
+    flex: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    height: 38px;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+#authenticatedNav {
+    display: none;
+}
+#authNav {
+    display: flex;
+}
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -18,8 +82,6 @@ body {
     text-align: right;
     background-color: #fafafa;
 }
-
-/* Hero Section - החלק הראשי */
 .hero-section {
     background: linear-gradient(45deg, #007bff, #0056b3) !important;
     color: white !important;
@@ -27,7 +89,6 @@ body {
     position: relative;
     overflow: hidden;
 }
-
 .hero-section::before {
     content: '';
     position: absolute;
@@ -38,13 +99,11 @@ body {
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
     pointer-events: none;
 }
-
 .hero-section h1 {
     font-weight: 700;
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
-
 .search-box {
     max-width: 800px;
     margin: 0 auto;
@@ -53,8 +112,6 @@ body {
     background: rgba(255,255,255,0.95) !important;
     backdrop-filter: blur(10px);
 }
-
-/* Feature Cards - כרטיסי תכונות */
 .feature-card {
     background: white;
     border: 2px solid #007bff;
@@ -63,29 +120,23 @@ body {
     transition: all 0.3s ease;
     height: 100%;
 }
-
 .feature-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     border-color: var(--primary-color);
 }
-
 .feature-card i {
     color: var(--primary-color);
     transition: transform 0.3s ease;
 }
-
 .feature-card:hover i {
     transform: scale(1.1);
 }
-
-/* Step Cards - כרטיסי שלבים */
 .step-card {
     padding: 20px;
     background: rgba(255,255,255,0.8);
     border-radius: 10px;
 }
-
 .step-number {
     width: 50px;
     height: 50px;
@@ -97,20 +148,16 @@ body {
     justify-content: center;
     box-shadow: 0 0 20px rgba(0,123,255,0.3);
 }
-
-/* Navigation - ניווט */
 .navbar-brand {
     font-weight: 700;
     font-size: 1.5rem;
     text-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
-
 .navbar-nav .nav-link {
     font-weight: 500;
     transition: color 0.3s ease;
     position: relative;
 }
-
 .navbar-nav .nav-link::after {
     content: '';
     position: absolute;
@@ -122,16 +169,12 @@ body {
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }
-
 .navbar-nav .nav-link:hover::after {
     width: 100%;
 }
-
 .navbar-nav .nav-link:hover {
     color: var(--warning-color) !important;
 }
-
-/* Buttons - כפתורים */
 .btn {
     border-radius: 25px;
     padding: 10px 25px;
@@ -140,7 +183,6 @@ body {
     position: relative;
     overflow: hidden;
 }
-
 .btn::before {
     content: '';
     position: absolute;
@@ -151,24 +193,19 @@ body {
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     transition: left 0.5s;
 }
-
 .btn:hover::before {
     left: 100%;
 }
-
 .btn-primary {
     background: linear-gradient(45deg, #007bff, #0056b3);
     border: none;
     transition: all 0.3s ease;
 }
-
 .btn-primary:hover {
     background: #0056b3;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0,123,255,0.3);
 }
-
-/* Forms - טפסים */
 .form-control {
     border-radius: 10px;
     border: 2px solid #e9ecef;
@@ -176,20 +213,16 @@ body {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     background: rgba(255,255,255,0.9);
 }
-
 .form-control:focus, .form-select:focus {
     border-color: #007bff;
     box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
     background: white;
 }
-
 .form-label {
     font-weight: 600;
     color: #495057;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
-
-/* Cards - כרטיסים */
 .card {
     border-radius: 15px;
     border: none;
@@ -197,12 +230,10 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background: rgba(255,255,255,0.95);
 }
-
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
-
 .card-header {
     background: var(--primary-color);
     color: white;
@@ -210,60 +241,28 @@ body {
     font-weight: 600;
     box-shadow: 0 2px 10px rgba(0,123,255,0.3);
 }
-
-/* Alerts - התראות */
 .alert {
     border-radius: 10px;
     border: none;
     padding: 15px 20px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-
-/* Badges - תגיות */
 .badge {
     border-radius: 20px;
     padding: 8px 12px;
     font-weight: 500;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
-
-/* Profile Images - תמונות פרופיל */
-.profile-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--primary-color);
-    transition: transform 0.3s ease;
-}
-
-.profile-image:hover {
-    transform: scale(1.1);
-}
-
-.profile-image-small {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--primary-color);
-}
-
-/* Rating - דירוג */
 .rating {
     color: var(--warning-color);
     font-size: 1.2rem;
 }
-
 .rating .bi-star-fill {
     color: var(--warning-color);
 }
-
 .rating .bi-star {
     color: #e9ecef;
 }
-
-/* Chat Container - מיכל צ'אט */
 .chat-container {
     height: 400px;
     border: 1px solid #dee2e6;
@@ -272,30 +271,63 @@ body {
     display: flex;
     flex-direction: column;
 }
-
-/* Messages - הודעות */
+.conversation-item {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #e9ecef;
+}
+.conversation-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(-5px);
+}
+.conversation-item.active {
+    background-color: #e3f2fd;
+    border-right: 4px solid var(--primary-color);
+}
+.conversation-time {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-shadow: 0 1px 2px rgba(0,123,255,0.1);
+}
+.conversation-time.recent {
+    color: #28a745;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+.recent-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #28a745;
+    border-radius: 50%;
+    margin: 2px auto;
+    animation: blink 1.5s infinite;
+}
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
 .message {
     padding: 10px 15px;
     margin: 5px;
     border-radius: 15px;
     max-width: 70%;
 }
-
 .message.sent {
     background: var(--primary-color);
     color: white;
     margin-right: auto;
     border-bottom-right-radius: 5px;
 }
-
 .message.received {
     background: var(--light-color);
     color: var(--dark-color);
     margin-left: auto;
     border-bottom-left-radius: 5px;
 }
-
-/* Spinner - ספינר */
 .spinner {
     width: 40px;
     height: 40px;
@@ -304,13 +336,10 @@ body {
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
-/* Auth Container - מיכל התחברות */
 .auth-container {
     background: rgba(255,255,255,0.95) !important;
     backdrop-filter: blur(10px);
@@ -321,12 +350,10 @@ body {
     max-width: 1000px;
     margin: 0 auto;
 }
-
 .auth-tabs {
     display: flex;
     background: #f8f9fa;
 }
-
 .auth-tab {
     flex: 1;
     padding: 20px;
@@ -338,35 +365,27 @@ body {
     font-weight: 600;
     font-size: 18px;
 }
-
 .auth-tab.active {
     background: #007bff;
     color: white;
 }
-
 .auth-tab:hover:not(.active) {
     background: #e9ecef;
 }
-
 .auth-content {
     padding: 40px;
 }
-
 .auth-form {
     display: none;
 }
-
 .auth-form.active {
     display: block;
 }
-
-/* Form Divider - מפריד טפסים */
 .form-divider {
     position: relative;
     text-align: center;
     margin: 20px 0;
 }
-
 .form-divider::before {
     content: '';
     position: absolute;
@@ -376,34 +395,17 @@ body {
     height: 1px;
     background: #dee2e6;
 }
-
 .form-divider span {
     background: white;
     padding: 0 15px;
     color: #6c757d;
     font-size: 14px;
 }
-
-/* Profile Page Styles - סגנונות דף פרופיל */
 .profile-header {
     background: linear-gradient(45deg, #007bff, #0056b3);
     color: white;
     padding: 40px 0;
 }
-
-.profile-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 4px solid white;
-    background: #f8f9fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-    margin: 0 auto 20px;
-}
-
 .profile-card {
     background: white;
     border-radius: 15px;
@@ -411,17 +413,14 @@ body {
     margin-bottom: 30px;
     overflow: hidden;
 }
-
 .profile-card-header {
     background: #f8f9fa;
     padding: 20px;
     border-bottom: 1px solid #dee2e6;
 }
-
 .profile-card-body {
     padding: 30px;
 }
-
 .message-item {
     border: 1px solid #dee2e6;
     border-radius: 10px;
@@ -429,34 +428,28 @@ body {
     margin-bottom: 15px;
     transition: all 0.3s ease;
 }
-
 .message-item:hover {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     transform: translateY(-2px);
 }
-
 .message-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
-
 .message-sender {
     font-weight: 600;
     color: #007bff;
 }
-
 .message-time {
     font-size: 14px;
     color: #6c757d;
 }
-
 .message-content {
     color: #495057;
     line-height: 1.6;
 }
-
 .edit-btn {
     background: linear-gradient(45deg, #28a745, #20c997);
     border: none;
@@ -466,12 +459,10 @@ body {
     font-size: 14px;
     transition: all 0.3s ease;
 }
-
 .edit-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
 }
-
 .stats-card {
     background: linear-gradient(45deg, #007bff, #0056b3);
     color: white;
@@ -480,19 +471,15 @@ body {
     text-align: center;
     margin-bottom: 30px;
 }
-
 .stats-number {
     font-size: 48px;
     font-weight: bold;
     margin-bottom: 10px;
 }
-
 .stats-label {
     font-size: 18px;
     opacity: 0.9;
 }
-
-/* Test Profile Page Styles */
 .test-container {
     max-width: 800px;
     margin: 0 auto;
@@ -501,7 +488,6 @@ body {
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-
 .test-btn {
     background: #007bff;
     color: white;
@@ -511,352 +497,253 @@ body {
     cursor: pointer;
     margin: 10px;
 }
-
 .test-btn:hover {
     background: #0056b3;
 }
-
 .test-user-info {
     background: #e9ecef;
     padding: 15px;
     border-radius: 5px;
     margin: 20px 0;
 }
-
 .test-success {
     color: #28a745;
     font-weight: bold;
 }
-
 .test-error {
     color: #dc3545;
     font-weight: bold;
 }
-
-/* Utility Classes - מחלקות עזר */
 .text-primary {
     color: var(--primary-color) !important;
 }
-
 .bg-primary {
     background-color: var(--primary-color) !important;
 }
-
 .border-primary {
     border-color: var(--primary-color) !important;
 }
-
 .text-success {
     color: #28a745 !important;
 }
-
 .text-danger {
     color: #dc3545 !important;
 }
-
-/* Animations - אנימציות */
 .fade-in {
     animation: fadeIn 0.5s ease-in;
 }
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-
 .slide-in {
     animation: slideIn 0.5s ease-out;
 }
-
 @keyframes slideIn {
     from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
-
-/* Scrollbar - סרגל גלילה */
 ::-webkit-scrollbar {
     width: 8px;
 }
-
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
-
 ::-webkit-scrollbar-thumb {
     background: var(--primary-color);
     border-radius: 10px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background: #0056b3;
 }
-
-/* Responsive Design - עיצוב רספונסיבי */
 @media (max-width: 768px) {
     .hero-section {
         padding: 40px 0;
     }
-    
     .hero-section h1 {
         font-size: 2rem;
     }
-    
     .search-box {
         margin: 0 15px;
     }
-    
     .feature-card {
         margin-bottom: 20px;
     }
-    
     .step-card {
         margin-bottom: 20px;
     }
-    
     .auth-container {
         margin: 0 15px;
     }
-    
     .auth-content {
         padding: 20px;
     }
-    
     .profile-card-body {
         padding: 20px;
     }
-    
     .stats-card {
         padding: 20px;
     }
-    
     .stats-number {
         font-size: 36px;
     }
-    
     .stats-label {
         font-size: 16px;
     }
 }
-
-/* Form Check - בדיקת טופס */
 .form-check {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
 }
-
 .form-check-input {
     margin-left: 10px;
     margin-right: 0;
 }
-
 .form-check-label {
     margin-right: 10px;
     margin-left: 0;
     cursor: pointer;
 }
-
-/* Hidden Fields - שדות מוסתרים */
 #babysitterFields {
     display: none;
 }
-
 #parentFields {
     display: block;
 }
-
-/* Button Sizes - גדלי כפתורים */
 .btn-lg {
     padding: 15px 30px;
     font-size: 1.1rem;
     font-weight: 600;
     border-radius: 10px;
 }
-
-/* Card Title - כותרת כרטיס */
 .card-title {
     color: #007bff;
     font-weight: 700;
 }
-
-/* Shadow Effects - אפקטי צל */
 .shadow-lg {
     box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
 }
-
-/* Border Radius - רדיוס גבול */
 .rounded-lg {
     border-radius: 15px !important;
 }
-
-/* Background Effects - אפקטי רקע */
 .bg-white {
     background-color: white !important;
 }
-
-/* Text Colors - צבעי טקסט */
 .text-muted {
     color: #6c757d !important;
 }
-
-/* Margin and Padding - שוליים וריפוד */
 .mb-2 {
     margin-bottom: 0.5rem !important;
 }
-
 .mb-3 {
     margin-bottom: 1rem !important;
 }
-
 .mb-4 {
     margin-bottom: 1.5rem !important;
 }
-
 .py-3 {
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;
 }
-
 .py-5 {
     padding-top: 3rem !important;
     padding-bottom: 3rem !important;
 }
-
 .px-5 {
     padding-left: 3rem !important;
     padding-right: 3rem !important;
 }
-
-/* Display Classes - מחלקות תצוגה */
 .d-none {
     display: none !important;
 }
-
 .d-block {
     display: block !important;
 }
-
 .d-flex {
     display: flex !important;
 }
-
 .flex-grow-1 {
     flex-grow: 1 !important;
 }
-
-/* Position Classes - מחלקות מיקום */
 .position-relative {
     position: relative !important;
 }
-
 .position-absolute {
     position: absolute !important;
 }
-
-/* Overflow Classes - מחלקות גלישה */
 .overflow-hidden {
     overflow: hidden !important;
 }
-
 .overflow-y-auto {
     overflow-y: auto !important;
 }
-
-/* Height Classes - מחלקות גובה */
 .h-100 {
     height: 100% !important;
 }
-
-/* Width Classes - מחלקות רוחב */
 .w-100 {
     width: 100% !important;
 }
-
-/* Text Alignment - יישור טקסט */
 .text-center {
     text-align: center !important;
 }
-
 .text-right {
     text-align: right !important;
 }
-
-/* Font Weight - משקל גופן */
 .fw-bold {
     font-weight: bold !important;
 }
-
 .fw-600 {
     font-weight: 600 !important;
 }
-
-/* Font Size - גודל גופן */
 .fs-1 {
     font-size: 1rem !important;
 }
-
 .fs-2 {
     font-size: 1.1rem !important;
 }
-
 .fs-3 {
     font-size: 1.2rem !important;
 }
-
-/* Border Classes - מחלקות גבול */
 .border-0 {
     border: 0 !important;
 }
-
 .border-1 {
     border: 1px solid !important;
 }
-
-/* RTL Specific - ספציפי ל-RTL */
 .me-2 {
     margin-left: 0.5rem !important;
     margin-right: 0 !important;
 }
-
 .me-3 {
     margin-left: 1rem !important;
     margin-right: 0 !important;
 }
-
 .ms-auto {
     margin-right: auto !important;
     margin-left: 0 !important;
 }
-
 .me-auto {
     margin-left: auto !important;
     margin-right: 0 !important;
 }
-
-/* Bootstrap Overrides - דריסות Bootstrap */
 .navbar-nav .nav-link {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
 }
-
 .navbar-nav .nav-item {
     margin-right: 0;
     margin-left: 0.5rem;
 }
-
-/* Custom Scrollbar for Messages - סרגל גלילה מותאם להודעות */
 #messagesList {
     overflow-y: auto;
     max-height: 400px;
 }
-
-/* Loading States - מצבי טעינה */
 .loading {
     opacity: 0.6;
     pointer-events: none;
 }
-
 .loading::after {
     content: '';
     position: absolute;
@@ -870,36 +757,28 @@ body {
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
-
-/* Focus States - מצבי מיקוד */
 .form-control:focus,
 .form-select:focus,
 .btn:focus {
     outline: none;
     box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
 }
-
-/* Hover Effects - אפקטי hover */
 .btn:hover,
 .nav-link:hover,
 .feature-card:hover {
     transform: translateY(-2px);
     transition: all 0.3s ease;
 }
-
-/* Print Styles - סגנונות הדפסה */
 @media print {
     .navbar,
     .btn,
     .auth-container {
         display: none !important;
     }
-    
     body {
         background: white !important;
         color: black !important;
     }
-    
     .card {
         box-shadow: none !important;
         border: 1px solid #ddd !important;

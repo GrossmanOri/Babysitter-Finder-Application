@@ -4,12 +4,8 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
-
+const config = require('../config/default');
 const router = express.Router();
-
-// @route   POST /api/auth/register
-// @desc    Register a new user
-// @access  Public
 router.post('/register', [
     body('firstName', 'שם פרטי הוא שדה חובה').not().isEmpty(),
     body('lastName', 'שם משפחה הוא שדה חובה').not().isEmpty(),
@@ -19,7 +15,6 @@ router.post('/register', [
     body('userType', 'סוג משתמש חייב להיות parent או babysitter').isIn(['parent', 'babysitter']),
     body('city', 'עיר היא שדה חובה').not().isEmpty()
 ], function(req, res) {
-    // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ 
@@ -27,10 +22,7 @@ router.post('/register', [
             errors: errors.array() 
         });
     }
-
-    const { firstName, lastName, email, password, phone, userType, city, address } = req.body;
-
-    // Check if user already exists
+    const { firstName, lastName, email, password, phone, userType, city, experience, hourlyRate, description } = req.body;
     User.findOne({ email: email })
         .then(user => {
             if (user) {
@@ -39,34 +31,35 @@ router.post('/register', [
                     message: 'משתמש עם אימייל זה כבר קיים במערכת'
                 });
             }
-
-            // Create new user
-            const newUser = new User({
+            const userData = {
                 firstName,
                 lastName,
                 email,
                 password,
                 phone,
                 userType,
-                city,
-                address
-            });
-
-            // Save user to database
+                city
+            };
+            if (userType === 'babysitter') {
+                userData.babysitter = {
+                    experience: experience,
+                    hourlyRate: hourlyRate,
+                    description: description
+                };
+            }
+            const newUser = new User(userData);
             newUser.save()
                 .then(user => {
-                    // Create JWT token
                     const payload = {
                         user: {
                             id: user.id,
                             userType: user.userType
                         }
                     };
-
                     jwt.sign(
                         payload,
-                        process.env.JWT_SECRET,
-                        { expiresIn: '7d' },
+                        config.jwt.secret,
+                        { expiresIn: config.jwt.expiresIn },
                         function(err, token) {
                             if (err) {
                                 console.error('JWT signing error:', err);
@@ -75,7 +68,6 @@ router.post('/register', [
                                     message: 'שגיאה ביצירת טוקן'
                                 });
                             }
-
                             res.json({
                                 success: true,
                                 message: 'המשתמש נרשם בהצלחה',
@@ -108,15 +100,10 @@ router.post('/register', [
             });
         });
 });
-
-// @route   POST /api/auth/login
-// @desc    Authenticate user & get token
-// @access  Public
 router.post('/login', [
     body('email', 'אנא הזינו אימייל תקין').isEmail(),
     body('password', 'סיסמה היא שדה חובה').exists()
 ], function(req, res) {
-    // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ 
@@ -124,10 +111,7 @@ router.post('/login', [
             errors: errors.array() 
         });
     }
-
     const { email, password } = req.body;
-
-    // Check if user exists
     User.findOne({ email: email })
         .then(user => {
             if (!user) {
@@ -136,16 +120,12 @@ router.post('/login', [
                     message: 'פרטי התחברות שגויים'
                 });
             }
-
-            // Check if user is active
             if (!user.isActive) {
                 return res.status(400).json({
                     success: false,
                     message: 'החשבון אינו פעיל'
                 });
             }
-
-            // Check password
             user.comparePassword(password)
                 .then(isMatch => {
                     if (!isMatch) {
@@ -154,23 +134,18 @@ router.post('/login', [
                             message: 'פרטי התחברות שגויים'
                         });
                     }
-
-                    // Update last login
-                    user.lastLogin = new Date();
                     user.save()
                         .then(() => {
-                            // Create JWT token
                             const payload = {
                                 user: {
                                     id: user.id,
                                     userType: user.userType
                                 }
                             };
-
                             jwt.sign(
                                 payload,
-                                process.env.JWT_SECRET,
-                                { expiresIn: '7d' },
+                                config.jwt.secret,
+                                { expiresIn: config.jwt.expiresIn },
                                 function(err, token) {
                                     if (err) {
                                         console.error('JWT signing error:', err);
@@ -179,7 +154,6 @@ router.post('/login', [
                                             message: 'שגיאה ביצירת טוקן'
                                         });
                                     }
-
                                     res.json({
                                         success: true,
                                         message: 'התחברת בהצלחה',
@@ -189,9 +163,12 @@ router.post('/login', [
                                             firstName: user.firstName,
                                             lastName: user.lastName,
                                             email: user.email,
+                                            phone: user.phone,
                                             userType: user.userType,
                                             city: user.city,
-                                            profileImage: user.profileImage
+                                            profileImage: user.profileImage,
+                                            babysitter: user.babysitter,
+                                            parent: user.parent
                                         }
                                     });
                                 }
@@ -221,10 +198,6 @@ router.post('/login', [
             });
         });
 });
-
-// @route   GET /api/auth/verify
-// @desc    Verify JWT token
-// @access  Private
 router.get('/verify', auth, function(req, res) {
     User.findById(req.user.id)
         .select('-password')
@@ -235,7 +208,6 @@ router.get('/verify', auth, function(req, res) {
                     message: 'משתמש לא נמצא'
                 });
             }
-
             res.json({
                 success: true,
                 user: user
@@ -249,26 +221,17 @@ router.get('/verify', auth, function(req, res) {
             });
         });
 });
-
-// @route   POST /api/auth/logout
-// @desc    Logout user (client-side token removal)
-// @access  Private
 router.post('/logout', auth, function(req, res) {
     res.json({
         success: true,
         message: 'התנתקת בהצלחה'
     });
 });
-
-// @route   POST /api/auth/change-password
-// @desc    Change user password
-// @access  Private
 router.post('/change-password', [
     auth,
     body('currentPassword', 'סיסמה נוכחית היא שדה חובה').exists(),
     body('newPassword', 'סיסמה חדשה חייבת להיות לפחות 6 תווים').isLength({ min: 6 })
 ], function(req, res) {
-    // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ 
@@ -276,9 +239,7 @@ router.post('/change-password', [
             errors: errors.array() 
         });
     }
-
     const { currentPassword, newPassword } = req.body;
-
     User.findById(req.user.id)
         .then(user => {
             if (!user) {
@@ -287,8 +248,6 @@ router.post('/change-password', [
                     message: 'משתמש לא נמצא'
                 });
             }
-
-            // Check current password
             user.comparePassword(currentPassword)
                 .then(isMatch => {
                     if (!isMatch) {
@@ -297,8 +256,6 @@ router.post('/change-password', [
                             message: 'סיסמה נוכחית שגויה'
                         });
                     }
-
-                    // Update password
                     user.password = newPassword;
                     user.save()
                         .then(() => {
@@ -331,5 +288,4 @@ router.post('/change-password', [
             });
         });
 });
-
 module.exports = router; 

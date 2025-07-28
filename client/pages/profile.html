@@ -19,7 +19,7 @@
     <!-- Header -->
     <header class="navbar navbar-expand-lg navbar-dark bg-primary">
         <nav class="container">
-            <a class="navbar-brand" href="../index.html">
+            <a class="navbar-brand" href="#" id="homeLink">
                 <i class="bi bi-heart-fill me-2"></i>
                 Babysitter Finder
             </a>
@@ -29,16 +29,8 @@
             </button>
             
             <section class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.html">בית</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="search.html">חיפוש בייביסיטר</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">אודות</a>
-                    </li>
+                <ul class="navbar-nav me-auto" id="navigationMenu">
+                    <!-- Navigation will be populated based on user type -->
                 </ul>
                 
                 <ul class="navbar-nav" id="authButtons">
@@ -53,9 +45,6 @@
         <!-- Profile Header -->
         <section class="profile-header">
             <article class="container text-center">
-                <section class="profile-avatar" id="userAvatar">
-                    <i class="bi bi-person-fill"></i>
-                </section>
                 <h1 id="userName">טוען...</h1>
                 <p id="userEmail" class="mb-0">טוען...</p>
                 <p id="userRole" class="mb-0 mt-2">
@@ -69,27 +58,7 @@
 
         <!-- Profile Content -->
         <section class="container py-5">
-            <!-- Stats Cards -->
-            <section class="row mb-5">
-                <article class="col-md-4">
-                    <section class="stats-card">
-                        <section class="stats-number" id="totalMessages">0</section>
-                        <section class="stats-label">הודעות</section>
-                    </section>
-                </article>
-                <article class="col-md-4">
-                    <section class="stats-card">
-                        <section class="stats-number" id="totalBookings">0</section>
-                        <section class="stats-label">הזמנות</section>
-                    </section>
-                </article>
-                <article class="col-md-4">
-                    <section class="stats-card">
-                        <section class="stats-number" id="userRating">0</section>
-                        <section class="stats-label">דירוג ממוצע</section>
-                    </section>
-                </article>
-            </section>
+
 
             <!-- Profile Information -->
             <section class="row">
@@ -122,11 +91,60 @@
                                     </section>
                                     <section class="col-md-6">
                                         <label class="form-label">עיר</label>
-                                        <input type="text" class="form-control" id="city" name="city">
+                                        <section class="input-group">
+                                            <input type="text" class="form-control" id="city" name="city">
+                                            <button type="button" class="btn btn-outline-primary" id="detectLocationBtn" title="זיהוי אוטומטי של העיר">
+                                                <i class="bi bi-geo-alt"></i>
+                                            </button>
+                                        </section>
                                     </section>
+                                    <section class="col-md-6">
+                                        <label class="form-label">סיסמה חדשה</label>
+                                        <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="השאר ריק אם לא רוצה לשנות">
+                                    </section>
+                                    
+                                    <!-- Babysitter specific fields -->
+                                    <section id="babysitterProfileFields" class="col-12" style="display: none;">
+                                        <hr class="my-4">
+                                        <h5 class="text-primary mb-3"><i class="bi bi-star me-2"></i>פרטי ביביסיטר</h5>
+                                        <section class="row g-3">
+                                            <section class="col-md-6">
+                                                <label class="form-label"><i class="bi bi-award me-2"></i>ניסיון</label>
+                                                <select class="form-select" id="experience" name="experience">
+                                                    <option value="beginner">🌱 מתחילה</option>
+                                                    <option value="intermediate">⭐ בינונית</option>
+                                                    <option value="expert">🏆 מנוסה</option>
+                                                </select>
+                                            </section>
+                                            <section class="col-md-6">
+                                                <label class="form-label"><i class="bi bi-currency-dollar me-2"></i>מחיר לשעה (₪)</label>
+                                                <input type="number" class="form-control" id="hourlyRate" name="hourlyRate" min="20" max="200">
+                                            </section>
+                                            <section class="col-md-6">
+                                                <label class="form-label"><i class="bi bi-check-circle me-2"></i>זמינות</label>
+                                                <select class="form-select" id="isAvailable" name="isAvailable">
+                                                    <option value="true">✅ זמינה עכשיו</option>
+                                                    <option value="false">❌ לא זמינה כרגע</option>
+                                                </select>
+                                            </section>
+                                            <section class="col-12">
+                                                <label class="form-label"><i class="bi bi-chat-text me-2"></i>תיאור</label>
+                                                <textarea class="form-control" id="description" name="description" maxlength="500" rows="3" placeholder="ספרי על עצמך, הניסיון שלך ומה את מציעה..."></textarea>
+                                            </section>
+                                        </section>
+                                    </section>
+                                    
                                     <section class="col-12">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="bi bi-check-circle me-2"></i>שמור שינויים
+                                        </button>
+                                    </section>
+                                    
+                                    <!-- Delete Profile Section -->
+                                    <section class="col-12 mt-4">
+                                        <hr class="my-4">
+                                        <button type="button" class="btn btn-danger" id="deleteProfileBtn" onclick="showDeleteConfirmation()">
+                                            <i class="bi bi-trash me-2"></i>למחיקת המשתמש
                                         </button>
                                     </section>
                                 </section>
@@ -134,19 +152,7 @@
                         </section>
                     </section>
 
-                    <!-- Messages -->
-                    <section class="profile-card">
-                        <header class="profile-card-header">
-                            <h3 class="mb-0">
-                                <i class="bi bi-chat-dots me-2"></i>ההודעות שלי
-                            </h3>
-                        </header>
-                        <section class="profile-card-body">
-                            <section id="messagesList">
-                                <!-- הודעות יוכנסו כאן דינמית -->
-                            </section>
-                        </section>
-                    </section>
+
                 </article>
 
                 <article class="col-lg-4">
@@ -179,9 +185,6 @@
                                 <a href="chat.html" class="btn btn-outline-success">
                                     <i class="bi bi-chat me-2"></i>צ'אט
                                 </a>
-                                <button class="btn btn-outline-warning" onclick="changePassword()">
-                                    <i class="bi bi-key me-2"></i>שנה סיסמה
-                                </button>
                             </section>
                         </section>
                     </section>
@@ -215,13 +218,15 @@
             <hr>
             
             <section class="text-center">
-                <p>&copy; 2024 Babysitter Finder. כל הזכויות שמורות.</p>
+                <p>&copy; 2025 Babysitter Finder. כל הזכויות שמורות.</p>
             </section>
         </article>
     </footer>
 
     <!-- Bootstrap JS -->
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <!-- Geolocation Service -->
+    <script src="../js/utils/geolocation.js"></script>
     <!-- Custom JS -->
     <script src="../js/main.js"></script>
     <script src="../js/pages/profile.js"></script>

@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-
 const userSchema = new mongoose.Schema({
-  // פרטי משתמש בסיסיים
   firstName: {
     type: String,
     required: true,
@@ -30,21 +28,20 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  
-  // סוג משתמש
+  profileImage: {
+    type: String
+  },
+  city: {
+    type: String,
+    required: true,
+    trim: true
+  },
   userType: {
     type: String,
     enum: ['parent', 'babysitter'],
     required: true
   },
-  
-  // פרטים נוספים לביביסיטר
   babysitter: {
-    age: {
-      type: Number,
-      min: 16,
-      max: 80
-    },
     experience: {
       type: String,
       enum: ['beginner', 'intermediate', 'expert']
@@ -53,10 +50,6 @@ const userSchema = new mongoose.Schema({
       type: Number,
       min: 20,
       max: 200
-    },
-    city: {
-      type: String,
-      required: true
     },
     description: {
       type: String,
@@ -67,26 +60,10 @@ const userSchema = new mongoose.Schema({
       default: true
     }
   },
-  
-  // פרטים נוספים להורה
-  parent: {
-    childrenCount: {
-      type: Number,
-      min: 1,
-      max: 10
-    },
-    childrenAges: [{
-      type: Number,
-      min: 0,
-      max: 18
-    }],
-    city: {
-      type: String,
-      required: true
-    }
+  isActive: {
+    type: Boolean,
+    default: true
   },
-  
-  // תאריכי יצירה ועדכון
   createdAt: {
     type: Date,
     default: Date.now
@@ -96,35 +73,64 @@ const userSchema = new mongoose.Schema({
     default: Date.now
   }
 });
-
-// Middleware לעדכון תאריך עדכון
+userSchema.index({ email: 1 });
+userSchema.index({ userType: 1 });
+userSchema.index({ city: 1 });
+userSchema.index({ 'babysitter.isAvailable': 1 });
 userSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
   next();
 });
-
-// הצפנת סיסמה לפני שמירה
-userSchema.pre('save', function(next) {
+userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
-  
-  bcrypt.hash(this.password, 12)
-    .then(hashedPassword => {
-      this.password = hashedPassword;
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
       next();
-    })
-    .catch(err => next(err));
+  } catch (error) {
+    next(error);
+  }
 });
-
-// פונקציה להשוואת סיסמאות
-userSchema.methods.comparePassword = function(candidatePassword) {
+userSchema.methods.comparePassword = async function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
-
-// פונקציה לקבלת פרטי משתמש ללא סיסמה
-userSchema.methods.toPublicJSON = function() {
-  const userObject = this.toObject();
-  delete userObject.password;
-  return userObject;
+userSchema.virtual('fullName').get(function() {
+  return `${this.firstName} ${this.lastName}`;
+});
+userSchema.methods.getBabysitterDetails = function() {
+  if (this.userType !== 'babysitter') {
+    return null;
+  }
+  return {
+    experience: this.babysitter?.experience,
+    hourlyRate: this.babysitter?.hourlyRate,
+    description: this.babysitter?.description,
+    isAvailable: this.babysitter?.isAvailable
+  };
 };
-
+userSchema.statics.findAvailableBabysitters = function(city = null) {
+  const query = {
+    userType: 'babysitter',
+    isActive: true,
+    'babysitter.isAvailable': true
+  };
+  if (city) {
+    query.city = city;
+  }
+  return this.find(query);
+};
+userSchema.statics.searchUsers = function(searchTerm, userType = null) {
+  const query = {
+    isActive: true,
+    $or: [
+      { firstName: { $regex: searchTerm, $options: 'i' } },
+      { lastName: { $regex: searchTerm, $options: 'i' } },
+      { email: { $regex: searchTerm, $options: 'i' } }
+    ]
+  };
+  if (userType) {
+    query.userType = userType;
+  }
+  return this.find(query);
+};
 module.exports = mongoose.model('User', userSchema); 

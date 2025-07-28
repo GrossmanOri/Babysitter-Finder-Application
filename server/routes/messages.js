@@ -1,382 +1,189 @@
 const express = require('express');
 const router = express.Router();
-const Message = require('../models/Message');
 const User = require('../models/User');
+const messageStore = require('../utils/messageStore');
 const auth = require('../middleware/auth');
-
-// POST /api/messages - שליחת הודעה חדשה
 router.post('/', auth, (req, res) => {
   const { receiverId, content } = req.body;
   const senderId = req.user.id;
-  
-  // בדיקות תקינות
+  console.log('POST /api/messages - Request body:', req.body);
+  console.log('POST /api/messages - User:', req.user);
+  console.log('POST /api/messages - SenderId:', senderId);
+  console.log('POST /api/messages - ReceiverId:', receiverId);
+  console.log('POST /api/messages - Content:', content);
   if (!receiverId || !content) {
+    console.log('POST /api/messages - Missing receiverId or content');
     return res.status(400).json({
       success: false,
       message: 'נדרשים מזהה מקבל ותוכן הודעה'
     });
   }
-  
   if (content.trim().length === 0) {
     return res.status(400).json({
       success: false,
       message: 'תוכן ההודעה לא יכול להיות ריק'
     });
   }
-  
   if (senderId === receiverId) {
     return res.status(400).json({
       success: false,
       message: 'לא ניתן לשלוח הודעה לעצמך'
     });
   }
-  
-  // בדיקה שהמקבל קיים
-  User.findById(receiverId)
-    .then(receiver => {
-      if (!receiver) {
-        return res.status(404).json({
-          success: false,
-          message: 'המשתמש לא נמצא'
-        });
-      }
-      
-      // יצירת הודעה חדשה
-      const newMessage = new Message({
-        sender: senderId,
-        receiver: receiverId,
-        content: content.trim()
-      });
-      
-      return newMessage.save();
-    })
-    .then(savedMessage => {
-      // החזרת ההודעה עם פרטי השולח והמקבל
-      return Message.findById(savedMessage._id)
-        .populate('sender', 'firstName lastName userType')
-        .populate('receiver', 'firstName lastName userType');
-    })
-    .then(messageWithDetails => {
-      res.status(201).json({
-        success: true,
-        message: 'הודעה נשלחה בהצלחה',
-        data: messageWithDetails
-      });
-    })
-    .catch(err => {
-      console.error('Error sending message:', err);
-      res.status(500).json({
-        success: false,
-        message: 'שגיאה בשליחת ההודעה'
-      });
-    });
+  const newMessage = messageStore.addMessage(senderId, receiverId, content.trim());
+  res.status(201).json({
+    success: true,
+    message: 'הודעה נשלחה בהצלחה',
+    data: {
+      _id: newMessage.id,
+      sender: senderId,
+      receiver: receiverId,
+      content: newMessage.content,
+      isRead: newMessage.isRead,
+      createdAt: newMessage.createdAt
+    }
+  });
 });
-
-// GET /api/messages/conversation/:userId - קבלת שיחה עם משתמש ספציפי
-router.get('/conversation/:userId', auth, (req, res) => {
+router.get('/conversation/:userId', auth, async (req, res) => {
   const { userId } = req.params;
   const currentUserId = req.user.id;
   const { limit = 50 } = req.query;
-  
-  // בדיקה שהמשתמש השני קיים
-  User.findById(userId)
-    .then(user => {
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          message: 'המשתמש לא נמצא'
-        });
+  console.log('GET /api/messages/conversation/:userId - CurrentUserId:', currentUserId);
+  console.log('GET /api/messages/conversation/:userId - UserId:', userId);
+  try {
+    const messages = messageStore.getConversation(currentUserId, userId, parseInt(limit));
+    messageStore.markAsRead(userId, currentUserId);
+    const currentUser = await User.findById(currentUserId).select('firstName lastName userType');
+    const otherUser = await User.findById(userId).select('firstName lastName userType');
+    const messagesWithSender = messages.map(message => {
+      if (message.senderId === currentUserId) {
+        return {
+          ...message,
+          sender: {
+            _id: message.senderId,
+            firstName: currentUser?.firstName || 'אני',
+            lastName: currentUser?.lastName || '',
+            userType: currentUser?.userType || 'unknown'
+          }
+        };
+      } else {
+        return {
+          ...message,
+          sender: {
+            _id: message.senderId,
+            firstName: otherUser?.firstName || 'משתמש',
+            lastName: otherUser?.lastName || 'לא ידוע',
+            userType: otherUser?.userType || 'unknown'
+          }
+        };
       }
-      
-      // קבלת ההודעות
-      return Message.getConversation(currentUserId, userId, parseInt(limit));
-    })
-    .then(messages => {
-      // סימון הודעות כנקראו
-      return Message.markAsRead(userId, currentUserId)
-        .then(() => messages);
-    })
-    .then(messages => {
-      res.json({
-        success: true,
-        data: messages.reverse() // החזרת הודעות בסדר כרונולוגי
-      });
-    })
-    .catch(err => {
-      console.error('Error fetching conversation:', err);
-      res.status(500).json({
-        success: false,
-        message: 'שגיאה בטעינת השיחה'
-      });
     });
-});
-
-// GET /api/messages/conversations - קבלת רשימת שיחות של המשתמש
-router.get('/conversations', auth, (req, res) => {
-  const currentUserId = req.user.id;
-  
-  Message.getConversations(currentUserId)
-    .then(conversations => {
-      // הוספת פרטי המשתמשים לכל שיחה
-      const userIds = conversations.map(conv => conv._id);
-      
-      return User.find({ _id: { $in: userIds } })
-        .select('firstName lastName userType')
-        .then(users => {
-          const usersMap = {};
-          users.forEach(user => {
-            usersMap[user._id] = user;
-          });
-          
-          const conversationsWithUsers = conversations.map(conv => ({
-            ...conv,
-            user: usersMap[conv._id],
-            lastMessage: {
-              ...conv.lastMessage,
-              sender: usersMap[conv.lastMessage.sender],
-              receiver: usersMap[conv.lastMessage.receiver]
-            }
-          }));
-          
-          return conversationsWithUsers;
-        });
-    })
-    .then(conversationsWithUsers => {
-      res.json({
-        success: true,
-        data: conversationsWithUsers
-      });
-    })
-    .catch(err => {
-      console.error('Error fetching conversations:', err);
-      res.status(500).json({
-        success: false,
-        message: 'שגיאה בטעינת השיחות'
-      });
+    res.json({
+      success: true,
+      data: messagesWithSender
     });
-});
-
-// GET /api/messages/unread/count - קבלת מספר הודעות שלא נקראו
-router.get('/unread/count', auth, (req, res) => {
-  const currentUserId = req.user.id;
-  
-  Message.countDocuments({
-    receiver: currentUserId,
-    isRead: false
-  })
-    .then(count => {
-      res.json({
-        success: true,
-        data: { unreadCount: count }
-      });
-    })
-    .catch(err => {
-      console.error('Error counting unread messages:', err);
-      res.status(500).json({
-        success: false,
-        message: 'שגיאה בספירת הודעות שלא נקראו'
-      });
-    });
-});
-
-// PUT /api/messages/:messageId/read - סימון הודעה כנקראה
-router.put('/:messageId/read', auth, (req, res) => {
-  const { messageId } = req.params;
-  const currentUserId = req.user.id;
-  
-  Message.findById(messageId)
-    .then(message => {
-      if (!message) {
-        return res.status(404).json({
-          success: false,
-          message: 'ההודעה לא נמצאה'
-        });
-      }
-      
-      // בדיקה שהמשתמש הוא המקבל של ההודעה
-      if (message.receiver.toString() !== currentUserId) {
-        return res.status(403).json({
-          success: false,
-          message: 'אין לך הרשאה לסמן הודעה זו כנקראה'
-        });
-      }
-      
-      message.isRead = true;
-      return message.save();
-    })
-    .then(updatedMessage => {
-      res.json({
-        success: true,
-        message: 'ההודעה סומנה כנקראה',
-        data: updatedMessage
-      });
-    })
-    .catch(err => {
-      console.error('Error marking message as read:', err);
-      res.status(500).json({
-        success: false,
-        message: 'שגיאה בסימון ההודעה כנקראה'
-      });
-    });
-});
-
-// GET /api/messages - קבלת כל ההודעות של המשתמש (CRUD - Read)
-router.get('/', auth, (req, res) => {
-  const currentUserId = req.user.id;
-  const { limit = 50, page = 1, isRead } = req.query;
-  
-  const filter = {
-    $or: [
-      { sender: currentUserId },
-      { receiver: currentUserId }
-    ]
-  };
-  
-  if (isRead !== undefined) {
-    filter.isRead = isRead === 'true';
-  }
-  
-  const skip = (parseInt(page) - 1) * parseInt(limit);
-  
-  Message.find(filter)
-    .populate('sender', 'firstName lastName userType')
-    .populate('receiver', 'firstName lastName userType')
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(parseInt(limit))
-    .then(messages => {
-      Message.countDocuments(filter)
-        .then(total => {
-          res.json({
-            success: true,
-            data: messages,
-            pagination: {
-              currentPage: parseInt(page),
-              totalPages: Math.ceil(total / parseInt(limit)),
-              totalItems: total,
-              itemsPerPage: parseInt(limit)
-            }
-          });
-        });
-    })
-    .catch(err => {
-      console.error('Error fetching messages:', err);
-      res.status(500).json({
-        success: false,
-        message: 'שגיאה בטעינת הודעות'
-      });
-    });
-});
-
-// PUT /api/messages/:messageId - עדכון הודעה (CRUD - Update)
-router.put('/:messageId', auth, (req, res) => {
-  const { messageId } = req.params;
-  const { content } = req.body;
-  const currentUserId = req.user.id;
-  
-  if (!content || content.trim().length === 0) {
-    return res.status(400).json({
+  } catch (error) {
+    console.error('Error fetching conversation:', error);
+    res.status(500).json({
       success: false,
-      message: 'תוכן ההודעה לא יכול להיות ריק'
+      message: 'שגיאה בטעינת שיחה'
     });
   }
-  
-  Message.findById(messageId)
-    .then(message => {
-      if (!message) {
-        return res.status(404).json({
-          success: false,
-          message: 'ההודעה לא נמצאה'
-        });
-      }
-      
-      // בדיקה שהמשתמש הוא השולח של ההודעה
-      if (message.sender.toString() !== currentUserId) {
-        return res.status(403).json({
-          success: false,
-          message: 'אין לך הרשאה לעדכן הודעה זו'
-        });
-      }
-      
-      // בדיקה שההודעה לא נשלחה לפני יותר מ-5 דקות
-      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-      if (message.createdAt < fiveMinutesAgo) {
-        return res.status(400).json({
-          success: false,
-          message: 'לא ניתן לעדכן הודעה שנשלחה לפני יותר מ-5 דקות'
-        });
-      }
-      
-      message.content = content.trim();
-      return message.save();
-    })
-    .then(updatedMessage => {
-      return Message.findById(updatedMessage._id)
-        .populate('sender', 'firstName lastName userType')
-        .populate('receiver', 'firstName lastName userType');
-    })
-    .then(messageWithDetails => {
-      res.json({
-        success: true,
-        message: 'ההודעה עודכנה בהצלחה',
-        data: messageWithDetails
-      });
-    })
-    .catch(err => {
-      console.error('Error updating message:', err);
-      res.status(500).json({
-        success: false,
-        message: 'שגיאה בעדכון ההודעה'
-      });
-    });
 });
-
-// DELETE /api/messages/:messageId - מחיקת הודעה (CRUD - Delete)
-router.delete('/:messageId', auth, (req, res) => {
-  const { messageId } = req.params;
+router.delete('/conversation/:userId', auth, async (req, res) => {
+  const { userId } = req.params;
   const currentUserId = req.user.id;
-  
-  Message.findById(messageId)
-    .then(message => {
-      if (!message) {
-        return res.status(404).json({
-          success: false,
-          message: 'ההודעה לא נמצאה'
-        });
-      }
-      
-      // בדיקה שהמשתמש הוא השולח של ההודעה
-      if (message.sender.toString() !== currentUserId) {
-        return res.status(403).json({
-          success: false,
-          message: 'אין לך הרשאה למחוק הודעה זו'
-        });
-      }
-      
-      // בדיקה שההודעה לא נשלחה לפני יותר מ-5 דקות
-      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-      if (message.createdAt < fiveMinutesAgo) {
-        return res.status(400).json({
-          success: false,
-          message: 'לא ניתן למחוק הודעה שנשלחה לפני יותר מ-5 דקות'
-        });
-      }
-      
-      return Message.findByIdAndDelete(messageId);
-    })
-    .then(deletedMessage => {
-      res.json({
-        success: true,
-        message: 'ההודעה נמחקה בהצלחה'
-      });
-    })
-    .catch(err => {
-      console.error('Error deleting message:', err);
-      res.status(500).json({
-        success: false,
-        message: 'שגיאה במחיקת ההודעה'
-      });
+  console.log('DELETE /api/messages/conversation/:userId - CurrentUserId:', currentUserId);
+  console.log('DELETE /api/messages/conversation/:userId - UserId:', userId);
+  try {
+    const deletedCount = messageStore.deleteConversation(currentUserId, userId);
+    console.log('Deleted messages count:', deletedCount);
+    res.json({
+      success: true,
+      message: 'השיחה נמחקה בהצלחה',
+      deletedCount: deletedCount
     });
+  } catch (error) {
+    console.error('Error deleting conversation:', error);
+    res.status(500).json({
+      success: false,
+      message: 'שגיאה במחיקת שיחה'
+    });
+  }
 });
-
+router.get('/conversations', auth, async (req, res) => {
+  const currentUserId = req.user.id;
+  console.log('GET /api/messages/conversations - CurrentUserId:', currentUserId);
+  try {
+    const conversations = messageStore.getConversations(currentUserId);
+    console.log('Conversations from messageStore:', conversations);
+    const conversationsWithUsers = await Promise.all(
+      conversations.map(async (conversation) => {
+        console.log('Processing conversation:', conversation);
+        try {
+          const otherUser = await User.findById(conversation._id).select('firstName lastName userType');
+          console.log('Found user for conversation:', otherUser);
+          return {
+            ...conversation,
+            user: {
+              _id: conversation._id,
+              firstName: otherUser?.firstName || 'משתמש',
+              lastName: otherUser?.lastName || 'לא ידוע',
+              userType: otherUser?.userType || 'unknown'
+            }
+          };
+        } catch (userError) {
+          console.error('Error fetching user for conversation:', conversation._id, userError);
+          return {
+            ...conversation,
+            user: {
+              _id: conversation._id,
+              firstName: 'משתמש',
+              lastName: 'לא ידוע',
+              userType: 'unknown'
+            }
+          };
+        }
+      })
+    );
+    console.log('Final conversations with users:', conversationsWithUsers);
+    res.json({
+      success: true,
+      data: conversationsWithUsers
+    });
+  } catch (err) {
+    console.error('Error fetching conversations:', err);
+    res.status(500).json({
+      success: false,
+      message: 'שגיאה בטעינת שיחות'
+    });
+  }
+});
+router.get('/debug/conversations', auth, async (req, res) => {
+  const currentUserId = req.user.id;
+  console.log('DEBUG: Current user ID:', currentUserId);
+  try {
+    const messages = require('../utils/messageStore').readMessages();
+    console.log('DEBUG: All messages:', messages);
+    const conversations = require('../utils/messageStore').getConversations(currentUserId);
+    console.log('DEBUG: Conversations for user:', currentUserId, conversations);
+    res.json({
+      success: true,
+      currentUserId,
+      totalMessages: messages.length,
+      conversations: conversations.map(c => ({
+        otherUserId: c._id,
+        lastMessageTime: c.lastMessage.createdAt,
+        lastMessageContent: c.lastMessage.content,
+        unreadCount: c.unreadCount
+      }))
+    });
+  } catch (err) {
+    console.error('DEBUG Error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'שגיאה בבדיקה'
+    });
+  }
+});
 module.exports = router; 

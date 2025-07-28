@@ -2,13 +2,11 @@
 
 console.log('דף הפרופיל נטען!');
 
-// משתנים גלובליים - שימוש במשתנה הגלובלי מ-main.js
-let userMessages = [];
-let userStats = {
-    totalMessages: 0,
-    totalBookings: 0,
-    userRating: 0
-};
+// DOM element references for geolocation
+const detectLocationBtn = document.getElementById('detectLocationBtn');
+const cityInput = document.getElementById('city');
+
+
 
 // פונקציה לטעינת נתוני המשתמש
 function loadUserData() {
@@ -26,9 +24,7 @@ function loadUserData() {
     // עדכון ממשק המשתמש
     updateUserInterface();
     
-    // טעינת הודעות וסטטיסטיקות
-    loadUserMessages();
-    loadUserStats();
+
 }
 
 // פונקציה לעדכון ממשק המשתמש
@@ -78,14 +74,7 @@ function updateUserInterface() {
         console.error('אלמנט roleText לא נמצא!');
     }
     
-    // עדכון אווטאר
-    const avatar = document.getElementById('userAvatar');
-    if (avatar) {
-        avatar.innerHTML = `<i class="bi bi-${currentUser.userType === 'babysitter' ? 'person-badge' : 'people'}"></i>`;
-        console.log('עדכון אווטאר');
-    } else {
-        console.error('אלמנט userAvatar לא נמצא!');
-    }
+
     
     // מילוי טופס הפרופיל
     const firstNameInput = document.getElementById('firstName');
@@ -99,6 +88,27 @@ function updateUserInterface() {
     if (emailInput) emailInput.value = currentUser.email || '';
     if (phoneInput) phoneInput.value = currentUser.phone || '';
     if (cityInput) cityInput.value = currentUser.city || '';
+    
+    // Show babysitter fields if user is a babysitter
+    const babysitterFields = document.getElementById('babysitterProfileFields');
+    if (currentUser.userType === 'babysitter' && babysitterFields) {
+        babysitterFields.style.display = 'block';
+        
+        // Populate babysitter-specific fields
+        const babysitterData = currentUser.babysitter || {};
+        
+        const experienceSelect = document.getElementById('experience');
+        const hourlyRateInput = document.getElementById('hourlyRate');
+        const isAvailableSelect = document.getElementById('isAvailable');
+        const descriptionTextarea = document.getElementById('description');
+        
+        if (experienceSelect) experienceSelect.value = babysitterData.experience || 'beginner';
+        if (hourlyRateInput) hourlyRateInput.value = babysitterData.hourlyRate || '';
+        if (isAvailableSelect) isAvailableSelect.value = babysitterData.isAvailable !== false ? 'true' : 'false';
+        if (descriptionTextarea) descriptionTextarea.value = babysitterData.description || '';
+        
+        console.log('שדות ביביסיטר מולאו:', babysitterData);
+    }
     
     console.log('טופס הפרופיל מולא');
     
@@ -115,18 +125,21 @@ function updateAdditionalInfo() {
     
     if (currentUser.userType === 'babysitter') {
         const babysitterData = currentUser.babysitter || {};
+        const availabilityStatus = babysitterData.isAvailable !== false ? '✅ זמינה' : '❌ לא זמינה';
+        const availabilityClass = babysitterData.isAvailable !== false ? 'text-success' : 'text-danger';
+        
         additionalInfo.innerHTML = `
             <section class="mb-3">
-                <h6><i class="bi bi-calendar me-2"></i>גיל</h6>
-                <p class="text-muted">${babysitterData.age || 'לא צוין'}</p>
-            </section>
-            <section class="mb-3">
-                <h6><i class="bi bi-award me-2"></i>ניסיון</h6>
-                <p class="text-muted">${getExperienceText(babysitterData.experience)}</p>
+                <h6><i class="bi bi-check-circle me-2"></i>זמינות</h6>
+                <p class="text-muted ${availabilityClass}">${availabilityStatus}</p>
             </section>
             <section class="mb-3">
                 <h6><i class="bi bi-currency-dollar me-2"></i>מחיר לשעה</h6>
                 <p class="text-muted">${babysitterData.hourlyRate ? babysitterData.hourlyRate + ' ₪' : 'לא צוין'}</p>
+            </section>
+            <section class="mb-3">
+                <h6><i class="bi bi-award me-2"></i>ניסיון</h6>
+                <p class="text-muted">${babysitterData.experience || 'לא צוין'}</p>
             </section>
             <section class="mb-3">
                 <h6><i class="bi bi-chat-text me-2"></i>תיאור</h6>
@@ -134,194 +147,18 @@ function updateAdditionalInfo() {
             </section>
         `;
     } else {
-        const parentData = currentUser.parent || {};
         additionalInfo.innerHTML = `
             <section class="mb-3">
-                <h6><i class="bi bi-people-fill me-2"></i>מספר ילדים</h6>
-                <p class="text-muted">${parentData.childrenCount || 'לא צוין'}</p>
-            </section>
-            <section class="mb-3">
-                <h6><i class="bi bi-calendar-range me-2"></i>גילאי ילדים</h6>
-                <p class="text-muted">${parentData.childrenAges ? parentData.childrenAges.join(', ') + ' שנים' : 'לא צוין'}</p>
+                <h6><i class="bi bi-info-circle me-2"></i>סוג משתמש</h6>
+                <p class="text-muted">הורה</p>
             </section>
         `;
     }
 }
 
-// פונקציה להמרת רמת ניסיון לטקסט
-function getExperienceText(experience) {
-    const experienceMap = {
-        'beginner': '🌱 מתחילה',
-        'intermediate': '⭐ בינונית',
-        'expert': '🏆 מנוסה'
-    };
-    return experienceMap[experience] || 'לא צוין';
-}
 
-// פונקציה לטעינת הודעות המשתמש
-function loadUserMessages() {
-    console.log('טוען הודעות משתמש...');
-    
-    const token = localStorage.getItem('token');
-    if (!token) {
-        console.log('אין טוקן - לא ניתן לטעון הודעות');
-        return;
-    }
-    
-    // שליחה לשרת לקבלת הודעות
-    fetch('/api/messages/user', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('הודעות התקבלו:', data);
-        userMessages = data.messages || [];
-        displayMessages();
-    })
-    .catch(error => {
-        console.error('שגיאה בטעינת הודעות:', error);
-        // הצגת הודעות לדוגמה אם אין חיבור לשרת
-        displaySampleMessages();
-    });
-}
 
-// פונקציה להצגת הודעות
-function displayMessages() {
-    console.log('מציג הודעות...');
-    
-    const messagesList = document.getElementById('messagesList');
-    
-    if (userMessages.length === 0) {
-        messagesList.innerHTML = `
-            <section class="text-center text-muted py-5">
-                <i class="bi bi-chat-dots display-4 mb-3"></i>
-                <h5>אין הודעות עדיין</h5>
-                <p>כשתתחיל לתקשר עם בייביסיטרים או הורים, ההודעות יופיעו כאן</p>
-            </section>
-        `;
-        return;
-    }
-    
-    const messagesHTML = userMessages.map(message => `
-        <section class="message-item">
-            <section class="message-header">
-                <section class="message-sender">
-                    <i class="bi bi-person me-2"></i>
-                    ${message.senderName || 'משתמש'}
-                </section>
-                <section class="message-time">
-                    ${formatDate(message.createdAt)}
-                </section>
-            </section>
-            <section class="message-content">
-                ${message.content}
-            </section>
-        </section>
-    `).join('');
-    
-    messagesList.innerHTML = messagesHTML;
-}
 
-// פונקציה להצגת הודעות לדוגמה
-function displaySampleMessages() {
-    console.log('מציג הודעות לדוגמה...');
-    
-    const sampleMessages = [
-        {
-            senderName: 'שרה כהן',
-            content: 'שלום! האם את זמינה היום בערב?',
-            createdAt: new Date(Date.now() - 3600000) // שעה אחורה
-        },
-        {
-            senderName: 'דוד לוי',
-            content: 'תודה על השירות המעולה! הילדים מאוד נהנו',
-            createdAt: new Date(Date.now() - 86400000) // יום אחורה
-        }
-    ];
-    
-    const messagesList = document.getElementById('messagesList');
-    const messagesHTML = sampleMessages.map(message => `
-        <section class="message-item">
-            <section class="message-header">
-                <section class="message-sender">
-                    <i class="bi bi-person me-2"></i>
-                    ${message.senderName}
-                </section>
-                <section class="message-time">
-                    ${formatDate(message.createdAt)}
-                </section>
-            </section>
-            <section class="message-content">
-                ${message.content}
-            </section>
-        </section>
-    `).join('');
-    
-    messagesList.innerHTML = messagesHTML;
-}
-
-// פונקציה לטעינת סטטיסטיקות המשתמש
-function loadUserStats() {
-    console.log('טוען סטטיסטיקות משתמש...');
-    
-    const token = localStorage.getItem('token');
-    if (!token) {
-        console.log('אין טוקן - לא ניתן לטעון סטטיסטיקות');
-        return;
-    }
-    
-    // שליחה לשרת לקבלת סטטיסטיקות
-    fetch('/api/users/stats', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('סטטיסטיקות התקבלו:', data);
-        userStats = data.data || data; // תמיכה בשני הפורמטים
-        displayStats();
-    })
-    .catch(error => {
-        console.error('שגיאה בטעינת סטטיסטיקות:', error);
-        // הצגת סטטיסטיקות לדוגמה
-        displaySampleStats();
-    });
-}
-
-// פונקציה להצגת סטטיסטיקות
-function displayStats() {
-    console.log('מציג סטטיסטיקות...');
-    
-    document.getElementById('totalMessages').textContent = userStats.totalMessages || 0;
-    document.getElementById('totalBookings').textContent = userStats.totalBookings || 0;
-    document.getElementById('userRating').textContent = userStats.userRating || 0;
-}
-
-// פונקציה להצגת סטטיסטיקות לדוגמה
-function displaySampleStats() {
-    console.log('מציג סטטיסטיקות לדוגמה...');
-    
-    document.getElementById('totalMessages').textContent = '5';
-    document.getElementById('totalBookings').textContent = '3';
-    document.getElementById('userRating').textContent = '4.8';
-}
 
 // פונקציה לעדכון פרופיל
 function updateProfile(event) {
@@ -336,6 +173,31 @@ function updateProfile(event) {
     if (!token) {
         showMessage('אין הרשאה לעדכון פרופיל', 'danger');
         return;
+    }
+    
+    // בדיקה אם יש סיסמה חדשה
+    const newPassword = data.newPassword;
+    if (newPassword && newPassword.length > 0) {
+        if (newPassword.length < 6) {
+            showMessage('הסיסמה חייבת להכיל לפחות 6 תווים', 'warning');
+            return;
+        }
+        data.password = newPassword;
+    }
+    
+    // הסרת שדה הסיסמה החדשה מהנתונים שנשלחים
+    delete data.newPassword;
+    
+    // Handle babysitter-specific fields
+    if (currentUser.userType === 'babysitter') {
+        // Convert isAvailable string to boolean
+        if (data.isAvailable !== undefined) {
+            data.isAvailable = data.isAvailable === 'true';
+        }
+        // Convert hourlyRate to number
+        if (data.hourlyRate !== undefined && data.hourlyRate !== '') {
+            data.hourlyRate = parseInt(data.hourlyRate);
+        }
     }
     
     // הצגת טעינה
@@ -368,6 +230,10 @@ function updateProfile(event) {
         
         // עדכון ממשק
         updateUserInterface();
+        
+        // ניקוי שדה הסיסמה
+        const passwordInput = document.getElementById('newPassword');
+        if (passwordInput) passwordInput.value = '';
         
         showMessage('הפרופיל עודכן בהצלחה!', 'success');
     })
@@ -402,48 +268,7 @@ function showMessage(message, type = 'info') {
     }, 5000);
 }
 
-// פונקציה לשינוי סיסמה
-function changePassword() {
-    console.log('פותח חלון שינוי סיסמה...');
-    
-    const newPassword = prompt('הכנס סיסמה חדשה (לפחות 6 תווים):');
-    if (!newPassword) return;
-    
-    if (newPassword.length < 6) {
-        showMessage('הסיסמה חייבת להכיל לפחות 6 תווים', 'warning');
-        return;
-    }
-    
-    const token = localStorage.getItem('token');
-    if (!token) {
-        showMessage('אין הרשאה לשינוי סיסמה', 'danger');
-        return;
-    }
-    
-    // שליחה לשרת
-    fetch('/api/users/password', {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ password: newPassword })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('סיסמה שונתה:', data);
-        showMessage('הסיסמה שונתה בהצלחה!', 'success');
-    })
-    .catch(error => {
-        console.error('שגיאה בשינוי סיסמה:', error);
-        showMessage('שגיאה בשינוי סיסמה', 'danger');
-    });
-}
+
 
 // פונקציה לעיצוב תאריך
 function formatDate(dateString) {
@@ -464,6 +289,49 @@ function formatDate(dateString) {
     }
 }
 
+// Setup role-based navigation menu
+function setupRoleBasedMenu(userType) {
+    const navigationMenu = document.getElementById('navigationMenu');
+    if (!navigationMenu) return;
+    
+    let menuItems = '';
+    
+    if (userType === 'parent') {
+        // Parents can search for babysitters and see conversations
+        menuItems = `
+            <li class="nav-item">
+                <a class="nav-link" href="search.html">חיפוש בייביסיטר</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="conversations.html">שיחות</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="about.html">אודות</a>
+            </li>
+        `;
+    } else if (userType === 'babysitter') {
+        // Babysitters can only see conversations and about
+        menuItems = `
+            <li class="nav-item">
+                <a class="nav-link" href="conversations.html">שיחות</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="about.html">אודות</a>
+            </li>
+        `;
+    }
+    
+    navigationMenu.innerHTML = menuItems;
+}
+
+// Logout Function
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('user');
+    window.location.href = '../index.html';
+}
+
 // הגדרת מאזיני אירועים
 function setupEventListeners() {
     console.log('מגדיר מאזיני אירועים לדף הפרופיל...');
@@ -472,6 +340,30 @@ function setupEventListeners() {
     const profileForm = document.getElementById('profileForm');
     if (profileForm) {
         profileForm.addEventListener('submit', updateProfile);
+    }
+    
+    // Geolocation button event listener
+    if (detectLocationBtn && cityInput) {
+        console.log('מגדיר מאזין לכפתור זיהוי מיקום');
+        detectLocationBtn.addEventListener('click', async function() {
+            console.log('כפתור זיהוי מיקום נלחץ');
+            
+            let originalText = detectLocationBtn.innerHTML;
+            detectLocationBtn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+            detectLocationBtn.disabled = true;
+            
+            try {
+                const city = await window.geolocationService.autoDetectCity(cityInput);
+                console.log('עיר זוהתה:', city);
+            } catch (error) {
+                console.error('שגיאה בזיהוי מיקום:', error);
+            } finally {
+                detectLocationBtn.innerHTML = originalText;
+                detectLocationBtn.disabled = false;
+            }
+        });
+    } else {
+        console.log('כפתור זיהוי מיקום או שדה עיר לא נמצאו');
     }
     
     console.log('מאזיני אירועים הוגדרו');
@@ -499,6 +391,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('הנתונים תקינים - מתחיל טעינה');
                 currentUser = parsedData;
                 loadUserData(); // קריאה לפונקציה המרכזית
+                
+                // Update navigation for logged in users
+                const authButtons = document.getElementById('authButtons');
+                if (authButtons) {
+                    authButtons.innerHTML = `
+                        <li class="nav-item">
+                            <span class="navbar-text me-3 text-light">
+                                שלום, ${parsedData.firstName || 'משתמש'}!
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="logout()">
+                                <i class="bi bi-box-arrow-right"></i> התנתק
+                            </a>
+                        </li>
+                    `;
+                }
+                
+                // Set home link to profile for logged in users
+                const homeLink = document.getElementById('homeLink');
+                if (homeLink) {
+                    homeLink.href = 'profile.html';
+                    homeLink.onclick = function(e) {
+                        e.preventDefault();
+                        window.location.href = 'profile.html';
+                    };
+                }
+                
+                // Setup role-based navigation menu
+                setupRoleBasedMenu(parsedData.userType);
             } else {
                 console.error('נתונים חסרים - מעביר להתחברות');
                 window.location.href = '../index.html';

@@ -1,0 +1,106 @@
+[
+  {
+    "id": "1753702558250",
+    "senderId": "688740deeec26d11aaf666e7",
+    "receiverId": "68875196816ddcae6ff0d552",
+    "content": "היי מיכל",
+    "isRead": false,
+    "createdAt": "2025-07-28T11:35:58.250Z"
+  },
+  {
+    "id": "1753702651635",
+    "senderId": "688740deeec26d11aaf666e7",
+    "receiverId": "68875196816ddcae6ff0d552",
+    "content": "היייייייי שששש",
+    "isRead": false,
+    "createdAt": "2025-07-28T11:37:31.635Z"
+  },
+  {
+    "id": "1753702926937",
+    "senderId": "688740deeec26d11aaf666e7",
+    "receiverId": "68875196816ddcae6ff0d552",
+    "content": "שלום!!!",
+    "isRead": false,
+    "createdAt": "2025-07-28T11:42:06.937Z"
+  },
+  {
+    "id": "1753703012299",
+    "senderId": "688740deeec26d11aaf666e7",
+    "receiverId": "68875196816ddcae6ff0d552",
+    "content": "איקס",
+    "isRead": false,
+    "createdAt": "2025-07-28T11:43:32.299Z"
+  },
+  {
+    "id": "1753703151615",
+    "senderId": "688740deeec26d11aaf666e7",
+    "receiverId": "68875196816ddcae6ff0d552",
+    "content": "אורי",
+    "isRead": false,
+    "createdAt": "2025-07-28T11:45:51.615Z"
+  },
+  {
+    "id": "1753724847237",
+    "senderId": "6887518e816ddcae6ff0d54f",
+    "receiverId": "68875196816ddcae6ff0d552",
+    "content": "test message",
+    "isRead": false,
+    "createdAt": "2025-07-28T17:47:27.237Z"
+  },
+  {
+    "id": "1753727693377",
+    "senderId": "6887b3b910cb471fbf7c580d",
+    "receiverId": "6887ad9f10cb471fbf7c57fc",
+    "content": "היייייייייושששששש",
+    "isRead": true,
+    "createdAt": "2025-07-28T18:34:53.377Z"
+  },
+  {
+    "id": "1753727736194",
+    "senderId": "6887ad9f10cb471fbf7c57fc",
+    "receiverId": "6887b3b910cb471fbf7c580d",
+    "content": "הייייייי",
+    "isRead": false,
+    "createdAt": "2025-07-28T18:35:36.194Z"
+  },
+  {
+    "id": "1753736953190",
+    "senderId": "6887e4bb0ad906b1aedb92cb",
+    "receiverId": "6887ad9f10cb471fbf7c57fc",
+    "content": "היי",
+    "isRead": false,
+    "createdAt": "2025-07-28T21:09:13.190Z"
+  },
+  {
+    "id": "1753737089557",
+    "senderId": "6887e4bb0ad906b1aedb92cb",
+    "receiverId": "6887ad9f10cb471fbf7c57fc",
+    "content": "היי",
+    "isRead": false,
+    "createdAt": "2025-07-28T21:11:29.557Z"
+  },
+  {
+    "id": "1753737633620",
+    "senderId": "6887e4bb0ad906b1aedb92cb",
+    "receiverId": "6887ad9f10cb471fbf7c57fc",
+    "content": "vhh",
+    "isRead": false,
+    "createdAt": "2025-07-28T21:20:33.620Z"
+  },
+  {
+    "id": "1753737635558",
+    "senderId": "6887e4bb0ad906b1aedb92cb",
+    "receiverId": "6887ad9f10cb471fbf7c57fc",
+    "content": "היי",
+    "isRead": false,
+    "createdAt": "2025-07-28T21:20:35.558Z"
+  },
+  {
+    "id": "1753737888263",
+    "senderId": "6887e4bb0ad906b1aedb92cb",
+    "receiverId": "6887ad9f10cb471fbf7c57fc",
+    "content": "שלום",
+    "isRead": false,
+    "createdAt": "2025-07-28T21:24:48.263Z"
+  }
+]
