@@ -33,7 +33,11 @@
                         };
                     }
                     
-
+                    // הצגת קישור חיפוש ביביסיטר למשתמשים מחוברים
+                    const searchLink = document.getElementById('searchLink');
+                    if (searchLink) {
+                        searchLink.style.display = 'block';
+                    }
                     
                     console.log('הניווט שונה למשתמש מחובר');
                 } catch (error) {
@@ -41,6 +45,12 @@
                 }
             } else {
                 console.log('משתמש לא מחובר');
+                
+                // הסתרת קישור חיפוש ביביסיטר למשתמשים לא מחוברים
+                const searchLink = document.getElementById('searchLink');
+                if (searchLink) {
+                    searchLink.style.display = 'none';
+                }
             }
         })();
     </script>
@@ -61,19 +71,19 @@
             <section class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/search.html">חיפוש בייביסיטר</a>
+                        <a class="nav-link" href="pages/search.html" id="searchLink" style="display: none;">חיפוש ביביסיטר</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="pages/about.html">אודות</a>
                     </li>
                 </ul>
                 
-                <ul class="navbar-nav">
+                <ul class="navbar-nav" id="authButtons">
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/login.html">התחברות</a>
+                        <a class="nav-link" href="#login">התחברות</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/register.html">הרשמה</a>
+                        <a class="nav-link" href="#register">הרשמה</a>
                     </li>
                 </ul>
             </section>
@@ -187,7 +197,11 @@
                                 <!-- עיר -->
                                 <section class="col-md-6">
                                     <label class="form-label"><i class="bi bi-geo-alt me-2"></i>עיר</label>
-                                    <input type="text" class="form-control" name="city" required>
+                                    <input type="text" class="form-control" name="city" id="cityInput" required>
+                                    <button type="button" class="btn btn-outline-primary" id="detectLocationBtn" style="display: inline-block !important; margin-top: 10px !important; padding: 8px 16px !important; font-size: 14px !important; border: 1px solid #007bff !important; background-color: transparent !important; color: #007bff !important;">
+                                        <i class="bi bi-geo-alt me-1"></i>זיהוי אוטומטי
+                                    </button>
+                                    <small class="form-text text-muted">לחצו על הכפתור לצד כדי לזהות את העיר שלכם אוטומטית</small>
                                 </section>
                                 
                                 <!-- שדות ביביסיטר -->
@@ -331,5 +345,62 @@
     <script src="js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="js/main.js"></script>
+    <!-- Geolocation JS -->
+    <script src="js/utils/geolocation.js"></script>
+    <script>
+        // Geolocation functionality for main page
+        document.addEventListener('DOMContentLoaded', function() {
+            const detectLocationBtn = document.getElementById('detectLocationBtn');
+            const cityInput = document.getElementById('cityInput');
+            
+            if (detectLocationBtn && cityInput) {
+                detectLocationBtn.addEventListener('click', async function() {
+                    console.log('Location button clicked!');
+                    let originalText = detectLocationBtn.innerHTML;
+                    try {
+                        detectLocationBtn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+                        detectLocationBtn.disabled = true;
+                        console.log('Calling geolocation service...');
+                        await window.geolocationService.autoDetectCity(cityInput);
+                        console.log('Geolocation successful!');
+                    } catch (error) {
+                        console.error('Error detecting location:', error);
+                    } finally {
+                        detectLocationBtn.innerHTML = originalText;
+                        detectLocationBtn.disabled = false;
+                    }
+                });
+                console.log('Geolocation event listener added successfully');
+            }
+            
+            // Handle #register anchor link
+            if (window.location.hash === '#register') {
+                switchTab('register');
+            }
+            
+            // Handle #login anchor link
+            if (window.location.hash === '#login') {
+                switchTab('login');
+            }
+            
+            // Add click handlers for navigation links
+            const loginLink = document.querySelector('a[href="#login"]');
+            const registerLink = document.querySelector('a[href="#register"]');
+            
+            if (loginLink) {
+                loginLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchTab('login');
+                });
+            }
+            
+            if (registerLink) {
+                registerLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchTab('register');
+                });
+            }
+        });
+    </script>
 </body>
 </html> 

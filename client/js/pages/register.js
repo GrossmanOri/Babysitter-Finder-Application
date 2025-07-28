@@ -24,21 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('cityInput:', cityInput);
   console.log('window.geolocationService:', window.geolocationService);
   if (detectLocationBtn) {
-    detectLocationBtn.style.display = 'flex';
-    detectLocationBtn.style.visibility = 'visible';
-    detectLocationBtn.style.opacity = '1';
-    detectLocationBtn.style.border = '5px solid #00ff00 !important';
-    detectLocationBtn.style.backgroundColor = '#00ff00 !important';
-    detectLocationBtn.style.color = 'black !important';
-    detectLocationBtn.style.minWidth = '80px';
-    detectLocationBtn.style.height = '45px';
-    detectLocationBtn.style.fontSize = '18px';
-    detectLocationBtn.style.fontWeight = 'bold';
-    detectLocationBtn.style.zIndex = '9999';
-    detectLocationBtn.style.position = 'relative';
-    detectLocationBtn.style.marginLeft = '10px';
-    console.log('Button visibility forced with bright green styling');
-    console.log('Button computed styles:', window.getComputedStyle(detectLocationBtn));
+    console.log('Geolocation button found');
   }
   if (detectLocationBtn && cityInput) {
     console.log('Geolocation elements found, adding event listener...');

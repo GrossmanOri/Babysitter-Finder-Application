@@ -27,26 +27,7 @@
     min-width: 50px;
     height: 38px;
 }
-#detectLocationBtn {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px;
-    height: 38px;
-    border: 3px solid #ff0000 !important;
-    background-color: #ff0000 !important;
-    color: white !important;
-    font-weight: bold;
-    font-size: 16px;
-    z-index: 9999;
-    position: relative;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-#detectLocationBtn:hover {
-    background-color: #cc0000 !important;
-    color: white !important;
-}
+
 .input-group {
     display: flex !important;
     align-items: stretch;
@@ -68,6 +49,22 @@
     height: 38px;
     visibility: visible !important;
     opacity: 1 !important;
+}
+
+#detectLocationBtn {
+    border: 1px solid #007bff !important;
+    background-color: transparent !important;
+    color: #007bff !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    height: 38px;
+}
+
+#detectLocationBtn:hover {
+    background-color: #007bff !important;
+    color: white !important;
 }
 #authenticatedNav {
     display: none;

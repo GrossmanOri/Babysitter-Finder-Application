@@ -10,7 +10,11 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=1000" rel="stylesheet">
+    <script>
+        console.log('PAGE LOADED AT:', new Date().toISOString());
+        console.log('CACHE BUSTING VERSION: 1000');
+    </script>
 </head>
 <body class="bg-light">
     <!-- Header -->
@@ -60,12 +64,10 @@
                     </section>
                     <section class="mb-3">
                         <label class="form-label"><i class="bi bi-geo-alt me-2"></i>עיר</label>
-                        <section class="input-group">
-                            <input type="text" class="form-control" name="city" id="cityInput" required>
-                            <button type="button" class="btn btn-outline-primary" id="detectLocationBtn" title="זיהוי אוטומטי של העיר" style="border: 5px solid #00ff00 !important; background-color: #00ff00 !important; color: black !important; min-width: 80px; height: 45px; display: flex !important; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; z-index: 9999; position: relative; visibility: visible !important; opacity: 1 !important; margin-left: 10px;">
-                                <i class="bi bi-geo-alt"></i> LOCATE
-                            </button>
-                        </section>
+                        <input type="text" class="form-control" name="city" id="cityInput" required>
+                        <button type="button" class="btn btn-outline-primary" id="detectLocationBtn" style="display: inline-block !important; margin-top: 10px !important; padding: 8px 16px !important; font-size: 14px !important; border: 1px solid #007bff !important; background-color: transparent !important; color: #007bff !important;">
+                            <i class="bi bi-geo-alt me-1"></i>זיהוי אוטומטי
+                        </button>
                         <small class="form-text text-muted">לחצו על הכפתור לצד כדי לזהות את העיר שלכם אוטומטית</small>
                     </section>
                     <!-- Babysitter fields -->
