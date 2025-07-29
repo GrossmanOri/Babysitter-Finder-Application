@@ -1,172 +1,198 @@
-# Babysitter Finder - מציאת בייביסיטר
+# Babysitter Finder - פרויקט סיום ווב ענן
 
-## תיאור הפרויקט 📝
+## תיאור הפרויקט
 
-זהו פרויקט סיום לקורס ווב ענן - אפליקציה למציאת בייביסיטרים בישראל.
-האפליקציה מאפשרת להורים למצוא בייביסיטרים זמינים ולקיים איתם תקשורת.
+פרויקט זה הינו פרויקט סיום לקורס "ווב ענן" שנה ב'. האפליקציה מאפשרת להורים למצוא בייביסיטרים זמינים באזורם ולקיים איתם תקשורת ישירה.
 
-## תכונות עיקריות ✨
+### מטרות הפרויקט
+- פיתוח אפליקציה מלאה עם Frontend ו-Backend
+- שימוש בטכנולוגיות מודרניות לפיתוח web
+- יישום עקרונות אבטחה בסיסיים
+- יצירת ממשק משתמש ידידותי ונגיש
 
-- 🔍 **חיפוש בייביסיטרים** - לפי עיר, תאריך ושעה
-- 💬 **מערכת הודעות** - צ'אט בין הורים לבייביסיטרים
-- 👤 **ניהול פרופילים** - לכל משתמש יש פרופיל מפורט
-- ⭐ **דירוגים וביקורות** - מערכת דירוג לבייביסיטרים
-- 📱 **עיצוב רספונסיבי** - עובד על כל המכשירים
+## תכונות הפרויקט
 
-## טכנולוגיות ששימשו 🛠️
+### תכונות עיקריות
+- **הרשמה והתחברות** - מערכת משתמשים עם אימות JWT
+- **חיפוש בייביסיטרים** - לפי עיר ופרמטרים נוספים
+- **מערכת הודעות** - צ'אט בין הורים לבייביסיטרים
+- **ניהול פרופילים** - עדכון פרטי משתמש
+- **עיצוב רספונסיבי** - תמיכה במכשירים שונים
 
-### Frontend (Client):
-- HTML5 (Semantic - ללא divs!)
-- CSS3 + Bootstrap 5
-- JavaScript (ES6+ עם Promises)
-- Fetch API
+### תכונות טכניות
+- **אימות משתמשים** - עם JWT tokens
+- **אחסון נתונים** - MongoDB Atlas
+- **API RESTful** - עם Express.js
+- **Frontend דינמי** - עם JavaScript ו-Bootstrap
 
-### Backend (Server):
-- Node.js
-- Express.js
-- MongoDB + Mongoose
-- JWT Authentication
-- bcryptjs
+## טכנולוגיות ששימשו
 
-## התקנה והפעלה 🚀
+### Frontend
+- **HTML5** - מבנה סמנטי נכון
+- **CSS3** - עיצוב מודרני עם Bootstrap 5
+- **JavaScript ES6+** - לוגיקה דינמית
+- **Fetch API** - תקשורת עם השרת
 
-### דרישות מקדימות:
+### Backend
+- **Node.js** - סביבת ריצה
+- **Express.js** - framework לשרת
+- **MongoDB** - מסד נתונים NoSQL
+- **Mongoose** - ODM למסד הנתונים
+- **JWT** - אימות משתמשים
+- **bcryptjs** - הצפנת סיסמאות
+
+## התקנה והפעלה
+
+### דרישות מערכת
 - Node.js (גרסה 14 ומעלה)
-- MongoDB (מקומי או Atlas)
 - npm או yarn
+- חיבור לאינטרנט (עבור MongoDB Atlas)
 
-### שלבי התקנה:
+### שלבי התקנה
 
-1. **שכפול הפרויקט:**
+1. **שכפול הפרויקט**
 ```bash
-git clone [URL-של-הפרויקט]
+git clone [repository-url]
 cd babysitter-finder
 ```
 
-2. **התקנת תלויות השרת:**
+2. **התקנת תלויות**
 ```bash
 cd server
 npm install
 ```
 
-3. **הגדרת משתני סביבה:**
+3. **הגדרת משתני סביבה**
 צור קובץ `.env` בתיקיית `server`:
 ```env
-MONGODB_URI=mongodb://localhost:27017/babysitter-finder
-JWT_SECRET=your-secret-key-here
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database
+JWT_SECRET=your-secret-key
 PORT=3000
+NODE_ENV=development
 ```
 
-4. **הפעלת השרת:**
+4. **הפעלת השרת**
 ```bash
 npm start
-# או
-node server.js
 ```
 
-5. **הפעלת הלקוח:**
+5. **הפעלת הלקוח**
 ```bash
 cd ../client
-python3 -m http.server 8080
-# או כל שרת HTTP אחר
+# השתמש בשרת HTTP מקומי או Live Server
 ```
 
-## מבנה הפרויקט 📁
+## מבנה הפרויקט
 
 ```
 babysitter-finder/
 ├── client/                 # Frontend
-│   ├── index.html         # דף הבית
+│   ├── index.html         # דף הבית עם הרשמה/התחברות
 │   ├── pages/             # דפים נוספים
-│   │   ├── search.html    # דף חיפוש
-│   │   └── chat.html      # דף צ'אט
+│   │   ├── search.html    # חיפוש בייביסיטרים
+│   │   ├── chat.html      # צ'אט ישיר
+│   │   ├── conversations.html  # רשימת שיחות
+│   │   ├── profile.html   # ניהול פרופיל
+│   │   └── about.html     # דף אודות
 │   ├── js/                # קבצי JavaScript
+│   │   ├── main.js        # קוד ראשי
 │   │   ├── pages/         # קוד לדפים ספציפיים
-│   │   └── components/    # רכיבים משותפים
-│   └── css/              # קבצי עיצוב
-└── server/               # Backend
-    ├── server.js         # קובץ השרת הראשי
-    ├── models/           # מודלים של מסד הנתונים
-    ├── routes/           # נתיבי API
-    ├── middleware/       # תוכנה ביניים
-    └── package.json      # תלויות
+│   │   └── utils/         # פונקציות עזר
+│   └── css/               # קבצי עיצוב
+└── server/                # Backend
+    ├── server.js          # קובץ השרת הראשי
+    ├── config/            # הגדרות
+    ├── models/            # מודלים של מסד הנתונים
+    ├── routes/            # נתיבי API
+    ├── middleware/        # תוכנה ביניים
+    ├── utils/             # פונקציות עזר
+    └── data/              # קבצי נתונים
 ```
 
-## API Endpoints 📡
+## API Documentation
 
-### אימות (Authentication):
+### Authentication
 - `POST /api/auth/register` - הרשמת משתמש חדש
-- `POST /api/auth/login` - התחברות
-- `GET /api/auth/profile` - קבלת פרופיל המשתמש
+- `POST /api/auth/login` - התחברות משתמש
+- `GET /api/auth/profile` - קבלת פרטי משתמש
 
-### בייביסיטרים:
+### Users
+- `GET /api/users/profile` - קבלת פרופיל
+- `PUT /api/users/profile` - עדכון פרופיל
+- `DELETE /api/users/profile` - מחיקת חשבון
+
+### Babysitters
 - `GET /api/babysitters` - רשימת בייביסיטרים
-- `GET /api/babysitters/:id` - פרטי בייביסיטר ספציפי
-- `POST /api/babysitters` - הוספת בייביסיטר חדש
-- `PUT /api/babysitters/:id` - עדכון בייביסיטר
+- `GET /api/babysitters/search` - חיפוש בייביסיטרים
 
-### הודעות:
-- `GET /api/messages` - קבלת הודעות
-- `POST /api/messages` - שליחת הודעה חדשה
-- `PUT /api/messages/:id` - עדכון הודעה
-- `DELETE /api/messages/:id` - מחיקת הודעה
+### Messages
+- `GET /api/messages/conversations` - רשימת שיחות
+- `GET /api/messages/:conversationId` - הודעות בשיחה
+- `POST /api/messages` - שליחת הודעה
+- `DELETE /api/messages/conversations/:id` - מחיקת שיחה
 
-## דוגמאות שימוש 💡
+## דוגמאות קוד
 
-### חיפוש בייביסיטרים:
+### הרשמת משתמש
 ```javascript
-fetch('/api/babysitters?city=תל אביב&date=2024-01-15')
-  .then(response => response.json())
-  .then(data => console.log(data));
-```
+const userData = {
+  firstName: 'ישראל',
+  lastName: 'כהן',
+  email: 'israel@example.com',
+  password: 'password123',
+  phone: '050-1234567',
+  city: 'תל אביב',
+  userType: 'parent'
+};
 
-### שליחת הודעה:
-```javascript
-fetch('/api/messages', {
+fetch('/api/auth/register', {
   method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  },
-  body: JSON.stringify({
-    recipientId: 'user-id',
-    content: 'שלום, האם אתה זמין?'
-  })
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(userData)
 });
 ```
 
-## בעיות ידועות ⚠️
+### חיפוש בייביסיטרים
+```javascript
+fetch('/api/babysitters?city=תל אביב')
+  .then(response => response.json())
+  .then(babysitters => {
+    console.log('נמצאו בייביסיטרים:', babysitters);
+  });
+```
 
-- לפעמים יש בעיות בחיבור למסד הנתונים
-- הצ'אט לא עובד בזמן אמת (רק רענון דף)
-- אין אימות תמונות בייביסיטרים
+## אתגרים ופתרונות
 
-## תוכניות עתידיות 🔮
+### אתגרים עיקריים
+1. **ניהול מצב משתמש** - פתרון עם JWT tokens
+2. **תקשורת בזמן אמת** - פתרון עם polling
+3. **עיצוב רספונסיבי** - פתרון עם Bootstrap 5
+4. **אבטחה** - הצפנת סיסמאות עם bcrypt
 
-- [ ] הוספת צ'אט בזמן אמת עם WebSockets
-- [ ] מערכת הזמנות עם לוח שנה
-- [ ] תשלומים אונליין
-- [ ] אפליקציה למובייל
-- [ ] מערכת דירוגים מתקדמת
+### למידה מהפרויקט
+- הבנת ארכיטקטורת Client-Server
+- עבודה עם מסדי נתונים NoSQL
+- פיתוח API RESTful
+- ניהול מצב משתמש
+- עיצוב ממשק משתמש
 
-## תרומה לפרויקט 🤝
+## מסקנות
 
-אם תרצו לתרום לפרויקט:
-1. Fork את הפרויקט
-2. צרו branch חדש
-3. בצעו את השינויים
-4. שלחו Pull Request
+פרויקט זה הדגים את היכולת לפתח אפליקציה מלאה עם:
+- **Frontend** - ממשק משתמש אינטואיטיבי
+- **Backend** - שרת API מאובטח
+- **Database** - אחסון נתונים יעיל
+- **Security** - אימות והרשאות
 
-## רישיון 📄
+הפרויקט מספק בסיס טוב להמשך פיתוח ויכול להתרחב לתכונות נוספות כמו תשלומים, לוח זמנים, ודירוגים.
 
-פרויקט זה נוצר עבור קורס ווב ענן - כל הזכויות שמורות.
+## פרטי סטודנט
 
-## פרטי קשר 📞
-
-- **שם:** [שם הסטודנט]
-- **אימייל:** [email@example.com]
+- **שם:** אורי גרוסמן
 - **קורס:** ווב ענן - שנה ב'
+- **מוסד:** שנקר - הנדסת תוכנה
+- **שנה:** 2025
 
 ---
 
-**הערה:** זהו פרויקט לימודים ולא מוצר מסחרי. השתמשו בו על אחריותכם בלבד! 😊 
+*פרויקט זה הינו חלק מדרישות הקורס "ווב ענן" ואינו מיועד לשימוש מסחרי.* 
