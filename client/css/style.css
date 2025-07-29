@@ -737,6 +737,30 @@ body {
     overflow-y: auto;
     max-height: 400px;
 }
+
+/* Hide welcome message when messages are visible */
+#messagesList:not(.d-none) ~ #welcomeMessage,
+#messagesList[style*="display: block"] ~ #welcomeMessage {
+    display: none !important;
+}
+
+/* Ensure welcome message is hidden when messages list is visible */
+#messagesList:not(.d-none) + #welcomeMessage,
+#messagesList[style*="display: block"] + #welcomeMessage {
+    display: none !important;
+}
+
+/* Force hide welcome message when messages container has content */
+#messagesList:not(.d-none) ~ #welcomeMessage,
+#messagesList[style*="display: block"] ~ #welcomeMessage,
+#messagesList:not(.d-none) + #welcomeMessage,
+#messagesList[style*="display: block"] + #welcomeMessage {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: -1 !important;
+}
 .loading {
     opacity: 0.6;
     pointer-events: none;

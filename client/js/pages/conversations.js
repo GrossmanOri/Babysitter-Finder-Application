@@ -31,6 +31,11 @@ function checkAuth() {
     const user = localStorage.getItem('user');
     const userData = localStorage.getItem('userData');
     
+    console.log('בדיקת אימות:');
+    console.log('Token:', token ? 'קיים' : 'לא קיים');
+    console.log('User:', user ? 'קיים' : 'לא קיים');
+    console.log('UserData:', userData ? 'קיים' : 'לא קיים');
+    
     if (!token || (!user && !userData)) {
         console.log('לא מחובר - מעביר לדף ההתחברות');
         window.location.href = '../index.html';
@@ -67,12 +72,12 @@ function setupNavigation() {
             const authButtons = document.getElementById('authButtons');
             if (authButtons) {
                 authButtons.innerHTML = `
-                    <li class="nav-item">
+                    <li class="nav-item d-flex align-items-center">
                         <span class="navbar-text me-3 text-light">
                             שלום, ${user.firstName || 'משתמש'}!
                         </span>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item d-flex align-items-center">
                         <a class="nav-link" href="#" onclick="logout()">
                             <i class="bi bi-box-arrow-right"></i> התנתק
                         </a>
@@ -148,10 +153,12 @@ function setupRoleBasedMenu(userType) {
  */
 function loadConversations() {
     console.log('טוען שיחות...');
+    const token = localStorage.getItem('token');
+    console.log('Token for conversations:', token ? 'קיים' : 'לא קיים');
     
     fetch(`${API_BASE_URL}/messages/conversations`, {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
         }
     })
     .then(response => {
@@ -278,6 +285,13 @@ function selectConversationById(conversationId) {
  */
 function selectConversation(conversation, event) {
     console.log('בוחר שיחה:', conversation);
+    console.log('מבנה השיחה:', {
+        _id: conversation._id,
+        userId: conversation.userId,
+        user: conversation.user,
+        user_id: conversation.user?._id,
+        lastMessage: conversation.lastMessage
+    });
     
     // Update current conversation
     currentConversation = conversation;
@@ -299,6 +313,12 @@ function selectConversation(conversation, event) {
     // Show delete button and hide welcome message
     deleteConversationBtn.style.display = 'block';
     welcomeMessage.style.display = 'none';
+    welcomeMessage.classList.add('d-none');
+    welcomeMessage.style.visibility = 'hidden';
+    welcomeMessage.style.opacity = '0';
+    welcomeMessage.style.position = 'absolute';
+    welcomeMessage.style.zIndex = '-1';
+    welcomeMessage.style.pointerEvents = 'none';
     
     // Show messages area and message input
     messagesList.classList.remove('d-none');
@@ -306,8 +326,25 @@ function selectConversation(conversation, event) {
     messageInput.classList.remove('d-none');
     messageInput.style.display = 'block';
     
-    // Load messages for this conversation
-    loadMessages(conversation._id);
+    // Load messages for this conversation - try different ID fields
+    let targetUserId = null;
+    if (conversation._id) {
+        targetUserId = conversation._id;
+        console.log('משתמש ID מהשדה _id:', targetUserId);
+    } else if (conversation.user && conversation.user._id) {
+        targetUserId = conversation.user._id;
+        console.log('משתמש ID מהשדה user._id:', targetUserId);
+    } else if (conversation.userId) {
+        targetUserId = conversation.userId;
+        console.log('משתמש ID מהשדה userId:', targetUserId);
+    }
+    
+    if (targetUserId) {
+        loadMessages(targetUserId);
+    } else {
+        console.error('שגיאה: לא ניתן למצוא מזהה משתמש בשיחה:', conversation);
+        showMessagesError('שגיאה בטעינת ההודעות - מידע משתמש חסר');
+    }
 }
 
 /**
@@ -316,10 +353,18 @@ function selectConversation(conversation, event) {
  */
 function loadMessages(userId) {
     console.log('טוען הודעות עבור משתמש:', userId);
+    const token = localStorage.getItem('token');
+    console.log('Token for messages:', token ? 'קיים' : 'לא קיים');
+    
+    if (!userId) {
+        console.error('שגיאה: userId הוא undefined או null');
+        showMessagesError('שגיאה בטעינת ההודעות - מזהה משתמש חסר');
+        return;
+    }
     
     fetch(`${API_BASE_URL}/messages/conversation/${userId}`, {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
         }
     })
     .then(response => {
@@ -349,6 +394,23 @@ function loadMessages(userId) {
  */
 function displayMessages(messages) {
     console.log('מציג הודעות:', messages);
+    console.log('מצב UI לפני הצגת הודעות:');
+    console.log('- welcomeMessage display:', welcomeMessage?.style.display);
+    console.log('- welcomeMessage classList:', welcomeMessage?.classList.toString());
+    console.log('- messagesList display:', messagesList?.style.display);
+    console.log('- messagesList classList:', messagesList?.classList.toString());
+    
+    // Aggressively hide welcome message
+    if (welcomeMessage) {
+        welcomeMessage.style.display = 'none';
+        welcomeMessage.classList.add('d-none');
+        welcomeMessage.style.visibility = 'hidden';
+        welcomeMessage.style.opacity = '0';
+        welcomeMessage.style.position = 'absolute';
+        welcomeMessage.style.zIndex = '-1';
+        welcomeMessage.style.pointerEvents = 'none';
+        console.log('הסתרתי הודעת ברוכים הבאים - כל השיטות');
+    }
     
     if (messages.length === 0) {
         messagesList.innerHTML = `
@@ -369,6 +431,12 @@ function displayMessages(messages) {
     
     // Scroll to bottom
     messagesList.scrollTop = messagesList.scrollHeight;
+    
+    console.log('מצב UI אחרי הצגת הודעות:');
+    console.log('- welcomeMessage display:', welcomeMessage?.style.display);
+    console.log('- welcomeMessage classList:', welcomeMessage?.classList.toString());
+    console.log('- messagesList display:', messagesList?.style.display);
+    console.log('- messagesList classList:', messagesList?.classList.toString());
 }
 
 /**
@@ -377,8 +445,27 @@ function displayMessages(messages) {
  * @returns {string} HTML string for message element
  */
 function createMessageElement(message) {
+    console.log('יצירת אלמנט הודעה:', message);
+    console.log('שדות ההודעה:', {
+        id: message.id,
+        senderId: message.senderId,
+        content: message.content,
+        createdAt: message.createdAt,
+        timestamp: message.timestamp,
+        date: message.date
+    });
+    
     const isOwnMessage = message.senderId === currentUser.id;
-    const time = formatTime(message.createdAt);
+    
+    // Try different timestamp field names
+    let time = '--:--';
+    if (message.createdAt) {
+        time = formatTime(message.createdAt);
+    } else if (message.timestamp) {
+        time = formatTime(message.timestamp);
+    } else if (message.date) {
+        time = formatTime(message.date);
+    }
     
     return `
         <section class="message ${isOwnMessage ? 'message-own' : 'message-other'} mb-3">
@@ -402,6 +489,12 @@ function sendMessage(e) {
         return;
     }
     
+    if (!currentConversation.user || !currentConversation.user._id) {
+        console.error('שגיאה: אין מידע על המשתמש בשיחה הנוכחית:', currentConversation);
+        alert('שגיאה: אין מידע על המשתמש בשיחה. נסו לבחור שיחה אחרת.');
+        return;
+    }
+    
     const messageContent = messageText.value.trim();
     if (!messageContent) {
         return;
@@ -412,15 +505,17 @@ function sendMessage(e) {
     messageText.value = '';
     
     console.log('שולח הודעה:', messageContent);
+    const token = localStorage.getItem('token');
+    console.log('Token for sending message:', token ? 'קיים' : 'לא קיים');
     
     fetch(`${API_BASE_URL}/messages`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-            recipientId: currentConversation.userId,
+            receiverId: currentConversation.user._id,
             content: messageContent
         })
     })
@@ -479,12 +574,47 @@ function showConversationsError(message) {
  * @param {string} message - Error message to display
  */
 function showMessagesError(message) {
+    console.log('מציג שגיאת הודעות:', message);
+    console.log('מצב UI לפני הצגת שגיאה:');
+    console.log('- welcomeMessage display:', welcomeMessage?.style.display);
+    console.log('- messagesList display:', messagesList?.style.display);
+    
     messagesList.innerHTML = `
         <section class="text-center text-danger">
             <p>${message}</p>
-            <button class="btn btn-primary btn-sm" onclick="loadMessages(currentConversation.userId)">נסה שוב</button>
+            <button class="btn btn-primary btn-sm" onclick="retryLoadMessages()">נסה שוב</button>
         </section>
     `;
+    
+    console.log('מצב UI אחרי הצגת שגיאה:');
+    console.log('- welcomeMessage display:', welcomeMessage?.style.display);
+    console.log('- messagesList display:', messagesList?.style.display);
+}
+
+/**
+ * Retries loading messages with the correct user ID
+ */
+function retryLoadMessages() {
+    if (!currentConversation) {
+        console.error('אין שיחה נבחרת');
+        return;
+    }
+    
+    let targetUserId = null;
+    if (currentConversation._id) {
+        targetUserId = currentConversation._id;
+    } else if (currentConversation.user && currentConversation.user._id) {
+        targetUserId = currentConversation.user._id;
+    } else if (currentConversation.userId) {
+        targetUserId = currentConversation.userId;
+    }
+    
+    if (targetUserId) {
+        loadMessages(targetUserId);
+    } else {
+        console.error('לא ניתן למצוא מזהה משתמש לשיחה הנוכחית');
+        showMessagesError('שגיאה בטעינת ההודעות - מזהה משתמש חסר');
+    }
 }
 
 /**
@@ -495,13 +625,19 @@ function deleteConversation() {
         return;
     }
     
+    if (!currentConversation.user || !currentConversation.user._id) {
+        console.error('שגיאה: אין מידע על המשתמש בשיחה הנוכחית:', currentConversation);
+        alert('שגיאה: אין מידע על המשתמש בשיחה. לא ניתן למחוק את השיחה.');
+        return;
+    }
+    
     if (!confirm('האם אתם בטוחים שברצונכם למחוק את השיחה הזו?')) {
         return;
     }
     
     console.log('מוחק שיחה:', currentConversation);
     
-    fetch(`${API_BASE_URL}/messages/conversations/${currentConversation.userId}`, {
+    fetch(`${API_BASE_URL}/messages/conversation/${currentConversation.user._id}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -539,8 +675,11 @@ function refreshChat() {
     console.log('מרענן צ\'אט...');
     loadConversations();
     
-    if (currentConversation) {
-        loadMessages(currentConversation.userId);
+    if (currentConversation && currentConversation.user && currentConversation.user._id) {
+        loadMessages(currentConversation.user._id);
+    } else if (currentConversation) {
+        console.error('שגיאה: אין מידע על המשתמש בשיחה הנוכחית:', currentConversation);
+        showMessagesError('שגיאה בטעינת ההודעות - מידע משתמש חסר');
     }
 }
 
@@ -560,7 +699,13 @@ function logout() {
  * @returns {string} Formatted time string
  */
 function formatTime(dateString) {
+    if (!dateString) {
+        return '--:--';
+    }
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+        return '--:--';
+    }
     return date.toLocaleTimeString('he-IL', { 
         hour: '2-digit', 
         minute: '2-digit' 
@@ -629,7 +774,19 @@ function initializeConversations() {
     // Set up auto-refresh every 30 seconds
     refreshInterval = setInterval(() => {
         if (currentConversation) {
-            loadMessages(currentConversation.userId);
+            // Use the same logic as selectConversation to get the correct user ID
+            let targetUserId = null;
+            if (currentConversation._id) {
+                targetUserId = currentConversation._id;
+            } else if (currentConversation.user && currentConversation.user._id) {
+                targetUserId = currentConversation.user._id;
+            } else if (currentConversation.userId) {
+                targetUserId = currentConversation.userId;
+            }
+            
+            if (targetUserId) {
+                loadMessages(targetUserId);
+            }
         }
     }, 30000);
     

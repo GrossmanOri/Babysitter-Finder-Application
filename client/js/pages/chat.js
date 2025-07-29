@@ -471,12 +471,12 @@ function initializeChat() {
     const authButtons = document.getElementById('authButtons');
     if (authButtons && currentUser) {
         authButtons.innerHTML = `
-            <li class="nav-item">
+            <li class="nav-item d-flex align-items-center">
                 <span class="navbar-text me-3 text-light">
                     שלום, ${currentUser.firstName || 'משתמש'}!
                 </span>
             </li>
-            <li class="nav-item">
+            <li class="nav-item d-flex align-items-center">
                 <a class="nav-link" href="#" onclick="logout()">
                     <i class="bi bi-box-arrow-right"></i> התנתק
                 </a>

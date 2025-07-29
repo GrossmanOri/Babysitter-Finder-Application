@@ -102,5 +102,37 @@
     "content": "שלום",
     "isRead": false,
     "createdAt": "2025-07-28T21:24:48.263Z"
+  },
+  {
+    "id": "1753775244635",
+    "senderId": "68887be7068f709546446b98",
+    "receiverId": "68887c6c068f709546446b9f",
+    "content": "היי מאי",
+    "isRead": false,
+    "createdAt": "2025-07-29T07:47:24.635Z"
+  },
+  {
+    "id": "1753776085898",
+    "senderId": "68887be7068f709546446b98",
+    "receiverId": "68887c6c068f709546446b9f",
+    "content": "היי",
+    "isRead": false,
+    "createdAt": "2025-07-29T08:01:25.898Z"
+  },
+  {
+    "id": "1753776193870",
+    "senderId": "68887be7068f709546446b98",
+    "receiverId": "68887c6c068f709546446b9f",
+    "content": "היי",
+    "isRead": false,
+    "createdAt": "2025-07-29T08:03:13.870Z"
+  },
+  {
+    "id": "1753776253199",
+    "senderId": "68887be7068f709546446b98",
+    "receiverId": "68887c6c068f709546446b9f",
+    "content": "שלום מאי",
+    "isRead": false,
+    "createdAt": "2025-07-29T08:04:13.199Z"
   }
 ]

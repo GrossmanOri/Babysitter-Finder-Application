@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
       data.description = formData.get('description');
       data.isAvailable = formData.get('isAvailable') === 'true';
     }
-    fetch('/api/auth/register', {
+    fetch('http://localhost:3000/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -101,9 +101,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (json.token) {
           localStorage.setItem('token', json.token);
           localStorage.setItem('user', JSON.stringify(json.user));
+          localStorage.setItem('userData', JSON.stringify(json.user));
+          console.log('נשמר בהצלחה:', { token: json.token, user: json.user });
         }
         setTimeout(function() {
-          window.location.href = '/pages/profile.html';
+          window.location.href = 'profile.html';
         }, 2000);
       } else {
         formMessage.textContent = json.message || 'שגיאה בהרשמה';

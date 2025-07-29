@@ -111,12 +111,12 @@ function updateUIForLoggedInUser() {
     const authButtons = document.getElementById('authButtons');
     if (authButtons) {
         authButtons.innerHTML = `
-            <li class="nav-item">
+            <li class="nav-item d-flex align-items-center">
                 <span class="navbar-text me-3 text-light">
                     שלום, ${currentUser.firstName || currentUser.name}!
                 </span>
             </li>
-            <li class="nav-item">
+            <li class="nav-item d-flex align-items-center">
                 <a class="nav-link" href="#" onclick="logout()">
                     <i class="bi bi-box-arrow-right"></i> התנתק
                 </a>
@@ -127,7 +127,7 @@ function updateUIForLoggedInUser() {
         const navbarNav = document.querySelector('.navbar-nav');
         if (navbarNav && !document.querySelector('.profile-link')) {
             const profileLi = document.createElement('li');
-            profileLi.className = 'nav-item profile-link';
+            profileLi.className = 'nav-item profile-link d-flex align-items-center';
             profileLi.innerHTML = `
                 <a class="nav-link" href="pages/profile.html">
                     <i class="bi bi-person-circle"></i> הפרופיל שלי
@@ -142,6 +142,19 @@ function updateUIForGuestUser() {
     const profileLink = document.querySelector('.profile-link');
     if (profileLink) {
         profileLink.remove();
+    }
+    
+    // Add authentication buttons for guest users
+    const authButtons = document.getElementById('authButtons');
+    if (authButtons) {
+        authButtons.innerHTML = `
+            <li class="nav-item">
+                <a class="nav-link" href="/index.html#login">התחברות</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/index.html#register">הרשמה</a>
+            </li>
+        `;
     }
 }
 function logout() {

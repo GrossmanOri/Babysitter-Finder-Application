@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
       email: formData.get('email'),
       password: formData.get('password')
     };
-    fetch('/api/auth/login', {
+    fetch('http://localhost:3000/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -21,8 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
         formMessage.className = 'mb-3 text-center text-success';
         localStorage.setItem('token', json.token);
         localStorage.setItem('user', JSON.stringify(json.user));
+        localStorage.setItem('userData', JSON.stringify(json.user));
+        console.log('נשמר בהצלחה:', { token: json.token, user: json.user });
         setTimeout(function() {
-          window.location.href = '/pages/profile.html';
+          window.location.href = 'profile.html';
         }, 1000);
       } else {
         formMessage.textContent = json.message || 'שגיאה בהתחברות';

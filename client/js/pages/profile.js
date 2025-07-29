@@ -60,14 +60,11 @@ function updateUserInterface() {
     // עדכון תפקיד המשתמש
     if (roleTextElement) {
         if (currentUser.userType === 'babysitter') {
-            roleTextElement.textContent = 'ביביסיטר';
-            roleTextElement.innerHTML = '<i class="bi bi-person-badge me-1"></i>ביביסיטר';
+            roleTextElement.textContent = '👶 ביביסיטר';
         } else if (currentUser.userType === 'parent') {
-            roleTextElement.textContent = 'הורה';
-            roleTextElement.innerHTML = '<i class="bi bi-people me-1"></i>הורה';
+            roleTextElement.textContent = '👥 הורה';
         } else {
-            roleTextElement.textContent = 'לא מוגדר';
-            roleTextElement.innerHTML = '<i class="bi bi-question-circle me-1"></i>לא מוגדר';
+            roleTextElement.textContent = '❓ לא מוגדר';
         }
         console.log('עדכון תפקיד:', currentUser.userType);
     } else {
@@ -392,16 +389,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentUser = parsedData;
                 loadUserData(); // קריאה לפונקציה המרכזית
                 
-                // Update navigation for logged in users
+                // Set up auth buttons for logged-in user
                 const authButtons = document.getElementById('authButtons');
                 if (authButtons) {
                     authButtons.innerHTML = `
-                        <li class="nav-item">
+                        <li class="nav-item d-flex align-items-center">
                             <span class="navbar-text me-3 text-light">
                                 שלום, ${parsedData.firstName || 'משתמש'}!
                             </span>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item d-flex align-items-center">
                             <a class="nav-link" href="#" onclick="logout()">
                                 <i class="bi bi-box-arrow-right"></i> התנתק
                             </a>

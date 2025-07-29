@@ -56,12 +56,12 @@ function setupNavigation() {
             const authButtons = document.getElementById('authButtons');
             if (authButtons) {
                 authButtons.innerHTML = `
-                    <li class="nav-item">
+                    <li class="nav-item d-flex align-items-center">
                         <span class="navbar-text me-3 text-light">
                             שלום, ${user.firstName || 'משתמש'}!
                         </span>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item d-flex align-items-center">
                         <a class="nav-link" href="#" onclick="logout()">
                             <i class="bi bi-box-arrow-right"></i> התנתק
                         </a>
@@ -84,13 +84,48 @@ function setupNavigation() {
             
         } catch (error) {
             console.error('שגיאה בפענוח נתוני משתמש:', error);
+            // Fallback to guest user setup
+            setupGuestNavigation();
         }
     } else {
-        // Set up home link for guest user
-        const homeLink = document.getElementById('homeLink');
-        if (homeLink) {
-            homeLink.href = '../index.html';
-        }
+        // Set up navigation for guest user
+        setupGuestNavigation();
+    }
+}
+
+/**
+ * Sets up navigation for non-authenticated users
+ */
+function setupGuestNavigation() {
+    console.log('מגדיר ניווט למשתמש אורח');
+    
+    // Set up auth buttons for guest user
+    const authButtons = document.getElementById('authButtons');
+    if (authButtons) {
+        authButtons.innerHTML = `
+            <li class="nav-item">
+                <a class="nav-link" href="../index.html#login">התחברות</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../index.html#register">הרשמה</a>
+            </li>
+        `;
+    }
+    
+    // Set up home link for guest user
+    const homeLink = document.getElementById('homeLink');
+    if (homeLink) {
+        homeLink.href = '../index.html';
+    }
+    
+    // Set up minimal navigation menu for guest user
+    const navigationMenu = document.getElementById('navigationMenu');
+    if (navigationMenu) {
+        navigationMenu.innerHTML = `
+            <li class="nav-item">
+                <a class="nav-link active" href="about.html">אודות</a>
+            </li>
+        `;
     }
 }
 
