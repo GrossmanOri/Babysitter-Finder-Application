@@ -21,10 +21,52 @@ function loadUserData() {
     
     console.log('נתוני משתמש זמינים:', currentUser);
     
+    // בדיקה שהמשתמש עדיין קיים במסד הנתונים
+    verifyUserExists();
+    
     // עדכון ממשק המשתמש
     updateUserInterface();
-    
+}
 
+// פונקציה לבדיקה שהמשתמש עדיין קיים במסד הנתונים
+function verifyUserExists() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.log('אין טוקן - מעביר להתחברות');
+        window.location.href = '../index.html';
+        return;
+    }
+    
+    fetch('/api/users/profile', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 404) {
+                console.log('המשתמש לא קיים או לא מורשה - מעביר להתחברות');
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = '../index.html';
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('אימות משתמש הצליח:', data);
+        // המשתמש קיים - אפשר להמשיך
+    })
+    .catch(error => {
+        console.error('שגיאה באימות משתמש:', error);
+        // במקרה של שגיאה, נמחק את הנתונים ונעביר להתחברות
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = '../index.html';
+    });
 }
 
 // פונקציה לעדכון ממשק המשתמש
@@ -265,6 +307,67 @@ function showMessage(message, type = 'info') {
     }, 5000);
 }
 
+// פונקציה להצגת אישור מחיקה
+function showDeleteConfirmation() {
+    if (confirm('האם אתה בטוח שברצונך למחוק את החשבון שלך? פעולה זו אינה הפיכה ותמחק את כל הנתונים שלך מהמערכת.')) {
+        deleteProfile();
+    }
+}
+
+// פונקציה למחיקת הפרופיל
+function deleteProfile() {
+    console.log('מתחיל מחיקת פרופיל...');
+    
+    const token = localStorage.getItem('token');
+    if (!token) {
+        showMessage('אין הרשאה למחיקת פרופיל', 'danger');
+        return;
+    }
+    
+    // הצגת טעינה
+    const deleteBtn = document.getElementById('deleteProfileBtn');
+    const originalText = deleteBtn.innerHTML;
+    deleteBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>מוחק...';
+    deleteBtn.disabled = true;
+    
+    // שליחה לשרת
+    fetch('/api/users/profile', {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('פרופיל נמחק:', data);
+        
+        // ניקוי מיידי של כל הנתונים המקומיים
+        localStorage.clear(); // מחיקת כל הנתונים
+        sessionStorage.clear(); // מחיקת נתוני session
+        
+        // הצגת הודעת הצלחה
+        showMessage('החשבון נמחק בהצלחה! מעביר לדף הבית...', 'success');
+        
+        // מעבר מיידי לדף הבית
+        setTimeout(() => {
+            window.location.href = '../index.html';
+        }, 1000);
+    })
+    .catch(error => {
+        console.error('שגיאה במחיקת פרופיל:', error);
+        showMessage('שגיאה במחיקת הפרופיל', 'danger');
+        
+        // החזרת כפתור למצב רגיל
+        deleteBtn.innerHTML = originalText;
+        deleteBtn.disabled = false;
+    });
+}
 
 
 // פונקציה לעיצוב תאריך

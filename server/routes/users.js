@@ -111,12 +111,35 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // DELETE /api/users/profile - מחיקת החשבון של המשתמש הנוכחי
-router.delete('/profile', auth, (req, res) => {
-  // במקום למחוק מהמסד הנתונים, נחזיר הודעת הצלחה
-  res.json({
-    success: true,
-    message: 'החשבון נמחק בהצלחה'
-  });
+router.delete('/profile', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // מחיקת המשתמש מהמסד הנתונים
+    const deletedUser = await User.findByIdAndDelete(userId);
+    
+    if (!deletedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'משתמש לא נמצא'
+      });
+    }
+    
+    console.log(`User ${userId} deleted successfully`);
+    
+    // החזרת הודעת הצלחה עם דגל שמציין שהמשתמש נמחק
+    res.json({
+      success: true,
+      message: 'החשבון נמחק בהצלחה',
+      userDeleted: true
+    });
+  } catch (error) {
+    console.error('Error deleting user profile:', error);
+    res.status(500).json({
+      success: false,
+      message: 'שגיאה במחיקת החשבון'
+    });
+  }
 });
 
 // GET /api/users - קבלת רשימת משתמשים (למנהלים)
