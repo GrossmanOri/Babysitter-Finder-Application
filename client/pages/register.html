@@ -16,18 +16,33 @@
         console.log('CACHE BUSTING VERSION: 1000');
     </script>
 </head>
-<body class="bg-light">
+<body class="d-flex flex-column min-vh-100">
     <!-- Header -->
     <header class="navbar navbar-expand-lg navbar-dark bg-primary">
         <nav class="container">
-            <a class="navbar-brand" href="../index.html">
+            <a class="navbar-brand" href="#" id="homeLink">
                 <i class="bi bi-heart-fill me-2"></i>
                 Babysitter Finder
             </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <section class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto" id="navigationMenu">
+                    <!-- Navigation will be populated by JavaScript -->
+                </ul>
+                
+                <ul class="navbar-nav" id="authButtons">
+                    <!-- Auth buttons will be populated by JavaScript -->
+                </ul>
+            </section>
         </nav>
     </header>
-    
-    <main class="container mt-5">
+
+    <!-- Main Content -->
+    <main class="container my-5 flex-grow-1">
         <section class="card mx-auto shadow-lg rounded-lg">
             <article class="card-body p-5">
                 <header class="text-center mb-4">
