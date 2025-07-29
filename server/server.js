@@ -14,10 +14,15 @@ app.use(
   })
 );
 app.use(morgan('combined'));
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+
+// Dynamic CORS configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',')
+    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500'],
   credentials: true
-}));
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('../client'));
@@ -41,8 +46,8 @@ app.use('/api/babysitters', require('./routes/babysitters'));
 app.use('/api/messages', require('./routes/messages'));
 app.get('/api/health', (req, res) => {
   console.log('בדיקת בריאות השרת...');
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     message: 'Babysitter Finder API is running',
     timestamp: new Date().toISOString()
   });
@@ -50,7 +55,7 @@ app.get('/api/health', (req, res) => {
 app.use((err, req, res, next) => {
   console.error('שגיאה בשרת:', err.stack);
   console.log('פרטי השגיאה:', err.message);
-  res.status(500).json({ 
+  res.status(500).json({
     error: 'Something went wrong!',
     message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
   });
