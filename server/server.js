@@ -63,6 +63,24 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// Root route handler - explain this is an API-only server
+app.get('/', (req, res) => {
+  console.log('Root route accessed');
+  res.json({
+    message: 'Babysitter Finder API Server',
+    description: 'This is an API-only server. The client frontend is deployed separately.',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth/*',
+      users: '/api/users/*',
+      babysitters: '/api/babysitters/*',
+      messages: '/api/messages/*'
+    },
+    client_url: 'Please access the client application at the appropriate frontend URL',
+    documentation: 'Available API endpoints are listed above'
+  });
+});
 app.use((err, req, res, next) => {
   console.error('Server error:', err.stack);
   console.log('Error details:', err.message);
