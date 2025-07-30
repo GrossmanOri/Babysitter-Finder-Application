@@ -23,9 +23,8 @@ const corsOptions = {
         // Local development
         'http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500',
         'http://localhost:8080', 'http://localhost:3001', 'http://127.0.0.1:3001',
-        // Production (will be updated with actual client URLs)
-        'https://babysitter-finder-client.onrender.com',
-        'https://babysitter-finder-application.onrender.com'
+        // Production client URL
+        'https://babysitter-finder-application-7oe8.onrender.com'
       ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -77,7 +76,7 @@ app.get('/', (req, res) => {
       babysitters: '/api/babysitters/*',
       messages: '/api/messages/*'
     },
-    client_url: 'Please access the client application at the appropriate frontend URL',
+    client_url: 'https://babysitter-finder-application-7oe8.onrender.com',
     documentation: 'Available API endpoints are listed above'
   });
 });
