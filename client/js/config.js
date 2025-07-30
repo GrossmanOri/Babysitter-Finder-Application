@@ -3,7 +3,7 @@ const API_CONFIG = {
     // Server URLs for different environments
     SERVER_URLS: {
         local: 'http://localhost:3000/api',
-        production: 'https://babysitter-finder-server.onrender.com/api' // Update this with your actual server URL
+        production: 'https://babysitter-finder-application.onrender.com/api'
     },
     
     // Determine the base URL based on the current environment
