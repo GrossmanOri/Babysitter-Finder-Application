@@ -533,6 +533,40 @@ function sanitizeData(data) {
     return cleaned;
 }
 console.log('הקובץ הראשי הוכן בהצלחה!');
+
+// Fix navbar-toggler functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+    
+    if (navbarToggler && navbarCollapse) {
+        console.log('Navbar toggler found, setting up event listener');
+        
+        // Ensure Bootstrap collapse is properly initialized
+        if (typeof bootstrap !== 'undefined') {
+            const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                toggle: false
+            });
+            
+            navbarToggler.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Navbar toggler clicked');
+                bsCollapse.toggle();
+            });
+        } else {
+            console.warn('Bootstrap not loaded, using fallback navbar toggle');
+            
+            // Fallback for when Bootstrap is not available
+            navbarToggler.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Using fallback navbar toggle');
+                navbarCollapse.classList.toggle('show');
+            });
+        }
+    } else {
+        console.log('Navbar toggler or collapse not found');
+    }
+});
 function setupLoginForm() {
     console.log('מגדיר טופס התחברות...');
     const form = document.getElementById('loginForm');

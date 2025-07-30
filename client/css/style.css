@@ -804,4 +804,58 @@ body {
         box-shadow: none !important;
         border: 1px solid #ddd !important;
     }
+}
+
+/* Fix navbar-toggler for RTL layout */
+.navbar-toggler {
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    padding: 0.25rem 0.75rem !important;
+    font-size: 1.25rem !important;
+    line-height: 1 !important;
+    background-color: transparent !important;
+    border-radius: 0.375rem !important;
+    transition: box-shadow 0.15s ease-in-out !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25) !important;
+}
+
+.navbar-toggler-icon {
+    display: inline-block !important;
+    width: 1.5em !important;
+    height: 1.5em !important;
+    vertical-align: middle !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 100% !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* Ensure navbar collapse works properly */
+.navbar-collapse {
+    flex-basis: 100% !important;
+    flex-grow: 1 !important;
+    align-items: center !important;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        background-color: #007bff !important;
+        z-index: 1000 !important;
+        padding: 1rem !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .navbar-nav {
+        margin: 0 !important;
+    }
+    
+    .navbar-nav .nav-item {
+        margin: 0.5rem 0 !important;
+    }
 } 
