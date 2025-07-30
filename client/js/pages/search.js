@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000/api'
+const API_BASE_URL = API_CONFIG.getBaseUrl()
 const searchForm = document.getElementById('searchForm');
 const resultsSection = document.getElementById('resultsSection');
 const resultsList = document.getElementById('resultsList');

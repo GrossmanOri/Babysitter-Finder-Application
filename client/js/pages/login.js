@@ -9,7 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
       email: formData.get('email'),
       password: formData.get('password')
     };
-    fetch('http://localhost:3000/api/auth/login', {
+            const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:3000/api/auth/login' 
+            : 'https://babysitter-finder-application.onrender.com/api/auth/login';
+        fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

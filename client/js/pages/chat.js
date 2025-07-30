@@ -1,5 +1,7 @@
 console.log('=== CHAT.JS LOADED ===');
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:3000/api' 
+    : 'https://babysitter-finder-application.onrender.com/api';
 let currentUser = null;
 let currentConversation = null;
 let refreshInterval = null;
