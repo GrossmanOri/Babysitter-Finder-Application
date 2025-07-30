@@ -15,17 +15,26 @@ app.use(
 );
 app.use(morgan('combined'));
 
-// Dynamic CORS configuration
+// Dynamic CORS configuration for separate client/server deployment
 const corsOptions = {
   origin: process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(',')
-    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'https://babysitter-finder-application.onrender.com'],
-  credentials: true
+    : [
+        // Local development
+        'http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500',
+        'http://localhost:8080', 'http://localhost:3001', 'http://127.0.0.1:3001',
+        // Production (will be updated with actual client URLs)
+        'https://babysitter-finder-client.onrender.com',
+        'https://babysitter-finder-application.onrender.com'
+      ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('../client'));
+// Removed static file serving - client will be deployed separately
 console.log('Connecting to database...');
 mongoose.connect(config.mongodb.uri, {
   useNewUrlParser: true,

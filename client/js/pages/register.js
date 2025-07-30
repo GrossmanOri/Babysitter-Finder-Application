@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
           console.log('נשמר בהצלחה:', { token: json.token, user: json.user });
         }
         setTimeout(function() {
-          window.location.href = 'profile.html';
+                      CLIENT_NAV.goToProfile();
         }, 2000);
       } else {
         formMessage.textContent = json.message || 'שגיאה בהרשמה';
