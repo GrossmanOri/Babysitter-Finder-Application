@@ -7,7 +7,7 @@ const config = require('./config/default');
 require('dotenv').config();
 const app = express();
 const PORT = config.server.port;
-console.log('מתחיל את השרת...');
+console.log('Starting server...');
 app.use(
   helmet({
     contentSecurityPolicy: false
@@ -26,26 +26,26 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('../client'));
-console.log('מתחבר למסד הנתונים...');
+console.log('Connecting to database...');
 mongoose.connect(config.mongodb.uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 .then(() => {
   console.log('✅ Connected to MongoDB');
-  console.log('החיבור למסד הנתונים הצליח!');
+  console.log('Database connection successful!');
 })
 .catch(err => {
   console.error('❌ MongoDB connection error:', err);
-  console.log('שגיאה בחיבור למסד הנתונים:', err.message);
+  console.log('Database connection error:', err.message);
 });
-console.log('מגדיר נתיבי API...');
+console.log('Setting up API routes...');
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/babysitters', require('./routes/babysitters'));
 app.use('/api/messages', require('./routes/messages'));
 app.get('/api/health', (req, res) => {
-  console.log('בדיקת בריאות השרת...');
+  console.log('Checking server health...');
   res.json({
     status: 'OK',
     message: 'Babysitter Finder API is running',
@@ -53,24 +53,24 @@ app.get('/api/health', (req, res) => {
   });
 });
 app.use((err, req, res, next) => {
-  console.error('שגיאה בשרת:', err.stack);
-  console.log('פרטי השגיאה:', err.message);
+  console.error('Server error:', err.stack);
+  console.log('Error details:', err.message);
   res.status(500).json({
     error: 'Something went wrong!',
     message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
   });
 });
 app.use('*', (req, res) => {
-  console.log('נתיב לא נמצא:', req.originalUrl);
+  console.log('Route not found:', req.originalUrl);
   res.status(404).json({ error: 'Route not found' });
 });
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📱 API available at http://localhost:${PORT}/api`);
-  console.log('השרת פועל בהצלחה!');
+  console.log('Server is running successfully!');
 });
 function checkServerStatus() {
-  console.log('מצב השרת: פעיל');
-  console.log('זמן הפעלה:', new Date().toLocaleString('he-IL'));
+  console.log('Server status: Active');
+  console.log('Runtime:', new Date().toLocaleString('en-US'));
 }
 setInterval(checkServerStatus, 5 * 60 * 1000); 

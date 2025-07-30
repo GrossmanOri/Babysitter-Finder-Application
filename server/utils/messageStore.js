@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const MESSAGES_FILE = path.join(__dirname, '../data/messages.json');
-console.log('נתיב קובץ הודעות:', MESSAGES_FILE);
-console.log('נתיב נוכחי:', __dirname);
-console.log('נתיב עבודה:', process.cwd());
+console.log('Messages file path:', MESSAGES_FILE);
+console.log('Current path:', __dirname);
+console.log('Working directory:', process.cwd());
 function readMessages() {
     try {
         if (!fs.existsSync(MESSAGES_FILE)) {
@@ -12,24 +12,24 @@ function readMessages() {
         const data = fs.readFileSync(MESSAGES_FILE, 'utf8');
         return JSON.parse(data);
     } catch (error) {
-        console.error('שגיאה בקריאת הודעות:', error);
+        console.error('Error reading messages:', error);
         return [];
     }
 }
 function writeMessages(messages) {
     try {
-        console.log('שומר הודעות לקובץ:', MESSAGES_FILE);
-        console.log('מספר הודעות:', messages.length);
+        console.log('Saving messages to file:', MESSAGES_FILE);
+        console.log('Number of messages:', messages.length);
         fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2));
-        console.log('הודעות נשמרו בהצלחה!');
+        console.log('Messages saved successfully!');
         return true;
     } catch (error) {
-        console.error('שגיאה בשמירת הודעות:', error);
+        console.error('Error saving messages:', error);
         return false;
     }
 }
 function addMessage(senderId, receiverId, content) {
-    console.log('מוסיף הודעה חדשה:', { senderId, receiverId, content });
+    console.log('Adding new message:', { senderId, receiverId, content });
     const messages = readMessages();
     const newMessage = {
         id: Date.now().toString(),
@@ -39,13 +39,13 @@ function addMessage(senderId, receiverId, content) {
         isRead: false,
         createdAt: new Date().toISOString()
     };
-    console.log('הודעה חדשה:', newMessage);
+    console.log('New message:', newMessage);
     messages.push(newMessage);
     const success = writeMessages(messages);
     if (success) {
-        console.log('הודעה נוספה בהצלחה!');
+        console.log('Message added successfully!');
     } else {
-        console.log('שגיאה בהוספת הודעה!');
+        console.log('Error adding message!');
     }
     return newMessage;
 }
