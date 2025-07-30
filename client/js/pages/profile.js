@@ -1,6 +1,6 @@
 // profile.js - קובץ JavaScript לדף הפרופיל
 
-console.log('דף הפרופיל נטען!');
+console.log('Profile page loaded!');
 
 // DOM element references for geolocation
 const detectLocationBtn = document.getElementById('detectLocationBtn');
@@ -10,16 +10,16 @@ const cityInput = document.getElementById('city');
 
 // פונקציה לטעינת נתוני המשתמש
 function loadUserData() {
-    console.log('טוען נתוני משתמש...');
+    console.log('Loading user data...');
     
     // בדיקה אם המשתמש מחובר
     if (!currentUser) {
-        console.log('המשתמש לא מחובר - מעביר לדף התחברות');
+        console.log('User not logged in - redirecting to login page');
         window.location.href = '../index.html';
         return;
     }
     
-    console.log('נתוני משתמש זמינים:', currentUser);
+    console.log('User data available:', currentUser);
     
     // בדיקה שהמשתמש עדיין קיים במסד הנתונים
     verifyUserExists();
@@ -32,7 +32,7 @@ function loadUserData() {
 function verifyUserExists() {
     const token = localStorage.getItem('token');
     if (!token) {
-        console.log('אין טוקן - מעביר להתחברות');
+        console.log('No token - redirecting to login');
         window.location.href = '../index.html';
         return;
     }
@@ -47,7 +47,7 @@ function verifyUserExists() {
     .then(response => {
         if (!response.ok) {
             if (response.status === 401 || response.status === 404) {
-                console.log('המשתמש לא קיים או לא מורשה - מעביר להתחברות');
+                console.log('User does not exist or not authorized - redirecting to login');
                 localStorage.clear();
                 sessionStorage.clear();
                 window.location.href = '../index.html';
@@ -57,11 +57,11 @@ function verifyUserExists() {
         return response.json();
     })
     .then(data => {
-        console.log('אימות משתמש הצליח:', data);
+        console.log('User verification successful:', data);
         // המשתמש קיים - אפשר להמשיך
     })
     .catch(error => {
-        console.error('שגיאה באימות משתמש:', error);
+        console.error('Error verifying user:', error);
         // במקרה של שגיאה, נמחק את הנתונים ונעביר להתחברות
         localStorage.clear();
         sessionStorage.clear();
@@ -71,14 +71,14 @@ function verifyUserExists() {
 
 // פונקציה לעדכון ממשק המשתמש
 function updateUserInterface() {
-    console.log('מעדכן ממשק משתמש...', currentUser);
+    console.log('Updating user interface...', currentUser);
     
     // בדיקת אלמנטים
     const userNameElement = document.getElementById('userName');
     const userEmailElement = document.getElementById('userEmail');
     const roleTextElement = document.getElementById('roleText');
     
-    console.log('=== בדיקת אלמנטים ===');
+    console.log('=== Element Check ===');
     console.log('userNameElement:', userNameElement);
     console.log('userEmailElement:', userEmailElement);
     console.log('roleTextElement:', roleTextElement);
@@ -86,17 +86,17 @@ function updateUserInterface() {
     // עדכון פרטי המשתמש
     if (userNameElement) {
         const fullName = `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim();
-        userNameElement.textContent = fullName || 'שם לא זמין';
-        console.log('עדכון שם משתמש:', fullName);
+        userNameElement.textContent = fullName || 'Name not available';
+        console.log('Updating username:', fullName);
     } else {
-        console.error('אלמנט userName לא נמצא!');
+        console.error('userName element not found!');
     }
     
     if (userEmailElement) {
-        userEmailElement.textContent = currentUser.email || 'אימייל לא זמין';
-        console.log('עדכון אימייל:', currentUser.email);
+        userEmailElement.textContent = currentUser.email || 'Email not available';
+        console.log('Updating email:', currentUser.email);
     } else {
-        console.error('אלמנט userEmail לא נמצא!');
+        console.error('userEmail element not found!');
     }
     
     // עדכון תפקיד המשתמש

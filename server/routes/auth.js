@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
@@ -15,6 +16,14 @@ router.post('/register', [
     body('userType', 'סוג משתמש חייב להיות parent או babysitter').isIn(['parent', 'babysitter']),
     body('city', 'עיר היא שדה חובה').not().isEmpty()
 ], function(req, res) {
+    // Check database connection
+    if (mongoose.connection.readyState !== 1) {
+        console.error('Database not connected. ReadyState:', mongoose.connection.readyState);
+        return res.status(500).json({
+            success: false,
+            message: 'Database connection error'
+        });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ 
