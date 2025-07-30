@@ -1,4 +1,4 @@
-console.log('הקובץ הראשי נטען!');
+console.log('Main file loaded!');
 let currentUser = null;
 let isLoggedIn = false;
 const API_BASE_URL = '/api';
@@ -16,7 +16,7 @@ window.addEventListener('load', function() {
     setTimeout(checkLoginStatus, 100);
 });
 function switchTab(tabName) {
-    console.log('מחליף לטאב:', tabName);
+    console.log('Switching to tab:', tabName);
     document.querySelectorAll('.auth-tab').forEach(tab => {
         tab.classList.remove('active');
     });
@@ -43,28 +43,28 @@ function clearMessages() {
     });
 }
 function checkLoginStatus() {
-    console.log('בודק סטטוס התחברות...');
+    console.log('Checking login status...');
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userData') || localStorage.getItem('user');
     if (token && userData) {
         try {
             currentUser = JSON.parse(userData);
             isLoggedIn = true;
-            console.log('המשתמש מחובר:', currentUser.firstName || currentUser.name);
+            console.log('User is logged in:', currentUser.firstName || currentUser.name);
             updateUIForLoggedInUser();
             changeNavigationForLoggedInUser();
         } catch (error) {
-            console.error('שגיאה בפענוח נתוני המשתמש:', error);
+            console.error('Error parsing user data:', error);
             logout();
         }
     } else {
-        console.log('המשתמש לא מחובר');
+        console.log('User is not logged in');
         updateUIForGuestUser();
         changeNavigationForGuestUser();
     }
 }
 function changeNavigationForLoggedInUser() {
-    console.log('משנה ניווט למשתמש מחובר...');
+    console.log('Changing navigation for logged in user...');
     const logoLinks = document.querySelectorAll('.navbar-brand');
     logoLinks.forEach(logoLink => {
         logoLink.href = '/pages/profile.html';
@@ -84,10 +84,10 @@ function changeNavigationForLoggedInUser() {
         authNav.style.display = 'none';
     }
     
-    console.log('הניווט שונה למשתמש מחובר');
+    console.log('Navigation changed for logged in user');
 }
 function changeNavigationForGuestUser() {
-    console.log('משנה ניווט למשתמש אורח...');
+    console.log('Changing navigation for guest user...');
     const logoLinks = document.querySelectorAll('.navbar-brand');
     logoLinks.forEach(logoLink => {
         logoLink.href = '/index.html';
@@ -104,10 +104,10 @@ function changeNavigationForGuestUser() {
         authNav.style.display = 'flex';
     }
     
-    console.log('הניווט שונה למשתמש אורח');
+    console.log('Navigation changed for guest user');
 }
 function updateUIForLoggedInUser() {
-    console.log('מעדכן ממשק למשתמש מחובר');
+    console.log('Updating UI for logged in user');
     const authButtons = document.getElementById('authButtons');
     if (authButtons) {
         authButtons.innerHTML = `
@@ -138,7 +138,7 @@ function updateUIForLoggedInUser() {
     }
 }
 function updateUIForGuestUser() {
-    console.log('מעדכן ממשק למשתמש אורח');
+    console.log('Updating UI for guest user');
     const profileLink = document.querySelector('.profile-link');
     if (profileLink) {
         profileLink.remove();
@@ -158,7 +158,7 @@ function updateUIForGuestUser() {
     }
 }
 function logout() {
-    console.log('המשתמש מתנתק...');
+    console.log('User is logging out...');
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
     localStorage.removeItem('user');
@@ -171,31 +171,31 @@ function logout() {
     } else {
         window.location.href = 'index.html';
     }
-    console.log('ההתנתקות הושלמה');
+    console.log('Logout completed');
 }
 function validateForm(formId) {
-    console.log('בודק תקינות טופס:', formId);
+    console.log('Validating form:', formId);
     const form = document.getElementById(formId);
     if (!form) {
-        console.error('הטופס לא נמצא:', formId);
+        console.error('Form not found:', formId);
         return false;
     }
     const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
     let isValid = true;
     inputs.forEach(input => {
         if (!input.value.trim()) {
-            console.log('שדה ריק:', input.name);
+            console.log('Empty field:', input.name);
             input.classList.add('is-invalid');
             isValid = false;
         } else {
             input.classList.remove('is-invalid');
         }
     });
-    console.log('תקינות הטופס:', isValid);
+    console.log('Form validity:', isValid);
     return isValid;
 }
 function showMessage(message, type = 'info') {
-    console.log('מציג הודעה:', message, 'סוג:', type);
+    console.log('Showing message:', message, 'type:', type);
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
     alertDiv.innerHTML = `
@@ -211,7 +211,7 @@ function showMessage(message, type = 'info') {
     }, 5000);
 }
 function loadData(url, options = {}) {
-    console.log('טוען נתונים מ:', url);
+    console.log('Loading data from:', url);
     const defaultOptions = {
         method: 'GET',
         headers: {
@@ -225,23 +225,23 @@ function loadData(url, options = {}) {
     const finalOptions = { ...defaultOptions, ...options };
     return fetch(url, finalOptions)
         .then(response => {
-            console.log('תגובה מהשרת:', response.status);
+            console.log('Server response:', response.status);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('נתונים שהתקבלו:', data);
+            console.log('Data received:', data);
             return data;
         })
         .catch(error => {
-            console.error('שגיאה בטעינת נתונים:', error);
+            console.error('Error loading data:', error);
             throw error;
         });
 }
 function sendData(url, data, method = 'POST') {
-    console.log('שולח נתונים ל:', url, 'נתונים:', data);
+    console.log('Sending data to:', url, 'data:', data);
     const options = {
         method: method,
         headers: {
@@ -255,23 +255,23 @@ function sendData(url, data, method = 'POST') {
     }
     return fetch(url, options)
         .then(response => {
-            console.log('תגובה מהשרת:', response.status);
+            console.log('Server response:', response.status);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('תגובה מהשרת:', data);
+            console.log('Server response:', data);
             return data;
         })
         .catch(error => {
-            console.error('שגיאה בשליחת נתונים:', error);
+            console.error('Error sending data:', error);
             throw error;
         });
 }
 function animateElement(element, animation = 'fadeIn') {
-    console.log('מפעיל אנימציה על אלמנט:', element);
+    console.log('Animating element:', element);
     element.style.opacity = '0';
     element.style.transform = 'translateY(20px)';
     setTimeout(() => {
@@ -281,18 +281,18 @@ function animateElement(element, animation = 'fadeIn') {
     }, 100);
 }
 function checkInternetConnection() {
-    console.log('בודק חיבור לאינטרנט...');
+    console.log('Checking internet connection...');
     if (!navigator.onLine) {
-        console.log('אין חיבור לאינטרנט');
-        showMessage('אין חיבור לאינטרנט. בדוק את החיבור שלך.', 'warning');
+        console.log('No internet connection');
+        showMessage('No internet connection. Check your connection.', 'warning');
         return false;
     }
-    console.log('יש חיבור לאינטרנט');
+    console.log('Internet connection available');
     return true;
 }
 function handleRegistration(event) {
     event.preventDefault();
-    console.log('מטפל בהרשמה...');
+    console.log('Handling registration...');
     const form = event.target;
     const formData = new FormData(form);
     const userType = formData.get('userType');
@@ -319,7 +319,7 @@ function handleRegistration(event) {
     submitBtn.disabled = true;
     sendData('/api/auth/register', data)
         .then(response => {
-            console.log('הרשמה הצליחה:', response);
+            console.log('Registration successful:', response);
             localStorage.setItem('token', response.token);
             localStorage.setItem('userData', JSON.stringify(response.user));
             currentUser = response.user;
@@ -332,8 +332,8 @@ function handleRegistration(event) {
             }, 1000);
         })
         .catch(error => {
-            console.error('שגיאה בהרשמה:', error);
-            showFormMessage('registerMessage', 'שגיאה בהרשמה. בדוק את הפרטים ונסה שוב.', 'danger');
+            console.error('Registration error:', error);
+            showFormMessage('registerMessage', 'Registration error. Check the details and try again.', 'danger');
         })
         .finally(() => {
             submitBtn.innerHTML = originalText;
@@ -341,12 +341,12 @@ function handleRegistration(event) {
         });
 }
 function setupRegistrationForm() {
-    console.log('מגדיר טופס הרשמה...');
+    console.log('Setting up registration form...');
     const userTypeSelect = document.getElementById('userType');
     const babysitterFields = document.getElementById('babysitterFields');
     const form = document.getElementById('registerForm');
     if (!userTypeSelect || !babysitterFields || !form) {
-        console.log('לא נמצאו אלמנטי הטופס');
+        console.log('Form elements not found');
         return;
     }
     function toggleFields() {
@@ -366,46 +366,46 @@ function setupRegistrationForm() {
     form.addEventListener('submit', handleRegistration);
 }
 function handleError(error, context = '') {
-    console.error('שגיאה:', context, error);
-    let message = 'אירעה שגיאה. אנא נסה שוב.';
+    console.error('Error:', context, error);
+    let message = 'An error occurred. Please try again.';
     if (error.message.includes('401')) {
-        message = 'הסשן פג תוקף. אנא התחבר מחדש.';
+        message = 'Session expired. Please log in again.';
         logout();
     } else if (error.message.includes('404')) {
-        message = 'המשאב המבוקש לא נמצא.';
+        message = 'The requested resource was not found.';
     } else if (error.message.includes('500')) {
-        message = 'שגיאה בשרת. אנא נסה שוב מאוחר יותר.';
+        message = 'Server error. Please try again later.';
     }
     showMessage(message, 'danger');
 }
 function checkBrowserCompatibility() {
-    console.log('בודק תאימות דפדפן...');
+    console.log('Checking browser compatibility...');
     const userAgent = navigator.userAgent;
     const isChrome = userAgent.includes('Chrome');
     const isFirefox = userAgent.includes('Firefox');
     const isSafari = userAgent.includes('Safari');
     const isEdge = userAgent.includes('Edge');
-    console.log('דפדפן:', { isChrome, isFirefox, isSafari, isEdge });
+    console.log('Browser:', { isChrome, isFirefox, isSafari, isEdge });
     if (!isChrome && !isFirefox && !isSafari && !isEdge) {
-        showMessage('מומלץ להשתמש בדפדפן מודרני לתמיכה מלאה.', 'info');
+        showMessage('It is recommended to use a modern browser for full support.', 'info');
     }
 }
 function showLoading(elementId = 'loading') {
     const loadingElement = document.getElementById(elementId);
     if (loadingElement) {
         loadingElement.style.display = 'block';
-        console.log('מציג אינדיקטור טעינה');
+        console.log('Showing loading indicator');
     }
 }
 function hideLoading(elementId = 'loading') {
     const loadingElement = document.getElementById(elementId);
     if (loadingElement) {
         loadingElement.style.display = 'none';
-        console.log('מסתיר אינדיקטור טעינה');
+        console.log('Hiding loading indicator');
     }
 }
 function addToHistory(page, title) {
-    console.log('מוסיף להיסטוריה:', page, title);
+    console.log('Adding to history:', page, title);
     const history = JSON.parse(localStorage.getItem('pageHistory') || '[]');
     history.push({
         page: page,
@@ -418,11 +418,11 @@ function addToHistory(page, title) {
     localStorage.setItem('pageHistory', JSON.stringify(history));
 }
 function checkPerformance() {
-    console.log('בודק ביצועים...');
+    console.log('Checking performance...');
     const loadTime = performance.now();
-    console.log('זמן טעינה:', loadTime, 'מילישניות');
+    console.log('Load time:', loadTime, 'milliseconds');
     if (loadTime > 3000) {
-        console.warn('זמן טעינה איטי:', loadTime);
+        console.warn('Slow load time:', loadTime);
     }
 }
 console.log('הדף נטען בהצלחה!');
@@ -430,14 +430,14 @@ function checkForm() {
     const city = document.getElementById('city').value;
     const date = document.getElementById('date').value;
     const time = document.getElementById('time').value;
-    console.log('עיר:', city);
-    console.log('תאריך:', date);
-    console.log('שעה:', time);
+    console.log('City:', city);
+    console.log('Date:', date);
+    console.log('Time:', time);
     if (city && date && time) {
-        alert('הטופס מלא! מעביר לחיפוש...');
+        alert('Form is complete! Redirecting to search...');
         window.location.href = 'pages/search.html';
     } else {
-        alert('אנא מלאו את כל השדות');
+        alert('Please fill in all fields');
     }
 }
 const heroForm = document.getElementById('heroSearchForm');
@@ -448,7 +448,7 @@ if (heroForm) {
     });
 }
 window.addEventListener('DOMContentLoaded', function() {
-    console.log('הדף מוכן!');
+    console.log('Page is ready!');
     const features = document.querySelectorAll('.feature-card');
     features.forEach(function(feature) {
         feature.addEventListener('mouseenter', function() {
@@ -460,37 +460,37 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('הדף נטען - מתחיל אתחול...');
+    console.log('Page loaded - starting initialization...');
     checkInternetConnection();
     checkBrowserCompatibility();
     checkPerformance();
     setupEventListeners();
     setupRegistrationForm();
     animatePageElements();
-    console.log('האתחול הושלם!');
+    console.log('Initialization completed!');
 });
 function setupEventListeners() {
-    console.log('מגדיר מאזיני אירועים...');
+    console.log('Setting up event listeners...');
     setupRegistrationForm();
     setupLoginForm();
     checkInternetConnection();
     checkBrowserCompatibility();
     animatePageElements();
     window.addEventListener('online', () => {
-        console.log('החיבור לאינטרנט חזר');
-        showMessage('החיבור לאינטרנט חזר!', 'success');
+        console.log('Internet connection restored');
+        showMessage('Internet connection restored!', 'success');
     });
     window.addEventListener('offline', () => {
-        console.log('החיבור לאינטרנט נותק');
-        showMessage('החיבור לאינטרנט נותק!', 'warning');
+        console.log('Internet connection lost');
+        showMessage('Internet connection lost!', 'warning');
     });
     window.addEventListener('resize', () => {
-        console.log('גודל החלון השתנה:', window.innerWidth, 'x', window.innerHeight);
+        console.log('Window size changed:', window.innerWidth, 'x', window.innerHeight);
     });
-    console.log('מאזיני אירועים הוגדרו');
+    console.log('Event listeners defined');
 }
 function animatePageElements() {
-    console.log('מפעיל אנימציות על אלמנטי הדף...');
+    console.log('Animating page elements...');
     const elementsToAnimate = document.querySelectorAll('.feature-card, .step-card, .card');
     elementsToAnimate.forEach((element, index) => {
         setTimeout(() => {
@@ -499,28 +499,28 @@ function animatePageElements() {
     });
 }
 function validateData(data, schema) {
-    console.log('בודק תקינות נתונים:', data);
+    console.log('Validating data:', data);
     for (const field in schema) {
         const value = data[field];
         const rules = schema[field];
         if (rules.required && !value) {
-            console.error('שדה חובה חסר:', field);
+            console.error('Required field missing:', field);
             return false;
         }
         if (rules.minLength && value && value.length < rules.minLength) {
-            console.error('שדה קצר מדי:', field);
+            console.error('Field too short:', field);
             return false;
         }
         if (rules.maxLength && value && value.length > rules.maxLength) {
-            console.error('שדה ארוך מדי:', field);
+            console.error('Field too long:', field);
             return false;
         }
     }
-    console.log('הנתונים תקינים');
+    console.log('Data is valid');
     return true;
 }
 function sanitizeData(data) {
-    console.log('מנקה נתונים...');
+    console.log('Sanitizing data...');
     const cleaned = {};
     for (const key in data) {
         if (typeof data[key] === 'string') {
@@ -529,23 +529,57 @@ function sanitizeData(data) {
             cleaned[key] = data[key];
         }
     }
-    console.log('הנתונים נוקו');
+    console.log('Data sanitized');
     return cleaned;
 }
-console.log('הקובץ הראשי הוכן בהצלחה!');
+console.log('Main file prepared successfully!');
+
+// Fix navbar-toggler functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+    
+    if (navbarToggler && navbarCollapse) {
+        console.log('Navbar toggler found, setting up event listener');
+        
+        // Ensure Bootstrap collapse is properly initialized
+        if (typeof bootstrap !== 'undefined') {
+            const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                toggle: false
+            });
+            
+            navbarToggler.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Navbar toggler clicked');
+                bsCollapse.toggle();
+            });
+        } else {
+            console.warn('Bootstrap not loaded, using fallback navbar toggle');
+            
+            // Fallback for when Bootstrap is not available
+            navbarToggler.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Using fallback navbar toggle');
+                navbarCollapse.classList.toggle('show');
+            });
+        }
+    } else {
+        console.log('Navbar toggler or collapse not found');
+    }
+});
 function setupLoginForm() {
-    console.log('מגדיר טופס התחברות...');
+    console.log('Setting up login form...');
     const form = document.getElementById('loginForm');
     if (!form) {
-        console.log('טופס התחברות לא נמצא');
+        console.log('Login form not found');
         return;
     }
     form.addEventListener('submit', handleLogin);
-    console.log('טופס התחברות מוגדר');
+    console.log('Login form configured');
 }
 function handleLogin(event) {
     event.preventDefault();
-    console.log('מטפל בהתחברות...');
+    console.log('Handling login...');
     const form = event.target;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
@@ -558,20 +592,20 @@ function handleLogin(event) {
     submitBtn.disabled = true;
     sendData('/api/auth/login', data)
         .then(response => {
-            console.log('התחברות הצליחה:', response);
+            console.log('Login successful:', response);
             localStorage.setItem('token', response.token);
             localStorage.setItem('userData', JSON.stringify(response.user));
             currentUser = response.user;
             isLoggedIn = true;
-            console.log('נתוני משתמש נשמרו:', response.user);
+            console.log('User data saved:', response.user);
             showFormMessage('loginMessage', 'התחברות הצליחה! מעביר לפרופיל שלך...', 'success');
             setTimeout(() => {
                 window.location.href = 'pages/profile.html';
             }, 1000);
         })
         .catch(error => {
-            console.error('שגיאה בהתחברות:', error);
-            showFormMessage('loginMessage', 'שגיאה בהתחברות. בדוק את הפרטים ונסה שוב.', 'danger');
+            console.error('Login error:', error);
+            showFormMessage('loginMessage', 'Login error. Check the details and try again.', 'danger');
         })
         .finally(() => {
             submitBtn.innerHTML = originalText;

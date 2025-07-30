@@ -19,7 +19,7 @@ app.use(morgan('combined'));
 const corsOptions = {
   origin: process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(',')
-    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500'],
+    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'https://babysitter-finder-application.onrender.com'],
   credentials: true
 };
 app.use(cors(corsOptions));
@@ -38,6 +38,8 @@ mongoose.connect(config.mongodb.uri, {
 .catch(err => {
   console.error('❌ MongoDB connection error:', err);
   console.log('Database connection error:', err.message);
+  console.log('MongoDB URI:', config.mongodb.uri ? 'Set' : 'Not set');
+  // Don't exit the process, let it continue but log the error
 });
 console.log('Setting up API routes...');
 app.use('/api/auth', require('./routes/auth'));

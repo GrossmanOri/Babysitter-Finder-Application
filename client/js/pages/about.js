@@ -1,7 +1,7 @@
 // About page JavaScript file
 // Handles navigation and user authentication for the about page
 
-console.log('דף אודות נטען!');
+console.log('About page loaded!');
 
 /**
  * Sets up the navigation menu based on user type
@@ -83,7 +83,7 @@ function setupNavigation() {
             setupRoleBasedMenu(user.userType);
             
         } catch (error) {
-            console.error('שגיאה בפענוח נתוני משתמש:', error);
+            console.error('Error parsing user data:', error);
             // Fallback to guest user setup
             setupGuestNavigation();
         }
@@ -97,7 +97,7 @@ function setupNavigation() {
  * Sets up navigation for non-authenticated users
  */
 function setupGuestNavigation() {
-    console.log('מגדיר ניווט למשתמש אורח');
+    console.log('Setting up navigation for guest user');
     
     // Set up auth buttons for guest user
     const authButtons = document.getElementById('authButtons');
@@ -141,7 +141,7 @@ function logout() {
 
 // Initialize the page when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('דף אודות נטען - מתחיל אתחול...');
+    console.log('About page loaded - starting initialization...');
     setupNavigation();
-    console.log('דף אודות הותחל בהצלחה!');
+    console.log('About page initialized successfully!');
 }); 

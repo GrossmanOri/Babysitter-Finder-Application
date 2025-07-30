@@ -1,37 +1,37 @@
-console.log('טוען קובץ פונקציות עזר...');
+console.log('Loading helper functions file...');
 function isValidEmail(email) {
-    console.log('בודק תקינות אימייל:', email);
+    console.log('Checking email validity:', email);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isValid = emailRegex.test(email);
-    console.log('תקינות האימייל:', isValid);
+    console.log('Email validity:', isValid);
     return isValid;
 }
 function isValidPassword(password) {
-    console.log('בודק תקינות סיסמה...');
+    console.log('Checking password validity...');
     if (password.length < 6) {
-        console.log('הסיסמה קצרה מדי');
+        console.log('Password is too short');
         return false;
     }
     if (!/[A-Z]/.test(password)) {
-        console.log('הסיסמה צריכה להכיל אות גדולה');
+        console.log('Password needs to contain uppercase letter');
         return false;
     }
     if (!/\d/.test(password)) {
-        console.log('הסיסמה צריכה להכיל מספר');
+        console.log('Password needs to contain a number');
         return false;
     }
-    console.log('הסיסמה תקינה');
+    console.log('Password is valid');
     return true;
 }
 function isValidPhone(phone) {
-    console.log('בודק תקינות מספר טלפון:', phone);
+    console.log('Checking phone number validity:', phone);
     const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
     const isValid = /^(05|9725)\d{8}$/.test(cleanPhone);
-    console.log('תקינות מספר הטלפון:', isValid);
+    console.log('Phone number validity:', isValid);
     return isValid;
 }
 function sanitizeData(data) {
-    console.log('מנקה נתונים...');
+    console.log('Sanitizing data...');
     const cleaned = {};
     for (const key in data) {
         if (typeof data[key] === 'string') {
@@ -44,11 +44,11 @@ function sanitizeData(data) {
             cleaned[key] = data[key];
         }
     }
-    console.log('הנתונים נוקו');
+    console.log('Data sanitized');
     return cleaned;
 }
 function getHebrewDate(date = new Date()) {
-    console.log('יוצר תאריך עברי...');
+    console.log('Creating Hebrew date...');
     const options = {
         year: 'numeric',
         month: 'long',
@@ -56,11 +56,11 @@ function getHebrewDate(date = new Date()) {
         weekday: 'long'
     };
     const hebrewDate = date.toLocaleDateString('he-IL', options);
-    console.log('תאריך עברי:', hebrewDate);
+    console.log('Hebrew date:', hebrewDate);
     return hebrewDate;
 }
 function calculateAge(birthDate) {
-    console.log('מחשב גיל...');
+    console.log('Calculating age...');
     const today = new Date();
     const birth = new Date(birthDate);
     let age = today.getFullYear() - birth.getFullYear();
@@ -68,60 +68,60 @@ function calculateAge(birthDate) {
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
         age--;
     }
-    console.log('הגיל המחושב:', age);
+    console.log('Calculated age:', age);
     return age;
 }
 function generateRandomCode(length = 6) {
-    console.log('יוצר קוד אקראי באורך:', length);
+    console.log('Generating random code with length:', length);
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let code = '';
     for (let i = 0; i < length; i++) {
         code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    console.log('הקוד שנוצר:', code);
+    console.log('Generated code:', code);
     return code;
 }
 function isValidDate(dateString) {
-    console.log('בודק תקינות תאריך:', dateString);
+    console.log('Checking date validity:', dateString);
     const date = new Date(dateString);
     const isValid = date instanceof Date && !isNaN(date);
-    console.log('תקינות התאריך:', isValid);
+    console.log('Date validity:', isValid);
     return isValid;
 }
 function isFutureDate(dateString) {
-    console.log('בודק אם התאריך בעתיד:', dateString);
+    console.log('Checking if date is in the future:', dateString);
     const date = new Date(dateString);
     const today = new Date();
     const isFuture = date > today;
-    console.log('התאריך בעתיד:', isFuture);
+    console.log('Date is in the future:', isFuture);
     return isFuture;
 }
 function isValidTime(timeString) {
-    console.log('בודק תקינות שעה:', timeString);
+    console.log('Checking time validity:', timeString);
     const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
     const isValid = timeRegex.test(timeString);
-    console.log('תקינות השעה:', isValid);
+    console.log('Time validity:', isValid);
     return isValid;
 }
 function formatTime12Hour(timeString) {
-    console.log('ממיר שעה לפורמט 12 שעות:', timeString);
+    console.log('Converting time to 12-hour format:', timeString);
     const [hours, minutes] = timeString.split(':');
     const hour = parseInt(hours);
     const ampm = hour >= 12 ? 'PM' : 'AM';
     const hour12 = hour % 12 || 12;
     const formattedTime = `${hour12}:${minutes} ${ampm}`;
-    console.log('השעה בפורמט 12 שעות:', formattedTime);
+    console.log('Time in 12-hour format:', formattedTime);
     return formattedTime;
 }
 function isValidName(name) {
-    console.log('בודק תקינות שם:', name);
+    console.log('Checking name validity:', name);
     const nameRegex = /^[א-ת\s]+$/;
     const isValid = nameRegex.test(name) && name.length >= 2;
-    console.log('תקינות השם:', isValid);
+    console.log('Name validity:', isValid);
     return isValid;
 }
 function isValidCity(city) {
-    console.log('בודק תקינות עיר:', city);
+    console.log('Checking city validity:', city);
     const israeliCities = [
         'תל אביב', 'ירושלים', 'חיפה', 'באר שבע', 'אשדוד', 'נתניה', 'ראשון לציון',
         'פתח תקווה', 'אשקלון', 'רחובות', 'הרצליה', 'כפר סבא', 'בית שמש',
@@ -129,87 +129,87 @@ function isValidCity(city) {
         'עכו', 'אלעד', 'בית שאן', 'קריית גת', 'אריאל', 'רמלה', 'נהריה'
     ];
     const isValid = israeliCities.includes(city);
-    console.log('תקינות העיר:', isValid);
+    console.log('City validity:', isValid);
     return isValid;
 }
 function isValidPrice(price) {
-    console.log('בודק תקינות מחיר:', price);
+    console.log('Checking price validity:', price);
     const numPrice = parseFloat(price);
     const isValid = !isNaN(numPrice) && numPrice > 0 && numPrice <= 1000;
-    console.log('תקינות המחיר:', isValid);
+    console.log('Price validity:', isValid);
     return isValid;
 }
 function isValidDescription(description) {
-    console.log('בודק תקינות תיאור...');
+    console.log('Checking description validity...');
     const isValid = description && description.length >= 10 && description.length <= 500;
-    console.log('תקינות התיאור:', isValid);
+    console.log('Description validity:', isValid);
     return isValid;
 }
 function createSummary(text, maxLength = 100) {
-    console.log('יוצר תקציר טקסט...');
+    console.log('Creating text summary...');
     if (text.length <= maxLength) {
         return text;
     }
     const summary = text.substring(0, maxLength) + '...';
-    console.log('התקציר שנוצר:', summary);
+    console.log('Generated summary:', summary);
     return summary;
 }
 function isValidAge(age) {
-    console.log('בודק תקינות גיל:', age);
+    console.log('Checking age validity:', age);
     const numAge = parseInt(age);
     const isValid = !isNaN(numAge) && numAge >= 16 && numAge <= 100;
-    console.log('תקינות הגיל:', isValid);
+    console.log('Age validity:', isValid);
     return isValid;
 }
 function isValidExperience(experience) {
-    console.log('בודק תקינות ניסיון:', experience);
+    console.log('Checking experience validity:', experience);
     const validExperiences = ['beginner', 'intermediate', 'expert'];
     const isValid = validExperiences.includes(experience);
-    console.log('תקינות הניסיון:', isValid);
+    console.log('Experience validity:', isValid);
     return isValid;
 }
 function getExperienceText(experience) {
-    console.log('ממיר ניסיון לטקסט עברי:', experience);
+    console.log('Converting experience to Hebrew text:', experience);
     const experienceMap = {
         'beginner': 'מתחיל',
         'intermediate': 'בינוני',
         'expert': 'מומחה'
     };
     const text = experienceMap[experience] || 'לא צוין';
-    console.log('הטקסט בעברית:', text);
+    console.log('Hebrew text:', text);
     return text;
 }
 function isValidAvailability(availability) {
-    console.log('בודק תקינות זמינות...');
+    console.log('Checking availability validity...');
     if (!Array.isArray(availability)) {
-        console.log('הזמינות אינה מערך');
+        console.log('Availability is not an array');
         return false;
     }
     const validDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const isValid = availability.every(day => validDays.includes(day));
-    console.log('תקינות הזמינות:', isValid);
+    console.log('Availability validity:', isValid);
     return isValid;
 }
 function isValidWorkingHours(hours) {
-    console.log('בודק תקינות שעות עבודה:', hours);
+    console.log('Checking working hours validity:', hours);
     if (!hours || typeof hours !== 'object') {
-        console.log('שעות העבודה לא תקינות');
+        console.log('Working hours are not valid');
         return false;
     }
     const { start, end } = hours;
     const isValid = isValidTime(start) && isValidTime(end) && start < end;
-    console.log('תקינות שעות העבודה:', isValid);
+    console.log('Working hours validity:', isValid);
     return isValid;
 }
 function isValidRating(rating) {
-    console.log('בודק תקינות דירוג:', rating);
+    console.log('Checking rating validity:', rating);
     const numRating = parseFloat(rating);
     const isValid = !isNaN(numRating) && numRating >= 1 && numRating <= 5;
-    console.log('תקינות הדירוג:', isValid);
+    console.log('Rating validity:', isValid);
     return isValid;
 }
 function createRatingStars(rating) {
-    console.log('יוצר כוכבי דירוג:', rating);
+    console.log('Creating rating stars:', rating);
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -223,24 +223,24 @@ function createRatingStars(rating) {
     for (let i = 0; i < emptyStars; i++) {
         stars += '<i class="bi bi-star text-warning"></i>';
     }
-    console.log('כוכבי הדירוג שנוצרו');
+    console.log('Rating stars created');
     return stars;
 }
 function isValidMessage(message) {
-    console.log('בודק תקינות הודעה...');
+    console.log('Checking message validity...');
     const isValid = message && message.trim().length > 0 && message.length <= 1000;
-    console.log('תקינות ההודעה:', isValid);
+    console.log('Message validity:', isValid);
     return isValid;
 }
 function isValidId(id) {
-    console.log('בודק תקינות ID:', id);
+    console.log('Checking ID validity:', id);
     const objectIdRegex = /^[0-9a-fA-F]{24}$/;
     const isValid = objectIdRegex.test(id);
-    console.log('תקינות ה-ID:', isValid);
+    console.log('ID validity:', isValid);
     return isValid;
 }
 function formatReadableDate(date) {
-    console.log('יוצר תאריך קריא:', date);
+    console.log('Creating readable date:', date);
     const options = {
         year: 'numeric',
         month: 'long',
@@ -249,23 +249,23 @@ function formatReadableDate(date) {
         minute: '2-digit'
     };
     const readableDate = new Date(date).toLocaleDateString('he-IL', options);
-    console.log('התאריך הקריא:', readableDate);
+    console.log('Readable date:', readableDate);
     return readableDate;
 }
 function isValidFile(file) {
-    console.log('בודק תקינות קובץ...');
+    console.log('Checking file validity...');
     if (!file) {
-        console.log('אין קובץ');
+        console.log('No file');
         return false;
     }
     const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
     const maxSize = 5 * 1024 * 1024; 
     const isValidType = validTypes.includes(file.mimetype);
     const isValidSize = file.size <= maxSize;
-    console.log('תקינות הקובץ:', isValidType && isValidSize);
+    console.log('File validity:', isValidType && isValidSize);
     return isValidType && isValidSize;
 }
-console.log('קובץ פונקציות העזר הוכן בהצלחה!');
+console.log('Helper functions file prepared successfully!');
 module.exports = {
     isValidEmail,
     isValidPassword,

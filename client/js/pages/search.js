@@ -7,10 +7,10 @@ const loading = document.getElementById('loading');
 const noResults = document.getElementById('noResults');
 const detectLocationBtn = document.getElementById('detectLocationBtn');
 const cityInput = document.getElementById('city');
-console.log('דף החיפוש נטען!');
+console.log('Search page loaded!');
 searchForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    console.log('הטופס נשלח!');
+    console.log('Form submitted!');
     performSearch();
 });
 if (detectLocationBtn && cityInput) {
@@ -46,7 +46,7 @@ function showMessage(message, type) {
     }, 5000);
 }
 function performSearch() {
-    console.log('מתחיל חיפוש...');
+    console.log('Starting search...');
     resultsSection.classList.remove('d-none');
     loading.classList.remove('d-none');
     resultsList.classList.add('d-none');
@@ -56,21 +56,21 @@ function performSearch() {
     for (let [key, value] of formData.entries()) {
         if (value.trim() !== '') {
             searchParams.append(key, value.trim());
-            console.log('הוספת פרמטר:', key, '=', value);
+            console.log('Adding parameter:', key, '=', value);
         }
     }
     const apiUrl = `${API_BASE_URL}/babysitters?${searchParams.toString()}`;
-    console.log('כתובת החיפוש:', apiUrl);
+    console.log('Search URL:', apiUrl);
     fetch(apiUrl)
         .then(response => {
-            console.log('תגובה מהשרת:', response.status);
+            console.log('Server response:', response.status);
             if (!response.ok) {
                 throw new Error('שגיאה בטעינת נתונים');
             }
             return response.json();
         })
         .then(data => {
-            console.log('נתונים שהתקבלו:', data);
+            console.log('Data received:', data);
             if (data.success) {
                 displayResults(data.data);
             } else {
@@ -83,11 +83,11 @@ function performSearch() {
         })
         .finally(() => {
             loading.classList.add('d-none');
-            console.log('החיפוש הסתיים');
+            console.log('Search completed');
         });
 }
 function displayResults(babysitters) {
-    console.log('מציג תוצאות:', babysitters.length, 'בייביסיטרים');
+    console.log('Displaying results:', babysitters.length, 'babysitters');
     if (babysitters.length === 0) {
         showNoResults();
         return;
@@ -95,7 +95,7 @@ function displayResults(babysitters) {
     resultsCount.textContent = `${babysitters.length} ביביסיטרים נמצאו`;
     resultsList.innerHTML = '';
     babysitters.forEach((babysitter, index) => {
-        console.log('יוצר כרטיס מספר:', index + 1);
+        console.log('Creating card number:', index + 1);
         const babysitterCard = createBabysitterCard(babysitter);
         resultsList.appendChild(babysitterCard);
     });
@@ -141,7 +141,7 @@ function createBabysitterCard(babysitter) {
     return article;
 }
 function showNoResults() {
-    console.log('אין תוצאות חיפוש');
+    console.log('No search results');
     resultsCount.textContent = '0 ביביסיטרים נמצאו';
     noResults.classList.remove('d-none');
 }
@@ -156,7 +156,7 @@ function showError(message) {
     noResults.classList.remove('d-none');
 }
 function startChat(babysitterId) {
-    console.log('מתחיל צ\'אט עם:', babysitterId);
+    console.log('Starting chat with:', babysitterId);
     const token = localStorage.getItem('token');
     if (!token) {
         alert('עליכם להתחבר כדי לשלוח הודעה');
@@ -165,7 +165,7 @@ function startChat(babysitterId) {
     }
     
     // Always go to direct chat - let the chat page handle existing conversations
-    console.log('פתיחת צ\'אט ישיר עם:', babysitterId);
+            console.log('Opening direct chat with:', babysitterId);
     window.location.href = `chat.html?userId=${babysitterId}`;
 }
 function setupRoleBasedMenu(userType) {
