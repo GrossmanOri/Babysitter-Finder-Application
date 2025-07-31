@@ -83,6 +83,31 @@ router.put('/profile', auth, async (req, res) => {
   }
 });
 
+// GET /api/users/stats - קבלת סטטיסטיקות המשתמש (MOVED BEFORE /:id route)
+router.get('/stats', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // כאן תוכל להוסיף לוגיקה לקבלת סטטיסטיקות אמיתיות
+    // כרגע נחזיר נתונים לדוגמה
+    const stats = {
+      totalMessages: 5,
+      totalConversations: 3
+    };
+    
+    res.json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    console.error('Error fetching user stats:', error);
+    res.status(500).json({
+      success: false,
+      message: 'שגיאה בטעינת סטטיסטיקות'
+    });
+  }
+});
+
 // GET /api/users/:id - קבלת פרטי משתמש ספציפי
 router.get('/:id', auth, async (req, res) => {
   try {
@@ -245,30 +270,7 @@ router.delete('/:id', auth, (req, res) => {
     });
 });
 
-// GET /api/users/stats - קבלת סטטיסטיקות המשתמש
-router.get('/stats', auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    
-    // כאן תוכל להוסיף לוגיקה לקבלת סטטיסטיקות אמיתיות
-    // כרגע נחזיר נתונים לדוגמה
-    const stats = {
-      totalMessages: 5,
-      totalConversations: 3
-    };
-    
-    res.json({
-      success: true,
-      data: stats
-    });
-  } catch (error) {
-    console.error('Error fetching user stats:', error);
-    res.status(500).json({
-      success: false,
-      message: 'שגיאה בטעינת סטטיסטיקות'
-    });
-  }
-});
+// Duplicate /stats route removed - moved above /:id route
 
 // PUT /api/users/password - שינוי סיסמה
 router.put('/password', auth, async (req, res) => {

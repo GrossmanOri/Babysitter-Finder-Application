@@ -1,16 +1,17 @@
 {
   "name": "babysitter-finder-client",
   "version": "1.0.0",
-  "description": "Frontend for Babysitter Finder application",
-  "main": "index.js",
+  "description": "Frontend for Babysitter Finder application - Vanilla HTML/JS SPA",
+  "main": "index.html",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "live-server --port=8080 --host=localhost --open=/index.html",
+    "dev": "live-server --port=8080 --host=localhost --open=/index.html --watch=.",
+    "build": "echo 'Static HTML/JS build - copy files to production server'",
+    "serve": "http-server -p 8080 -c-1"
   },
   "keywords": [
-    "react",
+    "vanilla-js",
+    "spa",
     "babysitter",
     "finder",
     "frontend"
@@ -18,13 +19,11 @@
   "author": "Babysitter Finder Team",
   "license": "MIT",
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.15.0",
-    "react-scripts": "5.0.1",
-    "axios": "^1.5.0",
-    "bootstrap": "^5.3.1",
-    "react-bootstrap": "^2.8.0"
+    "bootstrap": "^5.3.1"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "http-server": "^14.1.1"
   },
   "browserslist": {
     "production": [
@@ -37,6 +36,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:3000"
+  }
 } 
