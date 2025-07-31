@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
           localStorage.setItem('token', json.token);
           localStorage.setItem('user', JSON.stringify(json.user));
           localStorage.setItem('userData', JSON.stringify(json.user));
-          console.log('Saved successfully:', { token: json.token, user: json.user });
+          console.log('נשמר בהצלחה:', { token: json.token, user: json.user });
         }
         setTimeout(function() {
                       CLIENT_NAV.goToProfile();
