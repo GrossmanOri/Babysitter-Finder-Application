@@ -140,7 +140,7 @@
     "senderId": "6887ad9f10cb471fbf7c57fc",
     "receiverId": "688b8a5c80e9a286546371c8",
     "content": "שלום",
-    "isRead": false,
+    "isRead": true,
     "createdAt": "2025-07-31T15:27:28.732Z"
   }
 ]

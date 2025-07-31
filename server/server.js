@@ -19,7 +19,7 @@ app.use(morgan('combined'));
 const corsOptions = {
   origin: process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(',')
-    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3001', 'http://[::]:3001', 'http://localhost:8080', 'http://localhost:5500', 'https://babysitter-finder-application.onrender.com'],
+    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://[::]:3001', 'http://localhost:8080', 'http://localhost:5500', 'https://babysitter-finder-application.onrender.com'],
   credentials: true
 };
 app.use(cors(corsOptions));

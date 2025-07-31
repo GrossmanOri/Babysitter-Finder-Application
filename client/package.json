@@ -4,8 +4,8 @@
   "description": "Frontend for Babysitter Finder application",
   "main": "index.js",
   "scripts": {
-    "start": "python3 -m http.server 3001",
-    "dev": "python3 -m http.server 3001",
+    "start": "python3 -m http.server 3001 --bind 127.0.0.1",
+    "dev": "python3 -m http.server 3001 --bind 127.0.0.1",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

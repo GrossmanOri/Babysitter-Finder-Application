@@ -693,8 +693,28 @@ function handleLogin(event) {
         });
 }
 function goToProfile() {
+    console.log('=== GO TO PROFILE CALLED ===');
+    console.log('Current location:', window.location.href);
+    console.log('Current pathname:', window.location.pathname);
     console.log('Navigating to profile page...');
-    window.location.href = 'pages/profile.html';
+    
+    // Check if we're already in a pages directory
+    const currentPath = window.location.pathname;
+    const isInPagesDirectory = currentPath.includes('/pages/');
+    
+    let targetUrl;
+    if (isInPagesDirectory) {
+        // If we're in pages directory, go to profile.html (same directory)
+        targetUrl = 'profile.html';
+        console.log('In pages directory, using relative path:', targetUrl);
+    } else {
+        // If we're in root directory, go to pages/profile.html
+        targetUrl = 'pages/profile.html';
+        console.log('In root directory, using pages path:', targetUrl);
+    }
+    
+    console.log('Final target URL:', targetUrl);
+    window.location.href = targetUrl;
 }
 function showFormMessage(elementId, message, type = 'info') {
     const element = document.getElementById(elementId);
