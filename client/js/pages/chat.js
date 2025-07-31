@@ -1,6 +1,6 @@
 console.log('=== CHAT.JS LOADED ===');
-const API_BASE_URL = API_CONFIG.getBaseUrl();
-let currentUser = null;
+let CHAT_API_BASE_URL = null; // Will be set after API_CONFIG is available
+let chatCurrentUser = null;
 let currentConversation = null;
 let refreshInterval = null;
 let messagesList = null;
@@ -43,24 +43,24 @@ function checkAuth() {
     }
     if (user) {
         try {
-            currentUser = JSON.parse(user);
+            chatCurrentUser = JSON.parse(user);
         } catch (e) {
             console.error('שגיאה בפענוח נתוני משתמש:', e);
         }
     } else if (userData) {
         try {
-            currentUser = JSON.parse(userData);
+            chatCurrentUser = JSON.parse(userData);
             localStorage.setItem('user', userData);
         } catch (e) {
             console.error('שגיאה בפענוח נתוני משתמש:', e);
         }
     }
-    if (!currentUser) {
+    if (!chatCurrentUser) {
         console.log('אין נתוני משתמש מקומיים, טוען מהשרת...');
         return loadUserFromServer();
     }
-    console.log('משתמש נוכחי:', currentUser);
-    if (!currentUser) {
+    console.log('משתמש נוכחי:', chatCurrentUser);
+    if (!chatCurrentUser) {
         console.log('טוען נתוני משתמש מהשרת...');
         return loadUserFromServer();
     }
@@ -68,7 +68,7 @@ function checkAuth() {
 }
 function loadUserFromServer() {
     const token = localStorage.getItem('token');
-    return fetch(`${API_BASE_URL}/users/profile`, {
+    return fetch(`${CHAT_API_BASE_URL}/users/profile`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -79,12 +79,12 @@ function loadUserFromServer() {
         }
         return response.json();
     })
-    .then(data => {
-        if (data.success) {
-            currentUser = data.user;
-            localStorage.setItem('user', JSON.stringify(data.user));
-            return true;
-        } else {
+            .then(data => {
+            if (data.success) {
+                chatCurrentUser = data.user;
+                localStorage.setItem('user', JSON.stringify(data.user));
+                return true;
+            } else {
             throw new Error(data.message || 'שגיאה בטעינת נתוני משתמש');
         }
     })
@@ -111,7 +111,7 @@ function openDirectChat(userId) {
     const token = localStorage.getItem('token');
     
     // First, get user details
-    fetch(`${API_BASE_URL}/users/${userId}`, {
+    fetch(`${CHAT_API_BASE_URL}/users/${userId}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -125,7 +125,7 @@ function openDirectChat(userId) {
         const user = userData.data;
         
         // Check if conversation already exists
-        return fetch(`${API_BASE_URL}/messages/conversations`, {
+        return fetch(`${CHAT_API_BASE_URL}/messages/conversations`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -223,7 +223,7 @@ function loadMessages(userId) {
     }
     const token = localStorage.getItem('token');
     console.log('טוען הודעות עבור משתמש:', userId);
-    fetch(`${API_BASE_URL}/messages/conversation/${userId}`, {
+    fetch(`${CHAT_API_BASE_URL}/messages/conversation/${userId}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -274,7 +274,7 @@ function createMessageElement(message) {
             lastName: 'לא ידוע'
         };
     }
-    const isOwnMessage = message.sender._id === currentUser.id;
+            const isOwnMessage = message.sender._id === chatCurrentUser.id;
     article.className = `message-item mb-3 ${isOwnMessage ? 'text-end' : 'text-start'}`;
     article.innerHTML = `
         <section class="d-inline-block ${isOwnMessage ? 'bg-primary text-white' : 'bg-light'} rounded p-3" style="max-width: 70%;">
@@ -316,7 +316,7 @@ function sendMessage(e) {
     }
     console.log('שולח הודעה ל:', receiverId, 'תוכן:', content);
     console.log('שיחה נוכחית:', currentConversation);
-    console.log('שולח בקשת POST ל:', `${API_BASE_URL}/messages`);
+    console.log('שולח בקשת POST ל:', `${CHAT_API_BASE_URL}/messages`);
     console.log('Headers:', {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -325,7 +325,7 @@ function sendMessage(e) {
         receiverId: receiverId,
         content: content
     });
-    fetch(`${API_BASE_URL}/messages`, {
+    fetch(`${CHAT_API_BASE_URL}/messages`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -424,6 +424,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 function initializeChat() {
+    console.log('=== INITIALIZING CHAT PAGE ===');
+    
+    // Initialize CHAT_API_BASE_URL
+    if (typeof API_CONFIG !== 'undefined') {
+        CHAT_API_BASE_URL = API_CONFIG.getBaseUrl();
+        console.log('CHAT_API_BASE_URL initialized:', CHAT_API_BASE_URL);
+    } else {
+        console.error('API_CONFIG not available');
+        return;
+    }
+    
     console.log('מתחיל את הצ\'אט...');
     
     // Initialize DOM element references
@@ -453,7 +464,7 @@ function initializeChat() {
     
     const token = localStorage.getItem('token');
     if (token) {
-        fetch(`${API_BASE_URL}/users/profile`, {
+        fetch(`${CHAT_API_BASE_URL}/users/profile`, {
             headers: { 'Authorization': `Bearer ${token}` }
         }).then(response => {
             if (!response.ok) {
@@ -469,11 +480,11 @@ function initializeChat() {
     }
     
     const authButtons = document.getElementById('authButtons');
-    if (authButtons && currentUser) {
+            if (authButtons && chatCurrentUser) {
         authButtons.innerHTML = `
             <li class="nav-item d-flex align-items-center">
                 <span class="navbar-text me-3 text-light">
-                    שלום, ${currentUser.firstName || 'משתמש'}!
+                    שלום, ${chatCurrentUser.firstName || 'משתמש'}!
                 </span>
             </li>
             <li class="nav-item d-flex align-items-center">

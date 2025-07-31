@@ -162,11 +162,47 @@ function updateUIForLoggedInUser() {
     // Update home link for logged in users
     const homeLink = document.getElementById('homeLink');
     if (homeLink) {
-        homeLink.href = 'pages/profile.html';
-        homeLink.onclick = function(e) {
+        // Check if we're already in a pages directory
+        const currentPath = window.location.pathname;
+        const isInPagesDirectory = currentPath.includes('/pages/');
+        
+        console.log('Logo navigation - Current path:', currentPath);
+        console.log('Logo navigation - Is in pages directory:', isInPagesDirectory);
+        
+        if (isInPagesDirectory) {
+            // If we're in pages directory, go to profile.html (same directory)
+            console.log('Logo navigation - Setting href to profile.html');
+            homeLink.href = 'profile.html';
+            homeLink.onclick = function(e) {
+                e.preventDefault();
+                console.log('Logo clicked - navigating to profile.html');
+                window.location.href = 'profile.html';
+            };
+        } else {
+            // If we're in root directory, go to pages/profile.html
+            console.log('Logo navigation - Setting href to pages/profile.html');
+            homeLink.href = 'pages/profile.html';
+            homeLink.onclick = function(e) {
+                e.preventDefault();
+                console.log('Logo clicked - navigating to pages/profile.html');
+                window.location.href = 'pages/profile.html';
+            };
+        }
+        
+        // Force override any other onclick handlers
+        homeLink.addEventListener('click', function(e) {
             e.preventDefault();
-            window.location.href = 'pages/profile.html';
-        };
+            e.stopPropagation();
+            console.log('Logo clicked (forced override) - Current path:', window.location.pathname);
+            
+            if (window.location.pathname.includes('/pages/')) {
+                console.log('Forced navigation to profile.html');
+                window.location.href = 'profile.html';
+            } else {
+                console.log('Forced navigation to pages/profile.html');
+                window.location.href = 'pages/profile.html';
+            }
+        }, true);
     }
 }
 function updateUIForGuestUser() {

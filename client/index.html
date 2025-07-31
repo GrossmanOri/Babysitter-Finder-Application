@@ -343,7 +343,7 @@
     <!-- Config JS -->
     <script src="js/config.js?v=13&t=1730370000"></script>
     <!-- Custom JS -->
-    <script src="js/main.js?v=13&t=1730370000"></script>
+    <script src="js/main.js?v=16&t=1730370000"></script>
     <!-- Geolocation JS -->
     <script src="js/utils/geolocation.js"></script>
     <script>
@@ -411,6 +411,17 @@
                 }, 1000);
             }
         });
+        
+        // Force cache clear for main.js
+        console.log('Forcing cache clear for main.js');
+        if (typeof window.performance !== 'undefined' && window.performance.getEntriesByType) {
+            const resources = window.performance.getEntriesByType('resource');
+            resources.forEach(resource => {
+                if (resource.name.includes('main.js')) {
+                    console.log('Found main.js resource:', resource.name);
+                }
+            });
+        }
     </script>
 </body>
 </html> 
