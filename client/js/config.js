@@ -33,8 +33,11 @@ const API_CONFIG = {
         if (port === '3001' || port === '3002' || hostname === 'localhost' || hostname === '127.0.0.1') {
             console.log('Config - Using local development server');
             return 'http://localhost:3000/api';
+        } else if (hostname.includes('onrender.com')) {
+            console.log('Config - Using production server (onrender.com detected)');
+            return 'https://babysitter-finder-application.onrender.com/api';
         } else {
-            console.log('Config - Using production server');
+            console.log('Config - Using production server (fallback)');
             return 'https://babysitter-finder-application.onrender.com/api';
         }
     },
