@@ -1,9 +1,7 @@
 // Conversations page JavaScript file
 // Handles chat functionality, message sending, and conversation management
 
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-    ? 'http://localhost:3000/api' 
-    : 'https://babysitter-finder-application.onrender.com/api';
+const API_BASE_URL = API_CONFIG.getBaseUrl();
 
 // Global variables for chat state
 let currentUser = null;

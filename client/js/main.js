@@ -1,7 +1,7 @@
 console.log('Main file loaded!');
 let currentUser = null;
 let isLoggedIn = false;
-const API_BASE_URL = '/api';
+const API_BASE_URL = API_CONFIG.getBaseUrl();
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
         checkLoginStatus();
@@ -67,12 +67,35 @@ function changeNavigationForLoggedInUser() {
     console.log('Changing navigation for logged in user...');
     const logoLinks = document.querySelectorAll('.navbar-brand');
     logoLinks.forEach(logoLink => {
-        logoLink.href = '/pages/profile.html';
+        logoLink.href = 'pages/profile.html';
         logoLink.onclick = function(e) {
             e.preventDefault();
-            window.location.href = '/pages/profile.html';
+            window.location.href = 'pages/profile.html';
         };
     });
+    
+    // Update navbar brand link for logged in users
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+        navbarBrand.href = 'pages/profile.html';
+        navbarBrand.onclick = function(e) {
+            e.preventDefault();
+            window.location.href = 'pages/profile.html';
+        };
+    }
+    
+    // Add profile link to navigation
+    const navAuthButtons = document.getElementById('authButtons');
+    if (navAuthButtons && !document.querySelector('.profile-link')) {
+        const profileLi = document.createElement('li');
+        profileLi.className = 'nav-item profile-link d-flex align-items-center';
+        profileLi.innerHTML = `
+            <a class="nav-link" href="pages/profile.html">
+                <i class="bi bi-person-circle"></i> הפרופיל שלי
+            </a>
+        `;
+        navAuthButtons.appendChild(profileLi);
+    }
     
     const authenticatedNav = document.getElementById('authenticatedNav');
     if (authenticatedNav) {
@@ -108,9 +131,9 @@ function changeNavigationForGuestUser() {
 }
 function updateUIForLoggedInUser() {
     console.log('Updating UI for logged in user');
-    const authButtons = document.getElementById('authButtons');
-    if (authButtons) {
-        authButtons.innerHTML = `
+    const uiAuthButtons = document.getElementById('authButtons');
+    if (uiAuthButtons) {
+        uiAuthButtons.innerHTML = `
             <li class="nav-item d-flex align-items-center">
                 <span class="navbar-text me-3 text-light">
                     שלום, ${currentUser.firstName || currentUser.name}!
@@ -123,18 +146,27 @@ function updateUIForLoggedInUser() {
             </li>
         `;
     }
-    if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
-        const navbarNav = document.querySelector('.navbar-nav');
-        if (navbarNav && !document.querySelector('.profile-link')) {
-            const profileLi = document.createElement('li');
-            profileLi.className = 'nav-item profile-link d-flex align-items-center';
-            profileLi.innerHTML = `
-                <a class="nav-link" href="pages/profile.html">
-                    <i class="bi bi-person-circle"></i> הפרופיל שלי
-                </a>
-            `;
-            navbarNav.appendChild(profileLi);
-        }
+    // Add profile link to navigation for logged in users
+    const loggedInAuthButtons = document.getElementById('authButtons');
+    if (loggedInAuthButtons && !document.querySelector('.profile-link')) {
+        const profileLi = document.createElement('li');
+        profileLi.className = 'nav-item profile-link d-flex align-items-center';
+        profileLi.innerHTML = `
+            <a class="nav-link" href="#" onclick="goToProfile()">
+                <i class="bi bi-person-circle"></i> הפרופיל שלי
+            </a>
+        `;
+        loggedInAuthButtons.appendChild(profileLi);
+    }
+    
+    // Update home link for logged in users
+    const homeLink = document.getElementById('homeLink');
+    if (homeLink) {
+        homeLink.href = 'pages/profile.html';
+        homeLink.onclick = function(e) {
+            e.preventDefault();
+            window.location.href = 'pages/profile.html';
+        };
     }
 }
 function updateUIForGuestUser() {
@@ -145,9 +177,9 @@ function updateUIForGuestUser() {
     }
     
     // Add authentication buttons for guest users
-    const authButtons = document.getElementById('authButtons');
-    if (authButtons) {
-        authButtons.innerHTML = `
+    const guestAuthButtons = document.getElementById('authButtons');
+    if (guestAuthButtons) {
+        guestAuthButtons.innerHTML = `
             <li class="nav-item">
                 <a class="nav-link" href="/index.html#login">התחברות</a>
             </li>
@@ -317,7 +349,9 @@ function handleRegistration(event) {
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>מעבד...';
     submitBtn.disabled = true;
-    sendData('/api/auth/register', data)
+    const registerUrl = API_CONFIG.getUrl('/auth/register');
+    console.log('Making register request to:', registerUrl);
+    sendData(registerUrl, data)
         .then(response => {
             console.log('Registration successful:', response);
             localStorage.setItem('token', response.token);
@@ -579,6 +613,7 @@ function setupLoginForm() {
 }
 function handleLogin(event) {
     event.preventDefault();
+    console.log('=== LOGIN FORM SUBMITTED ===');
     console.log('Handling login...');
     const form = event.target;
     const formData = new FormData(form);
@@ -590,7 +625,11 @@ function handleLogin(event) {
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>מתחבר...';
     submitBtn.disabled = true;
-    sendData('/api/auth/login', data)
+    const loginUrl = API_CONFIG.getUrl('/auth/login');
+    console.log('=== MAKING LOGIN REQUEST ===');
+    console.log('Making login request to:', loginUrl);
+    console.log('Request data:', data);
+    sendData(loginUrl, data)
         .then(response => {
             console.log('Login successful:', response);
             localStorage.setItem('token', response.token);
@@ -599,9 +638,14 @@ function handleLogin(event) {
             isLoggedIn = true;
             console.log('User data saved:', response.user);
             showFormMessage('loginMessage', 'התחברות הצליחה! מעביר לפרופיל שלך...', 'success');
-            setTimeout(() => {
-                window.location.href = 'pages/profile.html';
-            }, 1000);
+            
+            // Update UI immediately
+            updateUIForLoggedInUser();
+            changeNavigationForLoggedInUser();
+            
+            // Redirect immediately
+            console.log('Redirecting to profile page...');
+            window.location.href = 'pages/profile.html';
         })
         .catch(error => {
             console.error('Login error:', error);
@@ -611,6 +655,10 @@ function handleLogin(event) {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
         });
+}
+function goToProfile() {
+    console.log('Navigating to profile page...');
+    window.location.href = 'pages/profile.html';
 }
 function showFormMessage(elementId, message, type = 'info') {
     const element = document.getElementById(elementId);

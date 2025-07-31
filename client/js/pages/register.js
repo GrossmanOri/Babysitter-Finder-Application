@@ -84,9 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
       data.description = formData.get('description');
       data.isAvailable = formData.get('isAvailable') === 'true';
     }
-            const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-            ? 'http://localhost:3000/api/auth/register' 
-            : 'https://babysitter-finder-application.onrender.com/api/auth/register';
+            const apiUrl = API_CONFIG.getUrl('/auth/register');
         fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
