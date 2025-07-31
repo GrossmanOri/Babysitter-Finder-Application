@@ -315,6 +315,8 @@ function sendData(url, data, method = 'POST') {
         headers: {
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
+        mode: 'cors',
         body: JSON.stringify(data)
     };
     const token = localStorage.getItem('token');
