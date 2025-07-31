@@ -41,20 +41,20 @@ function checkAuth() {
             }
         }
     } catch (e) {
-        console.error('שגיאה בבדיקת תוקף הטוקן:', e);
+        console.error('Error checking token validity:', e);
     }
     if (user) {
         try {
             currentUser = JSON.parse(user);
         } catch (e) {
-            console.error('שגיאה בפענוח נתוני משתמש:', e);
+            console.error('Error parsing user data:', e);
         }
     } else if (userData) {
         try {
             currentUser = JSON.parse(userData);
             localStorage.setItem('user', userData);
         } catch (e) {
-            console.error('שגיאה בפענוח נתוני משתמש:', e);
+            console.error('Error parsing user data:', e);
         }
     }
     if (!currentUser) {
@@ -91,7 +91,7 @@ function loadUserFromServer() {
         }
     })
     .catch(error => {
-        console.error('שגיאה בטעינת נתוני משתמש:', error);
+        console.error('Error loading user data:', error);
         alert('שגיאה בטעינת נתוני משתמש');
         window.location.href = 'login.html';
         return false;

@@ -433,7 +433,7 @@ function checkPerformance() {
         console.warn('Slow load time:', loadTime);
     }
 }
-console.log('הדף נטען בהצלחה!');
+    console.log('Page loaded successfully!');
 function checkForm() {
     const city = document.getElementById('city').value;
     const date = document.getElementById('date').value;

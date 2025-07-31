@@ -108,7 +108,7 @@ function updateUserInterface() {
         } else {
             roleTextElement.textContent = '❓ לא מוגדר';
         }
-        console.log('עדכון תפקיד:', currentUser.userType);
+        console.log('Updating role:', currentUser.userType);
     } else {
         console.error('אלמנט roleText לא נמצא!');
     }
@@ -146,10 +146,10 @@ function updateUserInterface() {
         if (isAvailableSelect) isAvailableSelect.value = babysitterData.isAvailable !== false ? 'true' : 'false';
         if (descriptionTextarea) descriptionTextarea.value = babysitterData.description || '';
         
-        console.log('שדות ביביסיטר מולאו:', babysitterData);
+        console.log('Babysitter fields populated:', babysitterData);
     }
     
-    console.log('טופס הפרופיל מולא');
+    console.log('Profile form populated');
     
     // עדכון מידע נוסף לפי סוג משתמש
     updateAdditionalInfo();
@@ -157,7 +157,7 @@ function updateUserInterface() {
 
 // פונקציה לעדכון מידע נוסף לפי סוג משתמש
 function updateAdditionalInfo() {
-    console.log('מעדכן מידע נוסף...', currentUser);
+    console.log('Updating additional info...', currentUser);
     
     const additionalInfo = document.getElementById('additionalInfo');
     if (!additionalInfo) return;
@@ -202,7 +202,7 @@ function updateAdditionalInfo() {
 // פונקציה לעדכון פרופיל
 function updateProfile(event) {
     event.preventDefault();
-    console.log('מעדכן פרופיל...');
+    console.log('Updating profile...');
     
     const form = event.target;
     const formData = new FormData(form);
@@ -261,7 +261,7 @@ function updateProfile(event) {
         return response.json();
     })
     .then(data => {
-        console.log('פרופיל עודכן:', data);
+        console.log('Profile updated:', data);
         
         // עדכון נתונים מקומיים
         currentUser = { ...currentUser, ...data.user };
@@ -316,7 +316,7 @@ function showDeleteConfirmation() {
 
 // פונקציה למחיקת הפרופיל
 function deleteProfile() {
-    console.log('מתחיל מחיקת פרופיל...');
+    console.log('Starting profile deletion...');
     
     const token = localStorage.getItem('token');
     if (!token) {
@@ -345,7 +345,7 @@ function deleteProfile() {
         return response.json();
     })
     .then(data => {
-        console.log('פרופיל נמחק:', data);
+        console.log('Profile deleted:', data);
         
         // ניקוי מיידי של כל הנתונים המקומיים
         localStorage.clear(); // מחיקת כל הנתונים
@@ -434,7 +434,7 @@ function logout() {
 
 // הגדרת מאזיני אירועים
 function setupEventListeners() {
-    console.log('מגדיר מאזיני אירועים לדף הפרופיל...');
+    console.log('Setting up event listeners for profile page...');
     
     // טופס עדכון פרופיל
     const profileForm = document.getElementById('profileForm');
@@ -444,9 +444,9 @@ function setupEventListeners() {
     
     // Geolocation button event listener
     if (detectLocationBtn && cityInput) {
-        console.log('מגדיר מאזין לכפתור זיהוי מיקום');
+        console.log('Setting up listener for location detection button');
         detectLocationBtn.addEventListener('click', async function() {
-            console.log('כפתור זיהוי מיקום נלחץ');
+            console.log('Location detection button clicked');
             
             let originalText = detectLocationBtn.innerHTML;
             detectLocationBtn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
@@ -454,7 +454,7 @@ function setupEventListeners() {
             
             try {
                 const city = await window.geolocationService.autoDetectCity(cityInput);
-                console.log('עיר זוהתה:', city);
+                console.log('City detected:', city);
             } catch (error) {
                 console.error('שגיאה בזיהוי מיקום:', error);
             } finally {
@@ -463,32 +463,32 @@ function setupEventListeners() {
             }
         });
     } else {
-        console.log('כפתור זיהוי מיקום או שדה עיר לא נמצאו');
+        console.log('Location detection button or city field not found');
     }
     
-    console.log('מאזיני אירועים הוגדרו');
+    console.log('Event listeners configured');
 }
 
 // אתחול הדף
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('דף הפרופיל נטען - מתחיל אתחול...');
+    console.log('Profile page loaded - starting initialization...');
     
     // בדיקת נתונים ב-localStorage
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userData');
     
-    console.log('=== בדיקת נתונים ===');
-    console.log('טוקן קיים:', !!token);
-    console.log('נתוני משתמש קיימים:', !!userData);
+    console.log('=== Data Check ===');
+    console.log('Token exists:', !!token);
+    console.log('User data exists:', !!userData);
     
     if (userData) {
         try {
             const parsedData = JSON.parse(userData);
-            console.log('נתוני משתמש מפורשים:', parsedData);
+            console.log('Parsed user data:', parsedData);
             
             // בדיקה אם הנתונים תקינים
             if (parsedData.firstName && parsedData.email) {
-                console.log('הנתונים תקינים - מתחיל טעינה');
+                console.log('Data is valid - starting load');
                 currentUser = parsedData;
                 loadUserData(); // קריאה לפונקציה המרכזית
                 
@@ -537,5 +537,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // הגדרת מאזיני אירועים
     setupEventListeners();
     
-    console.log('דף הפרופיל הותחל בהצלחה!');
+    console.log('Profile page initialized successfully!');
 }); 
