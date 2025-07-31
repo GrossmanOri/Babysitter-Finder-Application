@@ -188,8 +188,35 @@ class GeolocationService {
         } catch (error) {
             console.error('Error auto-detecting city:', error);
             inputElement.disabled = false;
-            this.showMessage(error.message, 'error');
-            throw error;
+            
+            // Check if it's a permission denied error
+            if (error.message.includes('נדחתה') || error.message.includes('denied')) {
+                const helpMessage = `
+                    <div>
+                        <strong>גישה למיקום נדחתה</strong><br>
+                        <small>כדי לאפשר גישה למיקום:</small><br>
+                        <small>• Chrome: לחצו על 🔒 בסרגל הכתובת → "מיקום" → "אפשר"</small><br>
+                        <small>• Safari: העדפות → פרטיות → שירותי מיקום → אפשר</small><br>
+                        <small>• Firefox: לחצו על 🔒 בסרגל הכתובת → "מיקום" → "אפשר"</small>
+                    </div>
+                `;
+                this.showMessage(helpMessage, 'warning');
+            } else {
+                this.showMessage(error.message, 'error');
+            }
+            
+            // Use fallback city instead of returning null
+            const defaultCities = ['תל אביב', 'ירושלים', 'חיפה', 'באר שבע', 'אשדוד', 'נתניה', 'פתח תקווה', 'ראשון לציון'];
+            const fallbackCity = defaultCities[Math.floor(Math.random() * defaultCities.length)];
+            
+            // Update input with fallback city
+            inputElement.value = fallbackCity;
+            inputElement.dispatchEvent(new Event('input', { bubbles: true }));
+            
+            // Show fallback message
+            this.showMessage(`השתמשתי בעיר ברירת מחדל: ${fallbackCity}`, 'info');
+            
+            return fallbackCity;
         }
     }
 
@@ -207,27 +234,35 @@ class GeolocationService {
 
         // Create new message element
         const messageElement = document.createElement('div');
-        messageElement.className = `alert alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info'} geolocation-message`;
+        messageElement.className = `alert alert-${type === 'error' ? 'danger' : type === 'warning' ? 'warning' : type === 'success' ? 'success' : 'info'} geolocation-message`;
         messageElement.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 9999;
-            max-width: 300px;
+            max-width: 400px;
             font-size: 14px;
+            line-height: 1.4;
         `;
-        messageElement.innerHTML = `
-            <i class="bi bi-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
-            ${message}
-        `;
+        
+        // Check if message contains HTML
+        if (message.includes('<')) {
+            messageElement.innerHTML = message;
+        } else {
+            messageElement.innerHTML = `
+                <i class="bi bi-${type === 'error' ? 'exclamation-triangle' : type === 'warning' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+                ${message}
+            `;
+        }
 
-        // Add to page and auto-remove after 3 seconds
+        // Add to page and auto-remove after 5 seconds for warning messages, 3 seconds for others
         document.body.appendChild(messageElement);
+        const timeout = type === 'warning' ? 5000 : 3000;
         setTimeout(() => {
             if (messageElement.parentNode) {
                 messageElement.remove();
             }
-        }, 3000);
+        }, timeout);
     }
 }
 

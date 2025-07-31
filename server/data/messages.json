@@ -48,27 +48,11 @@
     "createdAt": "2025-07-28T17:47:27.237Z"
   },
   {
-    "id": "1753727693377",
-    "senderId": "6887b3b910cb471fbf7c580d",
-    "receiverId": "6887ad9f10cb471fbf7c57fc",
-    "content": "היייייייייושששששש",
-    "isRead": true,
-    "createdAt": "2025-07-28T18:34:53.377Z"
-  },
-  {
-    "id": "1753727736194",
-    "senderId": "6887ad9f10cb471fbf7c57fc",
-    "receiverId": "6887b3b910cb471fbf7c580d",
-    "content": "הייייייי",
-    "isRead": false,
-    "createdAt": "2025-07-28T18:35:36.194Z"
-  },
-  {
     "id": "1753736953190",
     "senderId": "6887e4bb0ad906b1aedb92cb",
     "receiverId": "6887ad9f10cb471fbf7c57fc",
     "content": "היי",
-    "isRead": false,
+    "isRead": true,
     "createdAt": "2025-07-28T21:09:13.190Z"
   },
   {
@@ -76,7 +60,7 @@
     "senderId": "6887e4bb0ad906b1aedb92cb",
     "receiverId": "6887ad9f10cb471fbf7c57fc",
     "content": "היי",
-    "isRead": false,
+    "isRead": true,
     "createdAt": "2025-07-28T21:11:29.557Z"
   },
   {
@@ -84,7 +68,7 @@
     "senderId": "6887e4bb0ad906b1aedb92cb",
     "receiverId": "6887ad9f10cb471fbf7c57fc",
     "content": "vhh",
-    "isRead": false,
+    "isRead": true,
     "createdAt": "2025-07-28T21:20:33.620Z"
   },
   {
@@ -92,7 +76,7 @@
     "senderId": "6887e4bb0ad906b1aedb92cb",
     "receiverId": "6887ad9f10cb471fbf7c57fc",
     "content": "היי",
-    "isRead": false,
+    "isRead": true,
     "createdAt": "2025-07-28T21:20:35.558Z"
   },
   {
@@ -100,7 +84,7 @@
     "senderId": "6887e4bb0ad906b1aedb92cb",
     "receiverId": "6887ad9f10cb471fbf7c57fc",
     "content": "שלום",
-    "isRead": false,
+    "isRead": true,
     "createdAt": "2025-07-28T21:24:48.263Z"
   },
   {
@@ -134,5 +118,29 @@
     "content": "שלום מאי",
     "isRead": false,
     "createdAt": "2025-07-29T08:04:13.199Z"
+  },
+  {
+    "id": "1753975311108",
+    "senderId": "6887ad9f10cb471fbf7c57fc",
+    "receiverId": "6887e4bb0ad906b1aedb92cb",
+    "content": "היי",
+    "isRead": false,
+    "createdAt": "2025-07-31T15:21:51.108Z"
+  },
+  {
+    "id": "1753975630062",
+    "senderId": "688b8a5c80e9a286546371c8",
+    "receiverId": "6887ad9f10cb471fbf7c57fc",
+    "content": "היי",
+    "isRead": true,
+    "createdAt": "2025-07-31T15:27:10.062Z"
+  },
+  {
+    "id": "1753975648732",
+    "senderId": "6887ad9f10cb471fbf7c57fc",
+    "receiverId": "688b8a5c80e9a286546371c8",
+    "content": "שלום",
+    "isRead": true,
+    "createdAt": "2025-07-31T15:27:28.732Z"
   }
 ]

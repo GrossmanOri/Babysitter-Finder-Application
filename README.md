@@ -79,8 +79,13 @@ npm start
 5. **הפעלת הלקוח**
 ```bash
 cd ../client
-# השתמש בשרת HTTP מקומי או Live Server
+npm start
 ```
+
+### URLs לאחר הפעלה
+- **Client (Frontend):** http://localhost:3001 או http://127.0.0.1:3001
+- **Server (Backend):** http://localhost:3000
+- **API Base URL:** http://localhost:3000/api
 
 ## מבנה הפרויקט
 

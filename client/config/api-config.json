@@ -1,0 +1,25 @@
+{
+  "API_BASE_URL": "http://localhost:3000/api",
+  "API_SERVER_URL": "https://babysitter-finder-application.onrender.com/api",
+  "NODE_ENV": "development",
+  "description": "API Configuration - This file can be used to override default API settings",
+  "usage": {
+    "development": "Use API_BASE_URL for local development",
+    "production": "Use API_SERVER_URL for production deployment",
+    "custom": "Set your own API endpoints as needed"
+  },
+  "examples": {
+    "local_dev": {
+      "API_BASE_URL": "http://localhost:3000/api",
+      "NODE_ENV": "development"
+    },
+    "staging": {
+      "API_BASE_URL": "https://staging-api.example.com/api",
+      "NODE_ENV": "staging"
+    },
+    "production": {
+      "API_BASE_URL": "https://babysitter-finder-application.onrender.com/api",
+      "NODE_ENV": "production"
+    }
+  }
+} 

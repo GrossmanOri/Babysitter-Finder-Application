@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Last-Modified" content="Thu, 31 Jul 2025 17:50:00 GMT">
     <title>Babysitter Finder - מציאת בייביסיטר</title>
     
     <!-- Bootstrap CSS -->
@@ -337,11 +341,11 @@
     <!-- Bootstrap JS -->
     <script src="js/bootstrap.bundle.min.js"></script>
     <!-- Config JS -->
-    <script src="js/config.js"></script>
+    <script src="js/config.js?v=15&t=1730370000"></script>
     <!-- Custom JS -->
-    <script src="js/main.js"></script>
+    <script src="js/main.js?v=18&t=1730370000"></script>
     <!-- Geolocation JS -->
-    <script src="js/utils/geolocation.js"></script>
+    <script src="js/utils/geolocation.js?v=2"></script>
     <script>
         // Geolocation functionality for main page
         document.addEventListener('DOMContentLoaded', function() {
@@ -396,6 +400,28 @@
                 });
             }
         });
+        
+        // Force reload if there are JS errors
+        window.addEventListener('error', function(e) {
+            console.log('JavaScript error detected:', e.message);
+            if (e.message.includes('authButtons') || e.message.includes('bootstrap')) {
+                console.log('Critical error detected - forcing page reload');
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 1000);
+            }
+        });
+        
+        // Force cache clear for main.js
+        console.log('Forcing cache clear for main.js');
+        if (typeof window.performance !== 'undefined' && window.performance.getEntriesByType) {
+            const resources = window.performance.getEntriesByType('resource');
+            resources.forEach(resource => {
+                if (resource.name.includes('main.js')) {
+                    console.log('Found main.js resource:', resource.name);
+                }
+            });
+        }
     </script>
 </body>
 </html> 

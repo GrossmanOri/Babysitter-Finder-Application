@@ -1,16 +1,13 @@
 // Conversations page JavaScript file
 // Handles chat functionality, message sending, and conversation management
 
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-    ? 'http://localhost:3000/api' 
-    : 'https://babysitter-finder-application.onrender.com/api';
-
 // Global variables for chat state
-let currentUser = null;
+let conversationsCurrentUser = null;
 let currentConversation = null;
 let refreshInterval = null;
 let isSendingMessage = false;
 let allConversations = []; // Store all conversations globally
+let CONVERSATIONS_API_BASE_URL = null; // Will be set after API_CONFIG is available
 
 // DOM element references - will be initialized after DOM loads
 let conversationsList = null;
@@ -45,8 +42,8 @@ function checkAuth() {
     }
     
     try {
-        currentUser = JSON.parse(userData || user);
-        console.log('משתמש נוכחי:', currentUser);
+        conversationsCurrentUser = JSON.parse(userData || user);
+        console.log('משתמש נוכחי:', conversationsCurrentUser);
         return true;
     } catch (error) {
         console.error('שגיאה בפענוח נתוני משתמש:', error);
@@ -68,7 +65,7 @@ function setupNavigation() {
     if (token && userData) {
         try {
             const user = JSON.parse(userData);
-            currentUser = user;
+            conversationsCurrentUser = user;
             
             // Set up auth buttons for logged-in user
             const authButtons = document.getElementById('authButtons');
@@ -154,32 +151,49 @@ function setupRoleBasedMenu(userType) {
  * Loads conversations from the server
  */
 function loadConversations() {
-    console.log('טוען שיחות...');
+    console.log('=== LOADING CONVERSATIONS ===');
+    console.log('CONVERSATIONS_API_BASE_URL:', CONVERSATIONS_API_BASE_URL);
     const token = localStorage.getItem('token');
     console.log('Token for conversations:', token ? 'קיים' : 'לא קיים');
+    console.log('Token value:', token ? token.substring(0, 20) + '...' : 'null');
     
-    fetch(`${API_BASE_URL}/messages/conversations`, {
+    if (!token) {
+        console.error('No token available - redirecting to login');
+        window.location.href = '../index.html';
+        return;
+    }
+    
+    const url = `${CONVERSATIONS_API_BASE_URL}/messages/conversations`;
+    console.log('Making request to:', url);
+    
+    fetch(url, {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
         }
     })
     .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
-        console.log('שיחות שהתקבלו:', data);
+        console.log('=== CONVERSATIONS RESPONSE ===');
+        console.log('Full response data:', data);
         console.log('data.success:', data.success);
         console.log('data.data:', data.data);
         console.log('data.conversations:', data.conversations);
         const conversations = data.data || data.conversations || [];
-        console.log('conversations array:', conversations);
+        console.log('Final conversations array:', conversations);
         displayConversations(conversations);
     })
     .catch(error => {
-        console.error('שגיאה בטעינת שיחות:', error);
+        console.error('=== CONVERSATIONS ERROR ===');
+        console.error('Error details:', error);
+        console.error('Error message:', error.message);
         showConversationsError('שגיאה בטעינת השיחות');
     });
 }
@@ -364,7 +378,7 @@ function loadMessages(userId) {
         return;
     }
     
-    fetch(`${API_BASE_URL}/messages/conversation/${userId}`, {
+    fetch(`${CONVERSATIONS_API_BASE_URL}/messages/conversation/${userId}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -457,7 +471,7 @@ function createMessageElement(message) {
         date: message.date
     });
     
-    const isOwnMessage = message.senderId === currentUser.id;
+            const isOwnMessage = message.senderId === conversationsCurrentUser.id;
     
     // Try different timestamp field names
     let time = '--:--';
@@ -510,7 +524,7 @@ function sendMessage(e) {
     const token = localStorage.getItem('token');
     console.log('Token for sending message:', token ? 'קיים' : 'לא קיים');
     
-    fetch(`${API_BASE_URL}/messages`, {
+    fetch(`${CONVERSATIONS_API_BASE_URL}/messages`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -534,7 +548,7 @@ function sendMessage(e) {
         const newMessage = {
             id: data.message.id,
             content: messageContent,
-            senderId: currentUser.id,
+            senderId: conversationsCurrentUser.id,
             timestamp: new Date().toISOString()
         };
         
@@ -639,7 +653,7 @@ function deleteConversation() {
     
     console.log('מוחק שיחה:', currentConversation);
     
-    fetch(`${API_BASE_URL}/messages/conversation/${currentConversation.user._id}`, {
+    fetch(`${CONVERSATIONS_API_BASE_URL}/messages/conversation/${currentConversation.user._id}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -731,13 +745,26 @@ function formatConversationTime(dateString) {
  * Initializes the conversations page
  */
 function initializeConversations() {
-    console.log('מתחיל אתחול דף שיחות...');
+    console.log('=== INITIALIZING CONVERSATIONS PAGE ===');
     
-    if (!checkAuth()) {
+    // Initialize CONVERSATIONS_API_BASE_URL
+    if (typeof API_CONFIG !== 'undefined') {
+        CONVERSATIONS_API_BASE_URL = API_CONFIG.getBaseUrl();
+        console.log('CONVERSATIONS_API_BASE_URL initialized:', CONVERSATIONS_API_BASE_URL);
+    } else {
+        console.error('API_CONFIG not available');
         return;
     }
     
+    console.log('Checking authentication...');
+    if (!checkAuth()) {
+        console.log('Authentication failed - returning');
+        return;
+    }
+    console.log('Authentication passed');
+    
     // Initialize DOM element references
+    console.log('Initializing DOM elements...');
     conversationsList = document.getElementById('conversationsList');
     messagesList = document.getElementById('messagesList');
     messagesContainer = document.getElementById('messagesContainer');
@@ -750,15 +777,24 @@ function initializeConversations() {
     deleteConversationBtn = document.getElementById('deleteConversationBtn');
     
     // Debug DOM elements
-    console.log('בדיקת אלמנטי DOM:');
+    console.log('=== DOM ELEMENTS CHECK ===');
+    console.log('conversationsList:', conversationsList);
     console.log('messageInput:', messageInput);
     console.log('messagesList:', messagesList);
     console.log('welcomeMessage:', welcomeMessage);
     console.log('deleteConversationBtn:', deleteConversationBtn);
+    console.log('messageForm:', messageForm);
+    console.log('messageText:', messageText);
+    console.log('chatTitle:', chatTitle);
+    console.log('chatSubtitle:', chatSubtitle);
     
     // Verify all required elements exist
     if (!messageInput || !messagesList || !welcomeMessage || !deleteConversationBtn) {
-        console.error('שגיאה: לא נמצאו כל האלמנטים הנדרשים');
+        console.error('=== DOM ELEMENTS MISSING ===');
+        console.error('messageInput missing:', !messageInput);
+        console.error('messagesList missing:', !messagesList);
+        console.error('welcomeMessage missing:', !welcomeMessage);
+        console.error('deleteConversationBtn missing:', !deleteConversationBtn);
         return;
     }
     

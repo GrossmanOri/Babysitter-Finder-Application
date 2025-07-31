@@ -37,7 +37,7 @@ function verifyUserExists() {
         return;
     }
     
-    fetch('/api/users/profile', {
+    fetch(API_CONFIG.getUrl('/users/profile'), {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -246,7 +246,7 @@ function updateProfile(event) {
     submitBtn.disabled = true;
     
     // שליחה לשרת
-    fetch('/api/users/profile', {
+    fetch(API_CONFIG.getUrl('/users/profile'), {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -331,7 +331,7 @@ function deleteProfile() {
     deleteBtn.disabled = true;
     
     // שליחה לשרת
-    fetch('/api/users/profile', {
+    fetch(API_CONFIG.getUrl('/users/profile'), {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${token}`,
