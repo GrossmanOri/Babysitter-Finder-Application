@@ -78,7 +78,7 @@ function performSearch() {
             }
         })
         .catch(error => {
-            console.error('שגיאה בחיפוש:', error);
+            console.error('Search error:', error);
             showError('שגיאה בחיפוש ביביסיטרים: ' + error.message);
         })
         .finally(() => {
@@ -146,7 +146,7 @@ function showNoResults() {
     noResults.classList.remove('d-none');
 }
 function showError(message) {
-    console.error('שגיאה:', message);
+            console.error('Error:', message);
     resultsCount.textContent = 'שגיאה';
     noResults.innerHTML = `
         <i class="bi bi-exclamation-triangle display-1 text-danger"></i>
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             setupRoleBasedMenu(user.userType);
         } catch (error) {
-            console.error('שגיאה בפענוח נתוני משתמש:', error);
+            console.error('Error parsing user data:', error);
         }
     } else {
         const homeLink = document.getElementById('homeLink');

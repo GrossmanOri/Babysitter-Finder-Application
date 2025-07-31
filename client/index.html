@@ -21,7 +21,7 @@
             if (token && userData) {
                 try {
                     const user = JSON.parse(userData);
-                    console.log('משתמש מחובר:', user.firstName || user.name);
+                    console.log('User logged in:', user.firstName || user.name);
                     
                     // שינוי קישור הלוגו
                     const logoLink = document.querySelector('.navbar-brand');
@@ -39,12 +39,12 @@
                         searchLink.style.display = 'block';
                     }
                     
-                    console.log('הניווט שונה למשתמש מחובר');
+                    console.log('Navigation changed for logged in user');
                 } catch (error) {
-                    console.error('שגיאה בפענוח נתוני המשתמש:', error);
+                    console.error('Error parsing user data:', error);
                 }
             } else {
-                console.log('משתמש לא מחובר');
+                console.log('User not logged in');
                 
                 // הסתרת קישור חיפוש ביביסיטר למשתמשים לא מחוברים
                 const searchLink = document.getElementById('searchLink');

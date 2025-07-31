@@ -49,7 +49,7 @@ function checkAuth() {
         console.log('משתמש נוכחי:', currentUser);
         return true;
     } catch (error) {
-        console.error('שגיאה בפענוח נתוני משתמש:', error);
+        console.error('Error parsing user data:', error);
         localStorage.removeItem('token');
         localStorage.removeItem('userData');
         localStorage.removeItem('user');
@@ -101,7 +101,7 @@ function setupNavigation() {
             setupRoleBasedMenu(user.userType);
             
         } catch (error) {
-            console.error('שגיאה בפענוח נתוני משתמש:', error);
+            console.error('Error parsing user data:', error);
         }
     } else {
         // Set up home link for guest user
@@ -179,7 +179,7 @@ function loadConversations() {
         displayConversations(conversations);
     })
     .catch(error => {
-        console.error('שגיאה בטעינת שיחות:', error);
+        console.error('Error loading conversations:', error);
         showConversationsError('שגיאה בטעינת השיחות');
     });
 }
@@ -385,7 +385,7 @@ function loadMessages(userId) {
         }
     })
     .catch(error => {
-        console.error('שגיאה בטעינת הודעות:', error);
+        console.error('Error loading messages:', error);
         showMessagesError('שגיאה בטעינת ההודעות');
     });
 }
@@ -549,7 +549,7 @@ function sendMessage(e) {
         
     })
     .catch(error => {
-        console.error('שגיאה בשליחת הודעה:', error);
+        console.error('Error sending message:', error);
         messageText.value = originalText;
         alert('שגיאה בשליחת ההודעה. נסו שוב.');
     })
