@@ -1,7 +1,7 @@
 console.log('Main file loaded!');
 let currentUser = null;
 let isLoggedIn = false;
-const API_BASE_URL = API_CONFIG.getBaseUrl();
+const API_BASE_URL = '/api';
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
         checkLoginStatus();
@@ -70,7 +70,7 @@ function changeNavigationForLoggedInUser() {
         logoLink.href = '/pages/profile.html';
         logoLink.onclick = function(e) {
             e.preventDefault();
-            CLIENT_NAV.goToProfile();
+            window.location.href = '/pages/profile.html';
         };
     });
     
@@ -257,14 +257,7 @@ function sendData(url, data, method = 'POST') {
         .then(response => {
             console.log('Server response:', response.status);
             if (!response.ok) {
-                // Try to get the error message from the server response
-                return response.json().then(errorData => {
-                    console.error('Server error details:', errorData);
-                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-                }).catch(() => {
-                    // If parsing JSON fails, throw the status error
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                });
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
@@ -324,7 +317,7 @@ function handleRegistration(event) {
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>מעבד...';
     submitBtn.disabled = true;
-    sendData(API_CONFIG.getUrl('/auth/register'), data)
+    sendData('/api/auth/register', data)
         .then(response => {
             console.log('Registration successful:', response);
             localStorage.setItem('token', response.token);
@@ -335,13 +328,12 @@ function handleRegistration(event) {
             form.reset();
             updateUIForLoggedInUser();
             setTimeout(() => {
-                CLIENT_NAV.goToProfile();
+                window.location.href = 'pages/profile.html';
             }, 1000);
         })
         .catch(error => {
             console.error('Registration error:', error);
-            const errorMessage = error.message || 'Registration error. Check the details and try again.';
-            showFormMessage('registerMessage', errorMessage, 'danger');
+            showFormMessage('registerMessage', 'Registration error. Check the details and try again.', 'danger');
         })
         .finally(() => {
             submitBtn.innerHTML = originalText;
@@ -598,7 +590,7 @@ function handleLogin(event) {
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>מתחבר...';
     submitBtn.disabled = true;
-    sendData(API_CONFIG.getUrl('/auth/login'), data)
+    sendData('/api/auth/login', data)
         .then(response => {
             console.log('Login successful:', response);
             localStorage.setItem('token', response.token);
@@ -608,7 +600,7 @@ function handleLogin(event) {
             console.log('User data saved:', response.user);
             showFormMessage('loginMessage', 'התחברות הצליחה! מעביר לפרופיל שלך...', 'success');
             setTimeout(() => {
-                CLIENT_NAV.goToProfile();
+                window.location.href = 'pages/profile.html';
             }, 1000);
         })
         .catch(error => {

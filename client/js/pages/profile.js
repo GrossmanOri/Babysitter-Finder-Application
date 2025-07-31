@@ -15,7 +15,7 @@ function loadUserData() {
     // בדיקה אם המשתמש מחובר
     if (!currentUser) {
         console.log('User not logged in - redirecting to login page');
-        CLIENT_NAV.goHome();
+        window.location.href = '../index.html';
         return;
     }
     
@@ -33,11 +33,11 @@ function verifyUserExists() {
     const token = localStorage.getItem('token');
     if (!token) {
         console.log('No token - redirecting to login');
-        CLIENT_NAV.goHome();
+        window.location.href = '../index.html';
         return;
     }
     
-    fetch(API_CONFIG.getUrl('/users/profile'), {
+    fetch('/api/users/profile', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -50,7 +50,7 @@ function verifyUserExists() {
                 console.log('User does not exist or not authorized - redirecting to login');
                 localStorage.clear();
                 sessionStorage.clear();
-                CLIENT_NAV.goHome();
+                window.location.href = '../index.html';
             }
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -65,7 +65,7 @@ function verifyUserExists() {
         // במקרה של שגיאה, נמחק את הנתונים ונעביר להתחברות
         localStorage.clear();
         sessionStorage.clear();
-        CLIENT_NAV.goHome();
+        window.location.href = '../index.html';
     });
 }
 
@@ -246,7 +246,7 @@ function updateProfile(event) {
     submitBtn.disabled = true;
     
     // שליחה לשרת
-    fetch(API_CONFIG.getUrl('/users/profile'), {
+    fetch('/api/users/profile', {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -331,7 +331,7 @@ function deleteProfile() {
     deleteBtn.disabled = true;
     
     // שליחה לשרת
-    fetch(API_CONFIG.getUrl('/users/profile'), {
+    fetch('/api/users/profile', {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -356,7 +356,7 @@ function deleteProfile() {
         
         // מעבר מיידי לדף הבית
         setTimeout(() => {
-            CLIENT_NAV.goHome();
+            window.location.href = '../index.html';
         }, 1000);
     })
     .catch(error => {
@@ -429,7 +429,7 @@ function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
     localStorage.removeItem('user');
-    CLIENT_NAV.goHome();
+    window.location.href = '../index.html';
 }
 
 // הגדרת מאזיני אירועים
@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     homeLink.href = 'profile.html';
                     homeLink.onclick = function(e) {
                         e.preventDefault();
-                        CLIENT_NAV.goToProfile();
+                        window.location.href = 'profile.html';
                     };
                 }
                 
@@ -523,15 +523,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 setupRoleBasedMenu(parsedData.userType);
             } else {
                 console.error('נתונים חסרים - מעביר להתחברות');
-                CLIENT_NAV.goHome();
+                window.location.href = '../index.html';
             }
         } catch (error) {
             console.error('שגיאה בפענוח נתונים:', error);
-            CLIENT_NAV.goHome();
+            window.location.href = '../index.html';
         }
     } else {
         console.error('אין נתוני משתמש - מעביר להתחברות');
-        CLIENT_NAV.goHome();
+        window.location.href = '../index.html';
     }
     
     // הגדרת מאזיני אירועים

@@ -26,27 +26,20 @@ router.post('/register', [
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log('Validation errors:', errors.array());
-        const errorMessages = errors.array().map(error => error.msg).join(', ');
         return res.status(400).json({ 
             success: false,
-            message: errorMessages,
             errors: errors.array() 
         });
     }
-    console.log('Registration request body:', req.body);
     const { firstName, lastName, email, password, phone, userType, city, experience, hourlyRate, description } = req.body;
     User.findOne({ email: email })
         .then(user => {
-            console.log('Existing user check result:', user ? 'User exists' : 'User does not exist');
             if (user) {
-                console.log('User already exists with email:', email);
                 return res.status(400).json({
                     success: false,
                     message: 'משתמש עם אימייל זה כבר קיים במערכת'
                 });
             }
-            console.log('Creating new user...');
             const userData = {
                 firstName,
                 lastName,
@@ -63,11 +56,9 @@ router.post('/register', [
                     description: description
                 };
             }
-            console.log('User data to save:', userData);
             const newUser = new User(userData);
             newUser.save()
                 .then(user => {
-                    console.log('User saved successfully:', user.email);
                     const payload = {
                         user: {
                             id: user.id,

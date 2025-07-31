@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('userData', JSON.stringify(json.user));
         console.log('נשמר בהצלחה:', { token: json.token, user: json.user });
         setTimeout(function() {
-                      CLIENT_NAV.goToProfile();
+          window.location.href = 'profile.html';
         }, 1000);
       } else {
         formMessage.textContent = json.message || 'שגיאה בהתחברות';
